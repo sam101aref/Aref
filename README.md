@@ -68,8 +68,8 @@ Setup can be re-run any time from **Arash ▸ Setup**. · از منوی **Arash 
 
 ## Playing the current build · بازی کردن نسخهٔ فعلی
 
-The APK opens a **duel** against a Turanian archer, taking turns. Touch anywhere, pull back and release to shoot; drag back to where you started to cancel. Headshots kill; body shots take 40%, arms and legs 25%. Tap after the battle to play again.
-نسخهٔ فعلی یک **دوئل نوبتی** با یک کماندار تورانی است. هر جای صفحه را لمس کنید، به عقب بکشید و رها کنید؛ برای لغو، انگشت را به نقطهٔ شروع برگردانید. تیر به سر کشنده است، به بدن ۴۰٪ و به دست و پا ۲۵٪ آسیب می‌زند. بعد از پایان نبرد با یک لمس دوباره بازی کنید.
+Main menu → map → the five prologue levels (turn-based duels against Turanian archers). Touch anywhere, pull back and release to shoot; drag back to where you started to cancel. Headshots kill; body shots take 40%, arms and legs 25%. Up to three stars per level; progress and settings are saved. Language, sound, vibration and difficulty are in Settings.
+منوی اصلی ← نقشه ← پنج مرحلهٔ پیش‌درآمد (دوئل نوبتی با کمانداران تورانی). هر جای صفحه را لمس کنید، به عقب بکشید و رها کنید؛ برای لغو، انگشت را به نقطهٔ شروع برگردانید. تیر به سر کشنده است، به بدن ۴۰٪ و به دست و پا ۲۵٪ آسیب می‌زند. هر مرحله تا سه ستاره دارد و پیشرفت و تنظیمات ذخیره می‌شوند. زبان، صدا، لرزش و سختی در تنظیمات است.
 
 ## Project layout · ساختار پروژه
 
@@ -78,9 +78,16 @@ Assets/_Project/
   Art/  Audio/  Data/  Localization/  Prefabs/  Scenes/  Settings/
   Scripts/        game code (assembly Arash.Runtime)
     Combat/       aiming, bow, arrow, preview, camera, damage, ragdoll, turns, enemy AI
-    UI/           placeholder battle HUD
-    Core/         bootstrap
+    Levels/       level data, catalog, star and unlock rules, level runner
+    Localization/ string table, Persian shaper (right-to-left text)
+    UI/           menus, map, settings, battle HUD (built in code)
+    Core/         bootstrap, save system, settings, scene flow
+  Resources/      strings, Vazirmatn fonts, level catalog, UI sprites
   Tests/EditMode/ unit tests (run in CI before every build)
   Editor/Setup/   project setup and CI build (F-01)
-  Editor/Content/ builds the placeholder duel (prefabs + Battle scene)
+  Editor/Content/ builds placeholder art, prefabs, prologue levels and scene contents
 ```
+
+## Credits
+
+- [Vazirmatn](https://github.com/rastikerdar/vazirmatn) font by Saber Rastikerdar, SIL Open Font License 1.1 (`Assets/_Project/Resources/Fonts/OFL.txt`).

@@ -21,6 +21,15 @@ namespace Arash.Combat
         [Tooltip("Chance of aiming at the head instead of the body.")]
         [Range(0f, 1f)] public float headshotChance = 0.25f;
 
+        /// <summary>A copy with all angle errors scaled, e.g. for the difficulty setting.</summary>
+        public AiAccuracy Scaled(float errorMultiplier)
+        {
+            var copy = (AiAccuracy)MemberwiseClone();
+            copy.initialAngleError *= errorMultiplier;
+            copy.minAngleError *= errorMultiplier;
+            return copy;
+        }
+
         public float NextError(float currentError)
         {
             return Mathf.Max(minAngleError, currentError * decayPerMiss);

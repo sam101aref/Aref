@@ -1,20 +1,26 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Arash.Combat;
 using Arash.Core;
 using Arash.Editor.Setup;
+using Arash.Levels;
 using Arash.UI;
+using UnityEditor.Build;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Arash.Editor.Content
 {
     /// <summary>
-    /// Builds the placeholder duel used to test combat (F-02 – F-10): placeholder sprites, the Arrow
-    /// prefab, the Arash and Turanian archer prefabs (ragdoll body parts with hit zones), and the
-    /// contents of the Battle and Boot scenes. Runs as part of project setup and skips anything that
-    /// is already up to date, so hand edits are kept. Placeholder art is replaced once real art arrives.
+    /// Builds the placeholder game content: sprites and app icon, the Arrow and archer prefabs
+    /// (ragdoll body parts with hit zones), the prologue levels and level catalog (F-11, F-17), and
+    /// the contents of the Boot, MainMenu, WorldMap and Battle scenes. Runs as part of project setup
+    /// and skips anything that is already up to date, so hand edits are kept. Placeholder art is
+    /// replaced once real art arrives.
     /// </summary>
     [InitializeOnLoad]
     static class BattleSceneBuilder
@@ -32,6 +38,12 @@ namespace Arash.Editor.Content
         const string EnemyPrefabPath = PrefabFolder + "/TuranianArcher.prefab";
         const string BattleScenePath = ProjectSetup.ScenesFolder + "/Battle.unity";
         const string BootScenePath = ProjectSetup.ScenesFolder + "/Boot.unity";
+        const string MainMenuScenePath = ProjectSetup.ScenesFolder + "/MainMenu.unity";
+        const string WorldMapScenePath = ProjectSetup.ScenesFolder + "/WorldMap.unity";
+        const string StarPath = ProjectSetup.ProjectRoot + "/Resources/UI/Star.png";
+        const string IconPath = ProjectSetup.ProjectRoot + "/Art/Placeholder/Icon.png";
+        const string LevelFolder = ProjectSetup.ProjectRoot + "/Data/Levels";
+        const string CatalogPath = ProjectSetup.ProjectRoot + "/Resources/" + LevelCatalog.ResourcePath + ".asset";
         const string UnlitMaterialPath = "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Sprite-Unlit-Default.mat";
 
         static readonly Color PersianTeal = new Color(0.10f, 0.42f, 0.55f);
@@ -44,6 +56,7 @@ namespace Arash.Editor.Content
         static readonly Color Earth = new Color(0.55f, 0.43f, 0.28f);
         static readonly Color BarBackground = new Color(0.1f, 0.08f, 0.06f, 0.8f);
         static readonly Color BarFill = new Color(0.35f, 0.8f, 0.3f);
+        static readonly Color Lapis = new Color(0.07f, 0.12f, 0.25f);
 
         static Sprite s_Square;
         static Sprite s_Circle;
@@ -65,8 +78,10 @@ namespace Arash.Editor.Content
 
         static bool Build()
         {
-            s_Square = EnsureSprite(SquarePath, 32, circle: false);
-            s_Circle = EnsureSprite(CirclePath, 64, circle: true);
+            s_Square = EnsureSprite(SquarePath, 32, (u, v) => 1f);
+            s_Circle = EnsureSprite(CirclePath, 64, Disc);
+            EnsureSprite(StarPath, 128, StarShape);
+            EnsureIcon();
             s_Material = AssetDatabase.LoadAssetAtPath<Material>(UnlitMaterialPath);
             if (s_Square == null || s_Circle == null)
             {
@@ -86,9 +101,12 @@ namespace Arash.Editor.Content
             if (enemy == null)
                 enemy = CreateArcherPrefab("Turanian Archer", EnemyPrefabPath, false, TuranianRed, arrow);
 
+            var catalog = EnsureLevels();
             BuildBattleScene(arash, enemy);
+            BuildMenuScene<MainMenuScreen>(MainMenuScenePath, "Main Menu");
+            BuildMenuScene<WorldMapScreen>(WorldMapScenePath, "World Map");
             BuildBootScene();
-            return true;
+            return catalog != null;
         }
 
         /// <summary>Loads an archer prefab, discarding ones made by an older builder (no Combatant).</summary>
@@ -105,31 +123,15 @@ namespace Arash.Editor.Content
 
         // ---------------------------------------------------------------- sprites
 
-        static Sprite EnsureSprite(string path, int size, bool circle)
+        /// <summary>
+        /// Creates a white sprite whose alpha is <paramref name="coverage"/>(u, v) for pixel centres in
+        /// 0–1 space (4× supersampled), unless the file already exists.
+        /// </summary>
+        static Sprite EnsureSprite(string path, int size, Func<float, float, float> coverage)
         {
             if (!File.Exists(path))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
-                var texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
-                var pixels = new Color32[size * size];
-                var radius = size * 0.5f;
-                for (var y = 0; y < size; y++)
-                for (var x = 0; x < size; x++)
-                {
-                    byte alpha = 255;
-                    if (circle)
-                    {
-                        var distance = new Vector2(x + 0.5f - radius, y + 0.5f - radius).magnitude;
-                        alpha = (byte)(Mathf.Clamp01(radius - distance) * 255f);
-                    }
-                    pixels[y * size + x] = new Color32(255, 255, 255, alpha);
-                }
-                texture.SetPixels32(pixels);
-                texture.Apply();
-                File.WriteAllBytes(path, texture.EncodeToPNG());
-                Object.DestroyImmediate(texture);
-                AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport);
-
+                WritePng(path, size, (u, v) => new Color(1f, 1f, 1f, Supersample(size, u, v, coverage)));
                 var importer = (TextureImporter)AssetImporter.GetAtPath(path);
                 importer.textureType = TextureImporterType.Sprite;
                 importer.spriteImportMode = SpriteImportMode.Single;
@@ -144,6 +146,84 @@ namespace Arash.Editor.Content
             }
             return AssetDatabase.LoadAssetAtPath<Sprite>(path);
         }
+
+        static void WritePng(string path, int size, Func<float, float, Color> pixel)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            var pixels = new Color[size * size];
+            for (var y = 0; y < size; y++)
+            for (var x = 0; x < size; x++)
+                pixels[y * size + x] = pixel((x + 0.5f) / size, (y + 0.5f) / size);
+            texture.SetPixels(pixels);
+            texture.Apply();
+            File.WriteAllBytes(path, texture.EncodeToPNG());
+            Object.DestroyImmediate(texture);
+            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport);
+        }
+
+        static float Supersample(int size, float u, float v, Func<float, float, float> coverage)
+        {
+            var step = 1f / (size * 4f);
+            var sum = 0f;
+            for (var i = 0; i < 4; i++)
+            for (var j = 0; j < 4; j++)
+                sum += coverage(u + (i - 1.5f) * step, v + (j - 1.5f) * step);
+            return Mathf.Clamp01(sum / 16f);
+        }
+
+        static float Disc(float u, float v)
+        {
+            return new Vector2(u - 0.5f, v - 0.5f).magnitude <= 0.5f ? 1f : 0f;
+        }
+
+        /// <summary>Five-pointed star, point up.</summary>
+        static float StarShape(float u, float v)
+        {
+            var p = new Vector2(u - 0.5f, v - 0.47f);
+            var corners = new Vector2[10];
+            for (var i = 0; i < 10; i++)
+            {
+                var angle = Mathf.PI / 2f + i * Mathf.PI / 5f;
+                var radius = i % 2 == 0 ? 0.5f : 0.2f;
+                corners[i] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+            }
+            var inside = false;
+            for (int i = 0, j = 9; i < 10; j = i++)
+            {
+                if ((corners[i].y > p.y) != (corners[j].y > p.y) &&
+                    p.x < (corners[j].x - corners[i].x) * (p.y - corners[i].y) / (corners[j].y - corners[i].y) + corners[i].x)
+                    inside = !inside;
+            }
+            return inside ? 1f : 0f;
+        }
+
+        /// <summary>Placeholder app icon (F-18): a golden arrow on lapis, set as the default icon.</summary>
+        static void EnsureIcon()
+        {
+            if (!File.Exists(IconPath))
+            {
+                const int size = 512;
+                WritePng(IconPath, size, (u, v) =>
+                {
+                    var p = new Vector2(u - 0.5f, v - 0.5f);
+                    var ring = Mathf.Abs(p.magnitude - 0.36f) < 0.03f;
+                    // Arrow along the diagonal: shaft, head and fletching.
+                    var along = (p.x + p.y) * 0.7071f;
+                    var across = Mathf.Abs(p.x - p.y) * 0.7071f;
+                    var shaft = across < 0.018f && along > -0.3f && along < 0.2f;
+                    var head = along >= 0.2f && along < 0.32f && across < (0.32f - along) * 0.6f;
+                    var fletch = along > -0.32f && along < -0.2f && across < 0.06f && across > 0.02f;
+                    return ring || shaft || head || fletch ? UIFactoryGold : Lapis;
+                });
+            }
+
+            var icon = AssetDatabase.LoadAssetAtPath<Texture2D>(IconPath);
+            if (icon != null)
+                PlayerSettings.SetIcons(NamedBuildTarget.Unknown, new[] { icon }, IconKind.Any);
+        }
+
+        static readonly Color UIFactoryGold = new Color(0.90f, 0.72f, 0.32f);
 
         static GameObject Box(string name, Transform parent, Vector2 localPosition, Vector2 size, Color color, int order)
         {
@@ -374,6 +454,78 @@ namespace Arash.Editor.Content
 
         // ---------------------------------------------------------------- scenes
 
+        static void WireString(Object component, string field, string value)
+        {
+            var serialized = new SerializedObject(component);
+            var property = serialized.FindProperty(field);
+            if (property == null)
+            {
+                Debug.LogError($"[Arash Setup] {component.GetType().Name} has no serialized field '{field}'.");
+                return;
+            }
+            property.stringValue = value;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        // ---------------------------------------------------------------- levels
+
+        /// <summary>Creates the prologue (chapter 0, F-17) and the catalog unless the catalog exists.</summary>
+        static LevelCatalog EnsureLevels()
+        {
+            var catalog = AssetDatabase.LoadAssetAtPath<LevelCatalog>(CatalogPath);
+            if (catalog != null)
+                return catalog;
+
+            Directory.CreateDirectory(LevelFolder);
+            Directory.CreateDirectory(Path.GetDirectoryName(CatalogPath));
+
+            var village = new Color(0.98f, 0.82f, 0.55f);
+            var dusk = new Color(0.95f, 0.66f, 0.45f);
+            var levels = new List<LevelDefinition>
+            {
+                Level("0_1", village, true, true, 2, Enemy(14f, 0f, 40f, 10f, 0f)),
+                Level("0_2", village, true, true, 3, Enemy(16f, 0f, 100f, 9f, 0.1f)),
+                Level("0_3", village, true, true, 3, Enemy(26f, 0f, 100f, 8f, 0.15f)),
+                Level("0_4", dusk, true, false, 3, Enemy(18f, 3f, 100f, 7f, 0.2f)),
+                Level("0_5", dusk, true, false, 4, Enemy(15f, 0f, 70f, 8f, 0.15f), Enemy(24f, 2f, 70f, 8f, 0.15f)),
+            };
+
+            catalog = ScriptableObject.CreateInstance<LevelCatalog>();
+            catalog.chapters.Add(new LevelCatalog.Chapter { titleKey = "chapter.0.title", starsToUnlock = 0, levels = levels });
+            AssetDatabase.CreateAsset(catalog, CatalogPath);
+            AssetDatabase.SaveAssets();
+            return catalog;
+        }
+
+        static LevelDefinition Level(string id, Color sky, bool hasIntro, bool hasHint, int arrowsForThreeStars, params EnemySpawn[] enemies)
+        {
+            var level = ScriptableObject.CreateInstance<LevelDefinition>();
+            level.id = "ch" + id;
+            level.titleKey = "level." + id + ".title";
+            level.introKey = hasIntro ? "level." + id + ".intro" : null;
+            level.hintKey = hasHint ? "level." + id + ".hint" : null;
+            level.skyColor = sky;
+            level.groundColor = Earth;
+            level.enemies = enemies.ToList();
+            level.stars = new StarRules { healthForSecondStar = 0.5f, maxArrowsForThirdStar = arrowsForThreeStars };
+            level.coinsPerStar = 10;
+            AssetDatabase.CreateAsset(level, LevelFolder + "/Level_" + id + ".asset");
+            return level;
+        }
+
+        static EnemySpawn Enemy(float x, float height, float health, float initialError, float headshotChance)
+        {
+            return new EnemySpawn
+            {
+                x = x,
+                height = height,
+                maxHealth = health,
+                accuracy = new AiAccuracy { initialAngleError = initialError, headshotChance = headshotChance },
+            };
+        }
+
+        // ---------------------------------------------------------------- scenes
+
         static void BuildBattleScene(GameObject arashPrefab, GameObject enemyPrefab)
         {
             if (!File.Exists(BattleScenePath))
@@ -381,7 +533,7 @@ namespace Arash.Editor.Content
 
             var scene = EditorSceneManager.OpenScene(BattleScenePath, OpenSceneMode.Single);
             var roots = scene.GetRootGameObjects();
-            if (roots.Any(go => go.GetComponent<TurnManager>() != null))
+            if (roots.Any(go => go.GetComponent<LevelRunner>() != null))
                 return;
 
             // Replace anything an older builder generated; keep the camera and the global light.
@@ -394,8 +546,6 @@ namespace Arash.Editor.Content
 
             var arash = (GameObject)PrefabUtility.InstantiatePrefab(arashPrefab, scene);
             arash.transform.position = new Vector2(PlayerX, GroundY);
-            var enemy = (GameObject)PrefabUtility.InstantiatePrefab(enemyPrefab, scene);
-            enemy.transform.position = new Vector2(EnemyX, GroundY);
 
             var camera = roots.Select(go => go != null ? go.GetComponent<Camera>() : null).FirstOrDefault(c => c != null);
             BattleCamera battleCamera = null;
@@ -414,18 +564,46 @@ namespace Arash.Editor.Content
             var battle = new GameObject("Battle");
             var turns = battle.AddComponent<TurnManager>();
             Wire(turns, "player", arash.GetComponent<Combatant>());
-            WireArray(turns, "enemies", new Object[] { enemy.GetComponent<Combatant>() });
             Wire(turns, "battleCamera", battleCamera);
 
             var hud = battle.AddComponent<BattleHud>();
-            Wire(hud, "turnManager", turns);
 
             var feedback = battle.AddComponent<CombatFeedback>();
             Wire(feedback, "battleCamera", battleCamera);
             Wire(feedback, "hud", hud);
 
+            var runner = battle.AddComponent<LevelRunner>();
+            Wire(runner, "turnManager", turns);
+            Wire(runner, "hud", hud);
+            Wire(runner, "player", arash.GetComponent<Combatant>());
+            Wire(runner, "playerAim", arash.GetComponent<AimController>());
+            Wire(runner, "playerPreview", arash.GetComponentInChildren<TrajectoryPreview>());
+            Wire(runner, "enemyPrefab", enemyPrefab.GetComponent<Combatant>());
+            Wire(runner, "ground", ground.GetComponent<SpriteRenderer>());
+            Wire(runner, "sceneCamera", camera);
+            Wire(runner, "platformSprite", s_Square);
+            Wire(runner, "spriteMaterial", s_Material);
+
             EditorSceneManager.SaveScene(scene);
-            Debug.Log("[Arash Setup] Duel added to the Battle scene.");
+            Debug.Log("[Arash Setup] Battle scene built.");
+        }
+
+        static void BuildMenuScene<T>(string path, string name) where T : MonoBehaviour
+        {
+            if (!File.Exists(path))
+                return;
+
+            var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+            var roots = scene.GetRootGameObjects();
+            if (roots.Any(go => go.GetComponent<T>() != null))
+                return;
+
+            var camera = roots.Select(go => go.GetComponent<Camera>()).FirstOrDefault(c => c != null);
+            if (camera != null)
+                camera.backgroundColor = Lapis;
+
+            new GameObject(name).AddComponent<T>();
+            EditorSceneManager.SaveScene(scene);
         }
 
         static void BuildBootScene()
@@ -434,10 +612,10 @@ namespace Arash.Editor.Content
                 return;
 
             var scene = EditorSceneManager.OpenScene(BootScenePath, OpenSceneMode.Single);
-            if (scene.GetRootGameObjects().Any(go => go.GetComponent<Bootstrap>() != null))
-                return;
-
-            new GameObject("Bootstrap").AddComponent<Bootstrap>();
+            var bootstrap = scene.GetRootGameObjects().Select(go => go.GetComponent<Bootstrap>()).FirstOrDefault(b => b != null);
+            if (bootstrap == null)
+                bootstrap = new GameObject("Bootstrap").AddComponent<Bootstrap>();
+            WireString(bootstrap, "firstScene", SceneFlow.MainMenuScene);
             EditorSceneManager.SaveScene(scene);
         }
     }

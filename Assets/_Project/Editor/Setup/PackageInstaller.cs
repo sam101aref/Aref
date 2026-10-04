@@ -23,8 +23,6 @@ namespace Arash.Editor.Setup
             "com.unity.2d.sprite",
             "com.unity.2d.animation",                // skeletal 2D animation, needed for ragdolls
             "com.unity.2d.psdimporter",             // layered character art straight from Photoshop/Krita
-            "com.unity.localization",               // Persian / English string tables
-            "com.unity.addressables",
             "com.unity.timeline",                   // cutscenes
             "com.unity.test-framework",
             "com.unity.ide.visualstudio",

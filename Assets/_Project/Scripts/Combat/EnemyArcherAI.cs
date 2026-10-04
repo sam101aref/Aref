@@ -34,6 +34,12 @@ namespace Arash.Combat
             get { return currentError < 0f ? accuracy.initialAngleError : currentError; }
         }
 
+        public void SetAccuracy(AiAccuracy newAccuracy)
+        {
+            accuracy = newAccuracy;
+            currentError = -1f;
+        }
+
         public void BeginTurn(Combatant self, Combatant opponent, Action<Arrow> onShot)
         {
             CancelTurn();

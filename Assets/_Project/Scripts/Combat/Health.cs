@@ -29,6 +29,13 @@ namespace Arash.Combat
         public float Fraction { get { return Current / maxHealth; } }
         public bool IsDead { get { return Current <= 0f; } }
 
+        /// <summary>Sets the maximum and refills to full (used when spawning from level data).</summary>
+        public void SetMax(float max)
+        {
+            maxHealth = Mathf.Max(1f, max);
+            current = maxHealth;
+        }
+
         public void ApplyDamage(DamageInfo info)
         {
             if (IsDead)

@@ -1,5 +1,7 @@
 using System;
+using Arash.Core;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Arash.Combat
@@ -49,14 +51,14 @@ namespace Arash.Combat
         void Update()
         {
             var pointer = Pointer.current;
-            if (pointer == null)
+            if (pointer == null || GamePause.IsPaused)
                 return;
 
             var position = pointer.position.ReadValue();
 
             if (!IsAiming)
             {
-                if (pointer.press.wasPressedThisFrame)
+                if (pointer.press.wasPressedThisFrame && !IsOverUI())
                     Begin(position);
                 return;
             }
@@ -65,6 +67,12 @@ namespace Arash.Combat
 
             if (pointer.press.wasReleasedThisFrame || !pointer.press.isPressed)
                 Release();
+        }
+
+        static bool IsOverUI()
+        {
+            var events = EventSystem.current;
+            return events != null && events.IsPointerOverGameObject();
         }
 
         void Begin(Vector2 screenPosition)

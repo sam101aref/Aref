@@ -1,131 +1,205 @@
+using System;
 using System.Collections;
-using Arash.Combat;
+using Arash.Core;
+using Arash.Localization;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Arash.UI
 {
     /// <summary>
-    /// Minimal battle overlay built in code: pop-up messages ("Headshot!") and the win/lose screen
-    /// with tap-to-retry. Placeholder until the real HUD, end screen (F-12) and localization (F-15).
+    /// Battle overlay: level title, pause menu, tutorial hint, pop-ups ("Headshot!"), the level
+    /// intro banner and the end-of-level screen with stars and coins (F-12).
+    /// Built in code; rebuilt (keeping its state) when the language changes.
     /// </summary>
-    public class BattleHud : MonoBehaviour
+    public class BattleHud : ScreenBase
     {
-        [SerializeField] TurnManager turnManager;
-        [SerializeField] Color popupColor = new Color(1f, 0.85f, 0.3f);
+        class Result
+        {
+            public bool Won;
+            public int Stars;
+            public int Coins;
+            public Action Next;
+        }
+
         [SerializeField] float popupDuration = 1.1f;
+        [SerializeField] float introDuration = 3f;
+
+        string titleKey;
+        string hintKey;
+        Result result;
+        bool pauseOpen;
 
         Text popup;
-        Text result;
+        Text hint;
         Coroutine popupRoutine;
-        bool canRestart;
 
-        void Awake()
+        protected override int SortingOrder { get { return 10; } }
+
+        public void SetLevel(string levelTitleKey, string levelHintKey)
         {
-            BuildCanvas();
+            titleKey = levelTitleKey;
+            hintKey = levelHintKey;
+            Rebuild();
         }
 
-        void OnEnable()
+        public void ShowIntro(string introKey)
         {
-            if (turnManager != null)
-                turnManager.BattleEnded += ShowResult;
-        }
-
-        void OnDisable()
-        {
-            if (turnManager != null)
-                turnManager.BattleEnded -= ShowResult;
-        }
-
-        void Update()
-        {
-            if (!canRestart)
+            if (string.IsNullOrEmpty(introKey))
                 return;
-            var pointer = Pointer.current;
-            if (pointer != null && pointer.press.wasPressedThisFrame)
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            if (Canvas == null)
+                Rebuild();
+            StartCoroutine(IntroRoutine(introKey));
+        }
+
+        public void HideHint()
+        {
+            hintKey = null;
+            if (hint != null)
+                hint.gameObject.SetActive(false);
         }
 
         public void ShowPopup(string message)
         {
+            if (Canvas == null)
+                Rebuild();
             if (popupRoutine != null)
                 StopCoroutine(popupRoutine);
             popupRoutine = StartCoroutine(PopupRoutine(message));
         }
 
-        void ShowResult(bool playerWon)
+        public void ShowResult(bool won, int stars, int coins, Action next)
         {
-            result.text = playerWon ? "VICTORY\n<size=40>Tap to play again</size>" : "DEFEAT\n<size=40>Tap to try again</size>";
-            result.color = playerWon ? new Color(1f, 0.85f, 0.3f) : new Color(0.9f, 0.3f, 0.25f);
-            result.gameObject.SetActive(true);
-            StartCoroutine(EnableRestart());
+            result = new Result { Won = won, Stars = stars, Coins = coins, Next = next };
+            pauseOpen = false;
+            Rebuild();
         }
 
-        IEnumerator EnableRestart()
+        protected override void Build(RectTransform canvas)
         {
-            yield return new WaitForSecondsRealtime(1f);
-            canRestart = true;
+            if (!string.IsNullOrEmpty(titleKey))
+            {
+                var title = UIFactory.Label(canvas, Loc.T(titleKey), 44, UIFactory.Cream, TextAnchor.MiddleLeft, true);
+                UIFactory.Place(title.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -30f), new Vector2(1000f, 80f));
+            }
+
+            if (result == null)
+            {
+                var pause = UIFactory.Button(canvas, "II", OpenPause, new Color(0f, 0f, 0f, 0.35f), 48);
+                UIFactory.Place((RectTransform)pause.transform, new Vector2(1f, 1f), new Vector2(-30f, -25f), new Vector2(110f, 110f));
+            }
+
+            hint = UIFactory.Label(canvas, string.IsNullOrEmpty(hintKey) ? string.Empty : Loc.T(hintKey), 46, UIFactory.Cream);
+            UIFactory.Place(hint.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 90f), new Vector2(1700f, 90f));
+            hint.gameObject.SetActive(!string.IsNullOrEmpty(hintKey) && result == null);
+
+            popup = UIFactory.Label(canvas, string.Empty, 100, UIFactory.Gold, TextAnchor.MiddleCenter, true);
+            UIFactory.Place(popup.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 280f), new Vector2(1600f, 160f));
+            popup.gameObject.SetActive(false);
+
+            if (result != null)
+                BuildResult(canvas);
+            else if (pauseOpen)
+                BuildPause(canvas);
+        }
+
+        void OpenPause()
+        {
+            if (result != null)
+                return;
+            GamePause.Pause();
+            pauseOpen = true;
+            BuildPause(Canvas);
+        }
+
+        void BuildPause(RectTransform canvas)
+        {
+            var overlay = UIFactory.Overlay(canvas, "Pause");
+            var heading = UIFactory.Label(overlay, Loc.T("ui.paused"), 80, UIFactory.Gold, TextAnchor.MiddleCenter, true);
+            UIFactory.Place(heading.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 300f), new Vector2(1000f, 120f));
+
+            var y = 140f;
+            MenuButton(overlay, "ui.resume", () =>
+            {
+                pauseOpen = false;
+                GamePause.Resume();
+                Destroy(overlay.gameObject);
+            }, UIFactory.Turquoise, ref y);
+            MenuButton(overlay, "ui.retry", SceneFlow.Retry, UIFactory.LapisLight, ref y);
+            MenuButton(overlay, "ui.settings", OpenSettings, UIFactory.LapisLight, ref y);
+            MenuButton(overlay, "ui.map", SceneFlow.ToWorldMap, UIFactory.LapisLight, ref y);
+        }
+
+        void BuildResult(RectTransform canvas)
+        {
+            var overlay = UIFactory.Overlay(canvas, "Result");
+            var heading = UIFactory.Label(overlay, Loc.T(result.Won ? "battle.victory" : "battle.defeat"), 110,
+                result.Won ? UIFactory.Gold : UIFactory.Danger, TextAnchor.MiddleCenter, true);
+            UIFactory.Place(heading.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 330f), new Vector2(1200f, 160f));
+
+            UIFactory.StarRow(overlay, result.Stars, 120f, new Vector2(0f, 170f));
+
+            if (result.Coins > 0)
+            {
+                var coins = UIFactory.Label(overlay, Loc.T("battle.coins", result.Coins), 48, UIFactory.Cream);
+                UIFactory.Place(coins.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 50f), new Vector2(800f, 80f));
+            }
+
+            var y = -60f;
+            if (result.Next != null)
+                MenuButton(overlay, "ui.next", result.Next, UIFactory.Turquoise, ref y);
+            MenuButton(overlay, "ui.retry", SceneFlow.Retry, result.Next != null ? UIFactory.LapisLight : UIFactory.Turquoise, ref y);
+            MenuButton(overlay, "ui.map", SceneFlow.ToWorldMap, UIFactory.LapisLight, ref y);
+        }
+
+        static void MenuButton(RectTransform parent, string key, Action onClick, Color color, ref float y)
+        {
+            var button = UIFactory.Button(parent, Loc.T(key), onClick, color, 48);
+            UIFactory.Place((RectTransform)button.transform, new Vector2(0.5f, 0.5f), new Vector2(0f, y), new Vector2(520f, 110f));
+            y -= 130f;
+        }
+
+        IEnumerator IntroRoutine(string introKey)
+        {
+            var banner = UIFactory.Panel(Canvas, "Intro", new Color(0f, 0f, 0f, 0.55f));
+            UIFactory.Place(banner.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 120f), new Vector2(1920f, 260f));
+            banner.raycastTarget = false;
+            var group = banner.gameObject.AddComponent<CanvasGroup>();
+            group.blocksRaycasts = false;
+
+            if (!string.IsNullOrEmpty(titleKey))
+            {
+                var title = UIFactory.Label(banner.transform, Loc.T(titleKey), 76, UIFactory.Gold, TextAnchor.MiddleCenter, true);
+                UIFactory.Place(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 50f), new Vector2(1800f, 110f));
+            }
+            var text = UIFactory.Label(banner.transform, Loc.T(introKey), 40, UIFactory.Cream);
+            UIFactory.Place(text.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, -55f), new Vector2(1800f, 90f));
+
+            for (var t = 0f; t < introDuration && banner != null; t += Time.unscaledDeltaTime)
+            {
+                group.alpha = Mathf.Clamp01(Mathf.Min(t / 0.3f, (introDuration - t) / 0.6f));
+                yield return null;
+            }
+            if (banner != null)
+                Destroy(banner.gameObject);
         }
 
         IEnumerator PopupRoutine(string message)
         {
             popup.text = message;
             popup.gameObject.SetActive(true);
-            for (var t = 0f; t < popupDuration; t += Time.unscaledDeltaTime)
+            for (var t = 0f; t < popupDuration && popup != null; t += Time.unscaledDeltaTime)
             {
                 var k = t / popupDuration;
                 popup.transform.localScale = Vector3.one * (1f + 0.4f * (1f - Mathf.Clamp01(k * 4f)));
-                var color = popupColor;
+                var color = UIFactory.Gold;
                 color.a = 1f - Mathf.Clamp01((k - 0.7f) / 0.3f);
                 popup.color = color;
                 yield return null;
             }
-            popup.gameObject.SetActive(false);
+            if (popup != null)
+                popup.gameObject.SetActive(false);
             popupRoutine = null;
-        }
-
-        void BuildCanvas()
-        {
-            var canvasObject = new GameObject("HUD Canvas");
-            canvasObject.transform.SetParent(transform, false);
-            var canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 100;
-            var scaler = canvasObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.matchWidthOrHeight = 0.5f;
-
-            var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            popup = CreateText(canvasObject.transform, "Popup", font, 96, new Vector2(0f, 300f));
-            result = CreateText(canvasObject.transform, "Result", font, 120, Vector2.zero);
-        }
-
-        static Text CreateText(Transform parent, string name, Font font, int size, Vector2 position)
-        {
-            var go = new GameObject(name);
-            go.transform.SetParent(parent, false);
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.sizeDelta = new Vector2(1600f, 400f);
-            rect.anchoredPosition = position;
-
-            var text = go.AddComponent<Text>();
-            text.font = font;
-            text.fontSize = size;
-            text.fontStyle = FontStyle.Bold;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.supportRichText = true;
-            text.raycastTarget = false;
-
-            var outline = go.AddComponent<Outline>();
-            outline.effectColor = new Color(0f, 0f, 0f, 0.6f);
-            outline.effectDistance = new Vector2(3f, -3f);
-
-            go.SetActive(false);
-            return text;
         }
     }
 }

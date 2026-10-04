@@ -1,4 +1,6 @@
 using System.Collections;
+using Arash.Core;
+using Arash.Localization;
 using Arash.UI;
 using UnityEngine;
 
@@ -34,7 +36,8 @@ namespace Arash.Combat
         void OnDisable()
         {
             Health.AnyDamaged -= OnDamaged;
-            Time.timeScale = 1f;
+            if (!GamePause.IsPaused)
+                Time.timeScale = 1f;
         }
 
         void OnDamaged(Health health, DamageInfo info, bool killed)
@@ -46,19 +49,21 @@ namespace Arash.Combat
                 return;
 
             if (hud != null)
-                hud.ShowPopup("HEADSHOT!");
+                hud.ShowPopup(Loc.T("battle.headshot"));
             if (slowMotion != null)
                 StopCoroutine(slowMotion);
             slowMotion = StartCoroutine(SlowMotion());
-            if (vibrate)
+            if (vibrate && GameSettings.Vibration)
                 Vibrate();
         }
 
         IEnumerator SlowMotion()
         {
-            Time.timeScale = slowMotionScale;
+            if (!GamePause.IsPaused)
+                Time.timeScale = slowMotionScale;
             yield return new WaitForSecondsRealtime(slowMotionDuration);
-            Time.timeScale = 1f;
+            if (!GamePause.IsPaused)
+                Time.timeScale = 1f;
             slowMotion = null;
         }
 

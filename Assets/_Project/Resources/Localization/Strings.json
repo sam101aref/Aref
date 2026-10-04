@@ -1,0 +1,214 @@
+{
+  "entries": [
+    {
+      "key": "game.title",
+      "en": "Arash The Archer",
+      "fa": "آرش کمانگیر"
+    },
+    {
+      "key": "game.subtitle",
+      "en": "A legend of the Persian frontier",
+      "fa": "افسانه‌ای از مرزهای ایران"
+    },
+    {
+      "key": "ui.play",
+      "en": "Play",
+      "fa": "شروع"
+    },
+    {
+      "key": "ui.settings",
+      "en": "Settings",
+      "fa": "تنظیمات"
+    },
+    {
+      "key": "ui.language_name",
+      "en": "English",
+      "fa": "فارسی"
+    },
+    {
+      "key": "ui.back",
+      "en": "Back",
+      "fa": "بازگشت"
+    },
+    {
+      "key": "ui.map",
+      "en": "Map",
+      "fa": "نقشه"
+    },
+    {
+      "key": "ui.resume",
+      "en": "Resume",
+      "fa": "ادامه"
+    },
+    {
+      "key": "ui.retry",
+      "en": "Retry",
+      "fa": "دوباره"
+    },
+    {
+      "key": "ui.next",
+      "en": "Next",
+      "fa": "بعدی"
+    },
+    {
+      "key": "ui.paused",
+      "en": "Paused",
+      "fa": "توقف"
+    },
+    {
+      "key": "ui.close",
+      "en": "Close",
+      "fa": "بستن"
+    },
+    {
+      "key": "ui.on",
+      "en": "On",
+      "fa": "روشن"
+    },
+    {
+      "key": "ui.off",
+      "en": "Off",
+      "fa": "خاموش"
+    },
+    {
+      "key": "settings.language",
+      "en": "Language",
+      "fa": "زبان"
+    },
+    {
+      "key": "settings.sound",
+      "en": "Sound",
+      "fa": "صدا"
+    },
+    {
+      "key": "settings.music",
+      "en": "Music",
+      "fa": "موسیقی"
+    },
+    {
+      "key": "settings.vibration",
+      "en": "Vibration",
+      "fa": "لرزش"
+    },
+    {
+      "key": "settings.difficulty",
+      "en": "Difficulty",
+      "fa": "سختی"
+    },
+    {
+      "key": "difficulty.easy",
+      "en": "Easy",
+      "fa": "آسان"
+    },
+    {
+      "key": "difficulty.normal",
+      "en": "Normal",
+      "fa": "معمولی"
+    },
+    {
+      "key": "difficulty.hard",
+      "en": "Hard",
+      "fa": "سخت"
+    },
+    {
+      "key": "map.stats",
+      "en": "Stars: {0}    Coins: {1}",
+      "fa": "ستاره: {0}    سکه: {1}"
+    },
+    {
+      "key": "map.locked",
+      "en": "(needs {0} stars)",
+      "fa": "(نیاز به {0} ستاره)"
+    },
+    {
+      "key": "battle.headshot",
+      "en": "HEADSHOT!",
+      "fa": "تیر بر سر!"
+    },
+    {
+      "key": "battle.victory",
+      "en": "Victory",
+      "fa": "پیروزی"
+    },
+    {
+      "key": "battle.defeat",
+      "en": "Defeat",
+      "fa": "شکست"
+    },
+    {
+      "key": "battle.coins",
+      "en": "+{0} coins",
+      "fa": "{0} سکه"
+    },
+    {
+      "key": "chapter.0.title",
+      "en": "Prologue: The Border Village",
+      "fa": "پیش‌درآمد: روستای مرزی"
+    },
+    {
+      "key": "level.0_1.title",
+      "en": "First Draw",
+      "fa": "نخستین کمان"
+    },
+    {
+      "key": "level.0_1.intro",
+      "en": "Turanian scouts are near the village. Show them what a bowstring can do.",
+      "fa": "دیده‌بان‌های تورانی نزدیک روستا هستند. نشانشان بده زه کمان چه می‌کند."
+    },
+    {
+      "key": "level.0_1.hint",
+      "en": "Touch anywhere, pull back and release to shoot.",
+      "fa": "هر جای صفحه را لمس کن، به عقب بکش و رها کن."
+    },
+    {
+      "key": "level.0_2.title",
+      "en": "Aim High",
+      "fa": "نشانه به سر"
+    },
+    {
+      "key": "level.0_2.intro",
+      "en": "This scout is tougher. Aim for the head.",
+      "fa": "این دیده‌بان سرسخت‌تر است. سرش را نشانه بگیر."
+    },
+    {
+      "key": "level.0_2.hint",
+      "en": "A shot to the head ends the fight.",
+      "fa": "تیر به سر، کار را تمام می‌کند."
+    },
+    {
+      "key": "level.0_3.title",
+      "en": "The Far Hill",
+      "fa": "تپهٔ دور"
+    },
+    {
+      "key": "level.0_3.intro",
+      "en": "He shoots from far away. Draw harder.",
+      "fa": "از دور تیر می‌اندازد. کمان را محکم‌تر بکش."
+    },
+    {
+      "key": "level.0_3.hint",
+      "en": "Pull farther for more power.",
+      "fa": "هرچه بیشتر بکشی، تیر دورتر می‌رود."
+    },
+    {
+      "key": "level.0_4.title",
+      "en": "High Ground",
+      "fa": "بلندی"
+    },
+    {
+      "key": "level.0_4.intro",
+      "en": "An archer on the rocks. Your arrow must climb.",
+      "fa": "کمانداری روی صخره‌ها. تیرت باید اوج بگیرد."
+    },
+    {
+      "key": "level.0_5.title",
+      "en": "The First Raid",
+      "fa": "نخستین یورش"
+    },
+    {
+      "key": "level.0_5.intro",
+      "en": "Two raiders at once. Stay calm, Arash.",
+      "fa": "دو مهاجم با هم. آرام باش، آرش."
+    }
+  ]
+}

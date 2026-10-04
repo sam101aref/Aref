@@ -35,6 +35,13 @@ namespace Arash.Combat
         public Combatant CurrentTurn { get; private set; }
         public bool IsOver { get; private set; }
 
+        /// <summary>Sets who fights; call before the battle starts (e.g. from Awake).</summary>
+        public void Configure(Combatant playerCombatant, IEnumerable<Combatant> enemyCombatants)
+        {
+            player = playerCombatant;
+            enemies = new List<Combatant>(enemyCombatants);
+        }
+
         IEnumerator Start()
         {
             if (player == null || enemies.Count == 0)
