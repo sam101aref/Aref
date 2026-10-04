@@ -38,7 +38,7 @@
 
 **نتیجه:** برای یک بازی دوبعدی موبایلی با متن فارسی، **Unity** انتخاب درست‌تری است.
 
-- نسخه: **Unity 6 LTS**
+- نسخه: **Unity 6.3 LTS** (یا هر نسخهٔ LTS جدیدتر از Unity 6)
 - رندر: **URP 2D** (نور دوبعدی برای غروب، آتش و درخشش تیرها)
 - پکیج‌ها: Input System, Cinemachine, 2D Animation (اسکلتی), Localization, Addressables, Timeline, TextMeshPro
 
@@ -252,7 +252,7 @@ Assets/
 - در آینده: Google Play Games Saved Games برای ذخیرهٔ ابری.
 
 ### ۷.۴ مشخصات اندروید
-- حداقل Android **7.0 (API 24)**؛ Target API طبق آخرین الزام Google Play.
+- حداقل Android **7.0 (API 24)** (یا حداقلی که خود Unity لازم دارد، اگر بالاتر باشد)؛ Target API طبق آخرین الزام Google Play.
 - خروجی **AAB** برای انتشار، IL2CPP، ARM64.
 - جهت صفحه: **افقی (Landscape)**.
 - هدف کارایی: ۶۰ فریم بر ثانیه روی گوشی‌های میان‌رده.

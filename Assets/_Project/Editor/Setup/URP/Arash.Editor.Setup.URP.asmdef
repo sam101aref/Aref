@@ -1,0 +1,28 @@
+{
+    "name": "Arash.Editor.Setup.URP",
+    "rootNamespace": "Arash.Editor.Setup",
+    "references": [
+        "Arash.Editor.Setup",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "ARASH_URP"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "17.0.0",
+            "define": "ARASH_URP"
+        }
+    ],
+    "noEngineReferences": false
+}
