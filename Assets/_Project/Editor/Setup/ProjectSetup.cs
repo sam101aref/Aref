@@ -57,7 +57,10 @@ namespace Arash.Editor.Setup
         }
 
         [MenuItem("Arash/Setup/Configure Project", priority = 1)]
-        public static void Configure()
+        static void ConfigureFromMenu() => Configure();
+
+        /// <summary>Applies the whole setup. Returns false if a step could not be completed.</summary>
+        public static bool Configure()
         {
             Debug.Log("[Arash Setup] Configuring project…");
 
@@ -71,7 +74,7 @@ namespace Arash.Editor.Setup
                 Debug.LogWarning("[Arash Setup] URP is not configured yet. Install the packages, then run Arash ▸ Setup ▸ Configure Project again.");
 
             if (!CreateScenes())
-                return;
+                return false;
 
             AssetDatabase.SaveAssets();
             if (pipelineReady)
@@ -89,6 +92,8 @@ namespace Arash.Editor.Setup
             {
                 EditorApplication.OpenProject(Directory.GetCurrentDirectory());
             }
+
+            return pipelineReady;
         }
 
         static void ConfigureEditor()

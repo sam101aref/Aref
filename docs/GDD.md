@@ -38,7 +38,8 @@
 
 **نتیجه:** برای یک بازی دوبعدی موبایلی با متن فارسی، **Unity** انتخاب درست‌تری است.
 
-- نسخه: **Unity 6.3 LTS** (یا هر نسخهٔ LTS جدیدتر از Unity 6)
+- نسخه: **Unity 6 LTS** (`6000.0.58f2`؛ ارتقا به LTS جدیدتر بعداً ساده است)
+- ساخت خودکار APK در ابری GitHub Actions (GameCI) — نیازی به نصب Unity روی سیستم نیست
 - رندر: **URP 2D** (نور دوبعدی برای غروب، آتش و درخشش تیرها)
 - پکیج‌ها: Input System, Cinemachine, 2D Animation (اسکلتی), Localization, Addressables, Timeline, TextMeshPro
 

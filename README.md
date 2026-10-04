@@ -13,28 +13,47 @@ Built with **Unity**. Fully bilingual: **فارسی** and **English**.
 | [docs/GDD.md](docs/GDD.md) | Game Design Document — سند طراحی بازی |
 | [docs/FEATURES.md](docs/FEATURES.md) | Feature backlog & roadmap — فهرست ویژگی‌ها و نقشهٔ راه |
 
-## Getting started · راه‌اندازی پروژه
+## Cloud build (no Unity install needed) · ساخت ابری (بدون نصب Unity)
 
-**Requirements · پیش‌نیازها**
-- [Unity Hub](https://unity.com/download) + **Unity 6.3 LTS** (or newer Unity 6 LTS) with the **Android Build Support** module (incl. OpenJDK and Android SDK & NDK)
-- Git LFS: `git lfs install` (art and audio files are stored with LFS)
+Every push builds an installable **APK** on GitHub Actions ([`.github/workflows/android.yml`](.github/workflows/android.yml)).
+Download it from the repo's **Actions** tab → latest *Android Build* run → **Artifacts** → `ArashTheArcher-apk`.
 
-**First open · اولین باز کردن**
-1. Clone the repo, then in Unity Hub choose **Add ▸ Add project from disk** and select the repo folder.
-   ریپو را کلون کنید و در Unity Hub با **Add project from disk** پوشهٔ ریپو را اضافه کنید.
-   If Hub asks for an editor version, pick your installed Unity 6.3.x.
-   اگر Hub نسخهٔ ادیتور را پرسید، نسخهٔ 6.3 نصب‌شده را انتخاب کنید.
-2. When the project opens, a dialog asks to install the required packages → **Install**.
-   پس از باز شدن، پنجره‌ای برای نصب پکیج‌ها باز می‌شود ← **Install**.
-3. After recompiling, the project configures itself automatically (URP 2D, Android settings, scenes, build target).
-   بعد از کامپایل، پروژه خودش تنظیم می‌شود (URP 2D، تنظیمات اندروید، صحنه‌ها، پلتفرم Android).
-4. When asked to restart for the new Input System → **Restart now**.
-   وقتی برای Input System درخواست ری‌استارت داد ← **Restart now**.
-5. Commit the files Unity generated (`ProjectSettings/`, `Packages/`, `*.meta`, `Assets/_Project/Settings`, `Assets/_Project/Scenes`).
-   فایل‌هایی را که Unity ساخته کامیت کنید.
+با هر push، فایل نصبی **APK** به‌صورت خودکار روی GitHub ساخته می‌شود. از تب **Actions** ← آخرین اجرای *Android Build* ← بخش **Artifacts** دانلودش کنید.
 
-Setup can be re-run at any time from the menu **Arash ▸ Setup**.
-هر وقت لازم شد، از منوی **Arash ▸ Setup** می‌توانید تنظیمات را دوباره اجرا کنید.
+**One-time setup · تنظیم یک‌باره** (only the account owner can do this · فقط صاحب حساب می‌تواند انجام دهد)
+
+1. Install [Unity Hub](https://unity.com/download) (the editor is not needed), sign in, then **Preferences ▸ Licenses ▸ Add ▸ Get a free personal license**.
+   Unity Hub را نصب کنید (خود ادیتور لازم نیست)، وارد حساب شوید و از **Preferences ▸ Licenses ▸ Add** لایسنس رایگان Personal بگیرید.
+2. Open the license file in a text editor and copy all of its contents:
+   فایل لایسنس را با یک ویرایشگر متن باز کنید و کل محتوایش را کپی کنید:
+   - Windows: `C:\ProgramData\Unity\Unity_lic.ulf`
+   - macOS: `/Library/Application Support/Unity/Unity_lic.ulf`
+   - Linux: `~/.local/share/unity3d/Unity/Unity_lic.ulf`
+3. On GitHub: **Settings ▸ Secrets and variables ▸ Actions ▸ New repository secret**, add:
+   در GitHub این سه Secret را اضافه کنید:
+
+   | Secret | Value |
+   |---|---|
+   | `UNITY_LICENSE` | contents of `Unity_lic.ulf` · محتوای فایل لایسنس |
+   | `UNITY_EMAIL` | your Unity account email · ایمیل حساب Unity |
+   | `UNITY_PASSWORD` | your Unity account password · رمز حساب Unity |
+
+4. Re-run the workflow from the **Actions** tab (or push any change).
+   از تب **Actions** دوباره اجرا کنید.
+
+The first run also commits the files Unity generates (`ProjectSettings/`, `*.meta`, scenes) back to the branch.
+اولین اجرا فایل‌هایی را که Unity می‌سازد به برنچ کامیت می‌کند.
+
+## Local development (optional) · توسعه روی سیستم خودتان (اختیاری)
+
+- [Unity Hub](https://unity.com/download) + **Unity 6 LTS** (`6000.0.58f2` or a newer 6000.0 patch) with **Android Build Support**
+- `git lfs install` (art and audio are stored with Git LFS)
+
+1. In Unity Hub: **Add ▸ Add project from disk** → select the repo folder.
+2. If the packages dialog appears → **Install**; after recompiling the project configures itself.
+3. If asked to restart for the new Input System → **Restart now**.
+
+Setup can be re-run any time from **Arash ▸ Setup**. · از منوی **Arash ▸ Setup** می‌توانید تنظیمات را دوباره اجرا کنید.
 
 **Project settings applied · تنظیمات اعمال‌شده**
 
