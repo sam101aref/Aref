@@ -3,8 +3,9 @@ using UnityEngine;
 namespace Arash.Combat
 {
     /// <summary>
-    /// Side-view battle camera. Frames the archer while aiming, follows an arrow in flight with a
-    /// little look-ahead, zooms out as the arrow climbs, and never shows much below the ground.
+    /// Side-view battle camera. Frames the archer whose turn it is, follows an arrow in flight with a
+    /// little look-ahead, zooms out as the arrow climbs, never shows much below the ground, and shakes
+    /// on impacts.
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public class BattleCamera : MonoBehaviour
@@ -12,7 +13,9 @@ namespace Arash.Combat
         [Header("Framing")]
         [SerializeField, Tooltip("What the camera frames when nothing is in flight, usually the player.")]
         Transform home;
-        [SerializeField] Vector2 homeOffset = new Vector2(5f, 2.5f);
+        [SerializeField, Tooltip("Offset from home, for an archer facing right (mirrored when facing left).")]
+        Vector2 homeOffset = new Vector2(5f, 2.5f);
+        [SerializeField] bool homeFacingRight = true;
         [SerializeField, Tooltip("World Y of the ground surface.")]
         float groundY = -3f;
         [SerializeField, Tooltip("How much ground stays visible below the ground line.")]
@@ -38,6 +41,10 @@ namespace Arash.Combat
         Transform target;
         Vector3 moveVelocity;
         float zoomVelocity;
+        Vector3 focus;
+        float shakeAmplitude;
+        float shakeDuration;
+        float shakeRemaining;
 
         public bool IsFollowing { get { return target != null; } }
 
@@ -46,12 +53,23 @@ namespace Arash.Combat
             cam = GetComponent<Camera>();
             cam.orthographic = true;
             cam.orthographicSize = baseSize;
+            focus = transform.position;
             SnapHome();
         }
 
-        public void SetHome(Transform newHome)
+        public void SetHome(Transform newHome, bool facingRight)
         {
             home = newHome;
+            homeFacingRight = facingRight;
+        }
+
+        /// <summary>Shakes the view; runs on unscaled time so it also works in slow motion.</summary>
+        public void Shake(float amplitude, float duration)
+        {
+            if (amplitude < shakeAmplitude * (shakeRemaining / Mathf.Max(0.0001f, shakeDuration)))
+                return; // a stronger shake is already running
+            shakeAmplitude = amplitude;
+            shakeDuration = shakeRemaining = Mathf.Max(0.0001f, duration);
         }
 
         /// <summary>Follows the arrow until it lands or is destroyed.</summary>
@@ -70,7 +88,8 @@ namespace Arash.Combat
         public void SnapHome()
         {
             var desired = HomePoint();
-            transform.position = Clamp(new Vector3(desired.x, desired.y, transform.position.z), baseSize);
+            focus = Clamp(new Vector3(desired.x, desired.y, transform.position.z), baseSize);
+            transform.position = focus;
         }
 
         void LateUpdate()
@@ -96,14 +115,28 @@ namespace Arash.Combat
 
             cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, desiredSize, ref zoomVelocity, zoomSmoothTime);
 
-            var goal = Clamp(new Vector3(desired.x, desired.y, transform.position.z), cam.orthographicSize);
-            transform.position = Vector3.SmoothDamp(transform.position, goal, ref moveVelocity,
-                following ? followSmoothTime : returnSmoothTime);
+            var goal = Clamp(new Vector3(desired.x, desired.y, focus.z), cam.orthographicSize);
+            focus = Vector3.SmoothDamp(focus, goal, ref moveVelocity, following ? followSmoothTime : returnSmoothTime);
+            transform.position = focus + ShakeOffset();
+        }
+
+        Vector3 ShakeOffset()
+        {
+            if (shakeRemaining <= 0f)
+                return Vector3.zero;
+            shakeRemaining -= Time.unscaledDeltaTime;
+            var strength = shakeAmplitude * Mathf.Clamp01(shakeRemaining / shakeDuration);
+            return (Vector3)(Random.insideUnitCircle * strength);
         }
 
         Vector2 HomePoint()
         {
-            return home != null ? (Vector2)home.position + homeOffset : (Vector2)transform.position;
+            if (home == null)
+                return focus;
+            var offset = homeOffset;
+            if (!homeFacingRight)
+                offset.x = -offset.x;
+            return (Vector2)home.position + offset;
         }
 
         Vector3 Clamp(Vector3 position, float size)

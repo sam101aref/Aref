@@ -22,10 +22,14 @@ namespace Arash.Combat
     /// <summary>
     /// A flying arrow. It moves itself with <see cref="Ballistics"/> on the fixed time step (so it
     /// follows the aim preview exactly) and line-casts each step to find what it hits. On impact it
-    /// sticks into the collider and stays there. The transform pivot is the arrow tip.
+    /// sticks into the collider, damages it through its <see cref="HitZone"/>, pushes it if it is a
+    /// loose ragdoll part, and stays there. The transform pivot is the arrow tip.
     /// </summary>
     public class Arrow : MonoBehaviour
     {
+        [SerializeField] float damage = DamageRules.StandardArrowDamage;
+        [SerializeField, Tooltip("Impulse per unit of speed given to loose (dynamic) bodies it hits.")]
+        float impactImpulse = 0.03f;
         [SerializeField, Tooltip("How deep the tip sinks into what it hits.")]
         float penetration = 0.2f;
         [SerializeField] LayerMask hitMask = ~0;
@@ -39,6 +43,9 @@ namespace Arash.Combat
 
         public bool IsFlying { get; private set; }
         public Vector2 Velocity { get { return velocity; } }
+        public float Damage { get { return damage; } }
+        /// <summary>Root transform of the archer who shot this arrow.</summary>
+        public Transform Shooter { get { return ignoredRoot; } }
 
         static readonly RaycastHit2D[] HitBuffer = new RaycastHit2D[16];
 
@@ -133,8 +140,17 @@ namespace Arash.Combat
             PointAlong(direction);
             transform.SetParent(hit.collider.transform, true);
 
+            var body = hit.collider.attachedRigidbody;
+            if (body != null && body.bodyType == RigidbodyType2D.Dynamic)
+                body.AddForceAtPosition(velocity * impactImpulse, hit.point, ForceMode2D.Impulse);
+
+            var arrowHit = new ArrowHit(hit.collider, hit.point, hit.normal, velocity);
+            var zone = hit.collider.GetComponent<HitZone>();
+            if (zone != null)
+                zone.ReceiveHit(this, arrowHit);
+
             if (Stuck != null)
-                Stuck(this, new ArrowHit(hit.collider, hit.point, hit.normal, velocity));
+                Stuck(this, arrowHit);
         }
 
         void PointAlong(Vector2 direction)

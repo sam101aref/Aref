@@ -19,7 +19,7 @@ namespace Arash.Editor.Setup
     public static class ProjectSetup
     {
         // Bump when a new setup step is added so existing checkouts pick it up.
-        const int SetupVersion = 2;
+        const int SetupVersion = 3;
         const string MarkerPath = "ProjectSettings/ArashProjectSetup.json";
 
         // The application ID is permanent once the game is published on Google Play.

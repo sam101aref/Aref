@@ -68,8 +68,8 @@ Setup can be re-run any time from **Arash ▸ Setup**. · از منوی **Arash 
 
 ## Playing the current build · بازی کردن نسخهٔ فعلی
 
-The APK opens a **practice range**: touch anywhere, pull back and release to shoot. Drag back to where you started to cancel.
-نسخهٔ فعلی یک **میدان تمرین** است: هر جای صفحه را لمس کنید، به عقب بکشید و رها کنید. برای لغو، انگشت را به نقطهٔ شروع برگردانید.
+The APK opens a **duel** against a Turanian archer, taking turns. Touch anywhere, pull back and release to shoot; drag back to where you started to cancel. Headshots kill; body shots take 40%, arms and legs 25%. Tap after the battle to play again.
+نسخهٔ فعلی یک **دوئل نوبتی** با یک کماندار تورانی است. هر جای صفحه را لمس کنید، به عقب بکشید و رها کنید؛ برای لغو، انگشت را به نقطهٔ شروع برگردانید. تیر به سر کشنده است، به بدن ۴۰٪ و به دست و پا ۲۵٪ آسیب می‌زند. بعد از پایان نبرد با یک لمس دوباره بازی کنید.
 
 ## Project layout · ساختار پروژه
 
@@ -77,9 +77,10 @@ The APK opens a **practice range**: touch anywhere, pull back and release to sho
 Assets/_Project/
   Art/  Audio/  Data/  Localization/  Prefabs/  Scenes/  Settings/
   Scripts/        game code (assembly Arash.Runtime)
-    Combat/       aiming, bow, arrow, trajectory preview, battle camera
+    Combat/       aiming, bow, arrow, preview, camera, damage, ragdoll, turns, enemy AI
+    UI/           placeholder battle HUD
     Core/         bootstrap
   Tests/EditMode/ unit tests (run in CI before every build)
   Editor/Setup/   project setup and CI build (F-01)
-  Editor/Content/ builds the placeholder practice range (prefabs + Battle scene)
+  Editor/Content/ builds the placeholder duel (prefabs + Battle scene)
 ```

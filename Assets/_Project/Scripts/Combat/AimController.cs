@@ -7,9 +7,10 @@ namespace Arash.Combat
     /// <summary>
     /// Player aiming: touch anywhere, pull back and release to shoot (mouse works the same in the editor).
     /// Dragging back to roughly where the touch started cancels the shot.
-    /// Disable this component to block input, e.g. while it is the enemy's turn.
+    /// Input is only read while this component is enabled; as the player's <see cref="ITurnController"/>
+    /// it enables itself for the player's turn and disables itself once the arrow is away.
     /// </summary>
-    public class AimController : MonoBehaviour
+    public class AimController : MonoBehaviour, ITurnController
     {
         [SerializeField] Bow bow;
         [SerializeField] TrajectoryPreview preview;
@@ -25,6 +26,19 @@ namespace Arash.Combat
         public AimState CurrentAim { get; private set; }
 
         Vector2 dragStart;
+        Action<Arrow> turnCallback;
+
+        public void BeginTurn(Combatant self, Combatant opponent, Action<Arrow> onShot)
+        {
+            turnCallback = onShot;
+            enabled = true;
+        }
+
+        public void CancelTurn()
+        {
+            turnCallback = null;
+            enabled = false;
+        }
 
         void OnDisable()
         {
@@ -98,8 +112,18 @@ namespace Arash.Combat
             var arrow = bow.Fire(aim);
             if (rig != null)
                 rig.Relax();
-            if (arrow != null && Shot != null)
+            if (arrow == null)
+                return;
+
+            if (Shot != null)
                 Shot(arrow);
+            if (turnCallback != null)
+            {
+                var callback = turnCallback;
+                turnCallback = null;
+                enabled = false;
+                callback(arrow);
+            }
         }
 
         void Cancel()

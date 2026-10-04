@@ -33,7 +33,12 @@ namespace Arash.Combat
 
         public Vector2 LaunchVelocity(AimState aim)
         {
-            return aim.Direction * Mathf.Lerp(minLaunchSpeed, maxLaunchSpeed, aim.Power);
+            return aim.Direction * SpeedForPower(aim.Power);
+        }
+
+        public float SpeedForPower(float power)
+        {
+            return Mathf.Lerp(minLaunchSpeed, maxLaunchSpeed, power);
         }
 
         public Arrow Fire(AimState aim)
