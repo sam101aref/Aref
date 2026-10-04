@@ -1,0 +1,31 @@
+{
+    "name": "Arash.Tests.EditMode",
+    "rootNamespace": "Arash.Tests",
+    "references": [
+        "Arash.Runtime",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS",
+        "ARASH_INPUT_SYSTEM"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0",
+            "define": "ARASH_INPUT_SYSTEM"
+        }
+    ],
+    "noEngineReferences": false
+}

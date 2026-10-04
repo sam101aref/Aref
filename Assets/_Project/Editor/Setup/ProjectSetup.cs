@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -18,7 +19,7 @@ namespace Arash.Editor.Setup
     public static class ProjectSetup
     {
         // Bump when a new setup step is added so existing checkouts pick it up.
-        const int SetupVersion = 1;
+        const int SetupVersion = 2;
         const string MarkerPath = "ProjectSettings/ArashProjectSetup.json";
 
         // The application ID is permanent once the game is published on Google Play.
@@ -42,6 +43,12 @@ namespace Arash.Editor.Setup
 
         /// <summary>Set by the URP setup assembly to add a global 2D light to new scenes.</summary>
         internal static Action AddGlobalLight;
+
+        /// <summary>
+        /// Steps that build game content (prefabs, scene contents) once the base scenes exist.
+        /// Registered by assemblies that depend on the game code. Each returns false on failure.
+        /// </summary>
+        internal static readonly List<Func<bool>> ContentSteps = new List<Func<bool>>();
 
         [Serializable]
         class Marker
@@ -76,8 +83,15 @@ namespace Arash.Editor.Setup
             if (!CreateScenes())
                 return false;
 
+            var contentReady = ContentSteps.Count > 0;
+            foreach (var step in ContentSteps)
+                contentReady &= step();
+            if (!contentReady)
+                Debug.LogWarning("[Arash Setup] Game content was not built (game code not compiled yet, or a step failed).");
+
             AssetDatabase.SaveAssets();
-            if (pipelineReady)
+            var complete = pipelineReady && contentReady;
+            if (complete)
                 WriteMarker(); // otherwise setup retries on the next reload
 
             SwitchToAndroid();
@@ -93,7 +107,7 @@ namespace Arash.Editor.Setup
                 EditorApplication.OpenProject(Directory.GetCurrentDirectory());
             }
 
-            return pipelineReady;
+            return complete;
         }
 
         static void ConfigureEditor()

@@ -1,0 +1,27 @@
+{
+    "name": "Arash.Editor.Content",
+    "rootNamespace": "Arash.Editor.Content",
+    "references": [
+        "Arash.Runtime",
+        "Arash.Editor.Setup"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "ARASH_INPUT_SYSTEM"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0",
+            "define": "ARASH_INPUT_SYSTEM"
+        }
+    ],
+    "noEngineReferences": false
+}

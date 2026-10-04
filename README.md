@@ -66,11 +66,20 @@ Setup can be re-run any time from **Arash ▸ Setup**. · از منوی **Arash 
 | Package name | `com.sam101aref.arashthearcher` — change in `ProjectSetup.cs` **before** the first Google Play release |
 | Scenes | `Boot`, `MainMenu`, `WorldMap`, `Battle`, `Cutscene` |
 
+## Playing the current build · بازی کردن نسخهٔ فعلی
+
+The APK opens a **practice range**: touch anywhere, pull back and release to shoot. Drag back to where you started to cancel.
+نسخهٔ فعلی یک **میدان تمرین** است: هر جای صفحه را لمس کنید، به عقب بکشید و رها کنید. برای لغو، انگشت را به نقطهٔ شروع برگردانید.
+
 ## Project layout · ساختار پروژه
 
 ```
 Assets/_Project/
   Art/  Audio/  Data/  Localization/  Prefabs/  Scenes/  Settings/
-  Scripts/  (Core, Combat, AI, Levels, Story, UI, Progression)
-  Editor/Setup/   project setup tools (F-01)
+  Scripts/        game code (assembly Arash.Runtime)
+    Combat/       aiming, bow, arrow, trajectory preview, battle camera
+    Core/         bootstrap
+  Tests/EditMode/ unit tests (run in CI before every build)
+  Editor/Setup/   project setup and CI build (F-01)
+  Editor/Content/ builds the placeholder practice range (prefabs + Battle scene)
 ```

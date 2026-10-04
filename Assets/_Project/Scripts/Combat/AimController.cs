@@ -1,0 +1,117 @@
+using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace Arash.Combat
+{
+    /// <summary>
+    /// Player aiming: touch anywhere, pull back and release to shoot (mouse works the same in the editor).
+    /// Dragging back to roughly where the touch started cancels the shot.
+    /// Disable this component to block input, e.g. while it is the enemy's turn.
+    /// </summary>
+    public class AimController : MonoBehaviour
+    {
+        [SerializeField] Bow bow;
+        [SerializeField] TrajectoryPreview preview;
+        [SerializeField] ArcherRig rig;
+        [SerializeField] AimSettings settings = new AimSettings();
+        [SerializeField] bool facingRight = true;
+
+        public event Action AimStarted;
+        public event Action AimCancelled;
+        public event Action<Arrow> Shot;
+
+        public bool IsAiming { get; private set; }
+        public AimState CurrentAim { get; private set; }
+
+        Vector2 dragStart;
+
+        void OnDisable()
+        {
+            if (IsAiming)
+                Cancel();
+        }
+
+        void Update()
+        {
+            var pointer = Pointer.current;
+            if (pointer == null)
+                return;
+
+            var position = pointer.position.ReadValue();
+
+            if (!IsAiming)
+            {
+                if (pointer.press.wasPressedThisFrame)
+                    Begin(position);
+                return;
+            }
+
+            UpdateAim(position);
+
+            if (pointer.press.wasReleasedThisFrame || !pointer.press.isPressed)
+                Release();
+        }
+
+        void Begin(Vector2 screenPosition)
+        {
+            IsAiming = true;
+            dragStart = screenPosition;
+            CurrentAim = AimState.Cancelled;
+            if (AimStarted != null)
+                AimStarted();
+        }
+
+        void UpdateAim(Vector2 screenPosition)
+        {
+            CurrentAim = AimModel.Evaluate(dragStart, screenPosition, Screen.height, settings, facingRight);
+
+            if (!CurrentAim.IsValid)
+            {
+                if (preview != null)
+                    preview.Hide();
+                if (rig != null)
+                    rig.Relax();
+                return;
+            }
+
+            // Move the arm first so the preview starts from the bow's new position.
+            if (rig != null)
+                rig.Aim(CurrentAim.Direction);
+            if (preview != null && bow != null)
+                preview.Show(bow.LaunchPosition, bow.LaunchVelocity(CurrentAim), bow.FlightAcceleration);
+        }
+
+        void Release()
+        {
+            var aim = CurrentAim;
+            IsAiming = false;
+            if (preview != null)
+                preview.Hide();
+
+            if (!aim.IsValid || bow == null)
+            {
+                Cancel();
+                return;
+            }
+
+            var arrow = bow.Fire(aim);
+            if (rig != null)
+                rig.Relax();
+            if (arrow != null && Shot != null)
+                Shot(arrow);
+        }
+
+        void Cancel()
+        {
+            IsAiming = false;
+            CurrentAim = AimState.Cancelled;
+            if (preview != null)
+                preview.Hide();
+            if (rig != null)
+                rig.Relax();
+            if (AimCancelled != null)
+                AimCancelled();
+        }
+    }
+}

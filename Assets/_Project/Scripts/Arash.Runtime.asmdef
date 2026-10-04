@@ -1,0 +1,24 @@
+{
+    "name": "Arash.Runtime",
+    "rootNamespace": "Arash",
+    "references": [
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "ARASH_INPUT_SYSTEM"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0",
+            "define": "ARASH_INPUT_SYSTEM"
+        }
+    ],
+    "noEngineReferences": false
+}

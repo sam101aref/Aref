@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
 
-// The URP step lives in its own assembly so it only compiles once URP is installed.
+// These assemblies only compile once their packages are installed, and hook into ProjectSetup.
 [assembly: InternalsVisibleTo("Arash.Editor.Setup.URP")]
+[assembly: InternalsVisibleTo("Arash.Editor.Content")]
