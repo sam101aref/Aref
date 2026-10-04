@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Arash.Combat;
 using Arash.Core;
 using Arash.Localization;
 using Arash.Story;
@@ -24,6 +25,7 @@ namespace Arash.UI
             public int Coins;
             public Action Next;
             public Action Map;
+            public bool Doubled;
         }
 
         [SerializeField] float popupDuration = 1.1f;
@@ -35,6 +37,11 @@ namespace Arash.UI
         bool pauseOpen;
         Func<string> status;
         float? wind;
+        PlayerArsenal arsenal;
+        RectTransform farrFill;
+        Text farrLabel;
+        Text specialLabel;
+        Image specialButton;
         List<DialogueLine> dialogue;
         int dialogueIndex;
         Action dialogueDone;
@@ -81,7 +88,19 @@ namespace Arash.UI
         public void ShowResult(bool won, int stars, int coins, Action next, Action map)
         {
             result = new Result { Won = won, Stars = stars, Coins = coins, Next = next, Map = map ?? SceneFlow.ToWorldMap };
+            Audio.AudioService.Play(won ? Audio.Sfx.Victory : Audio.Sfx.Defeat);
             pauseOpen = false;
+            Rebuild();
+        }
+
+        /// <summary>Shows the farr meter and special-arrow button (F-31, F-32); null hides them.</summary>
+        public void SetArsenal(PlayerArsenal playerArsenal)
+        {
+            if (arsenal != null)
+                arsenal.Changed -= RefreshArsenal;
+            arsenal = playerArsenal;
+            if (arsenal != null)
+                arsenal.Changed += RefreshArsenal;
             Rebuild();
         }
 
@@ -163,6 +182,9 @@ namespace Arash.UI
             if (wind.HasValue && result == null)
                 BuildWind(canvas, wind.Value);
 
+            if (arsenal != null && result == null)
+                BuildArsenal(canvas);
+
             popup = UIFactory.Label(canvas, string.Empty, 100, UIFactory.Gold, TextAnchor.MiddleCenter, true);
             UIFactory.Place(popup.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 280f), new Vector2(1600f, 160f));
             popup.gameObject.SetActive(false);
@@ -173,6 +195,55 @@ namespace Arash.UI
                 DialogueView.Show(canvas, dialogue[dialogueIndex], () => AdvanceDialogue(false), () => AdvanceDialogue(true));
             else if (pauseOpen)
                 BuildPause(canvas);
+        }
+
+        void BuildArsenal(RectTransform canvas)
+        {
+            const float width = 360f;
+            var bar = UIFactory.Panel(canvas, "Farr", new Color(0f, 0f, 0f, 0.45f));
+            UIFactory.Place(bar.rectTransform, new Vector2(0f, 0f), new Vector2(40f, 40f), new Vector2(width, 34f));
+            var fill = UIFactory.Panel(bar.transform, "Fill", UIFactory.Gold);
+            farrFill = fill.rectTransform;
+            farrFill.anchorMin = new Vector2(Loc.IsRtl ? 1f : 0f, 0f);
+            farrFill.anchorMax = new Vector2(Loc.IsRtl ? 1f : 0f, 1f);
+            farrFill.pivot = new Vector2(Loc.IsRtl ? 1f : 0f, 0.5f);
+            farrFill.offsetMin = farrFill.offsetMax = Vector2.zero;
+
+            farrLabel = UIFactory.Label(canvas, Loc.T("farr.name"), 32, UIFactory.Cream, TextAnchor.MiddleLeft, true);
+            UIFactory.Place(farrLabel.rectTransform, new Vector2(0f, 0f), new Vector2(40f, 80f), new Vector2(width, 50f));
+
+            if (arsenal.HasSpecials)
+            {
+                var button = UIFactory.Button(canvas, string.Empty, arsenal.ToggleArmed, UIFactory.Muted, 32);
+                specialButton = button.GetComponent<Image>();
+                specialLabel = button.GetComponentInChildren<Text>();
+                UIFactory.Place((RectTransform)button.transform, new Vector2(0f, 0f), new Vector2(420f, 30f), new Vector2(300f, 100f));
+
+                var cycle = UIFactory.Button(canvas, "<>", arsenal.CycleSelection, new Color(0f, 0f, 0f, 0.45f), 32);
+                UIFactory.Place((RectTransform)cycle.transform, new Vector2(0f, 0f), new Vector2(735f, 30f), new Vector2(100f, 100f));
+            }
+            RefreshArsenal();
+        }
+
+        void RefreshArsenal()
+        {
+            if (arsenal == null || farrFill == null || arsenal.Farr == null)
+                return;
+            farrFill.sizeDelta = new Vector2(360f * arsenal.Farr.Value, 0f);
+
+            if (specialLabel == null)
+                return;
+            var name = Loc.T("special." + arsenal.Selected.ToString().ToLowerInvariant());
+            if (arsenal.Armed)
+            {
+                specialLabel.text = Loc.T("farr.armed", Loc.Get("special." + arsenal.Selected.ToString().ToLowerInvariant()));
+                specialButton.color = UIFactory.Gold;
+            }
+            else
+            {
+                specialLabel.text = name;
+                specialButton.color = arsenal.Farr.IsFull ? UIFactory.Turquoise : UIFactory.Muted;
+            }
         }
 
         static void BuildWind(RectTransform canvas, float strength)
@@ -226,6 +297,23 @@ namespace Arash.UI
             {
                 var coins = UIFactory.Label(overlay, Loc.T("battle.coins", result.Coins), 48, UIFactory.Cream);
                 UIFactory.Place(coins.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 50f), new Vector2(800f, 80f));
+
+                if (!result.Doubled && Monetization.CanOfferDoubleCoins(result.Coins))
+                {
+                    var bonus = result.Coins;
+                    var doubleCoins = UIFactory.Button(overlay, Loc.T("store.double_coins"), () =>
+                        Monetization.Ads.ShowRewarded(rewarded =>
+                        {
+                            if (!rewarded)
+                                return;
+                            SaveSystem.Data.coins += bonus;
+                            SaveSystem.Save();
+                            result.Coins += bonus;
+                            result.Doubled = true;
+                            Rebuild();
+                        }), UIFactory.Gold, 34);
+                    UIFactory.Place((RectTransform)doubleCoins.transform, new Vector2(0.5f, 0.5f), new Vector2(560f, 50f), new Vector2(380f, 80f));
+                }
             }
 
             var y = -60f;

@@ -1084,6 +1084,276 @@
       "key": "cut.ending.4",
       "en": "Every year, at the festival of Tirgan, Iran remembers Arash the Archer.",
       "fa": "هر سال، در جشن تیرگان، ایران آرش کمانگیر را به یاد می‌آورد."
+    },
+    {
+      "key": "ui.armory",
+      "en": "Armory",
+      "fa": "زرادخانه"
+    },
+    {
+      "key": "armory.coins",
+      "en": "Coins: {0}",
+      "fa": "سکه: {0}"
+    },
+    {
+      "key": "armory.tab.bow",
+      "en": "Bows",
+      "fa": "کمان‌ها"
+    },
+    {
+      "key": "armory.tab.upgrade",
+      "en": "Upgrades",
+      "fa": "ارتقاها"
+    },
+    {
+      "key": "armory.tab.specialarrow",
+      "en": "Special Arrows",
+      "fa": "تیرهای ویژه"
+    },
+    {
+      "key": "armory.tab.outfit",
+      "en": "Outfits",
+      "fa": "جامه‌ها"
+    },
+    {
+      "key": "armory.locked",
+      "en": "Locked",
+      "fa": "قفل"
+    },
+    {
+      "key": "armory.buy",
+      "en": "Buy · {0}",
+      "fa": "خرید · {0}"
+    },
+    {
+      "key": "armory.maxed",
+      "en": "Maxed",
+      "fa": "کامل"
+    },
+    {
+      "key": "armory.equipped",
+      "en": "Equipped",
+      "fa": "در دست"
+    },
+    {
+      "key": "armory.equip",
+      "en": "Equip",
+      "fa": "برگزیدن"
+    },
+    {
+      "key": "armory.bow.wood.name",
+      "en": "Wooden Bow",
+      "fa": "کمان چوبی"
+    },
+    {
+      "key": "armory.bow.wood.desc",
+      "en": "A village bow. Honest and light.",
+      "fa": "کمان روستا. ساده و سبک."
+    },
+    {
+      "key": "armory.bow.horn.name",
+      "en": "Horn Bow",
+      "fa": "کمان شاخی"
+    },
+    {
+      "key": "armory.bow.horn.desc",
+      "en": "Stronger draw and a slightly longer aim guide.",
+      "fa": "کشش قوی‌تر و راهنمای نشانه‌گیری کمی بلندتر."
+    },
+    {
+      "key": "armory.bow.champion.name",
+      "en": "Champion's Bow",
+      "fa": "کمان پهلوانی"
+    },
+    {
+      "key": "armory.bow.champion.desc",
+      "en": "Powerful, steady, and fills farr faster. Unlocked by defeating Barman.",
+      "fa": "پرقدرت و استوار، فرّ را سریع‌تر پر می‌کند. با شکست بارمان باز می‌شود."
+    },
+    {
+      "key": "armory.bow.arash.name",
+      "en": "The Bow of Arash",
+      "fa": "کمان آرش"
+    },
+    {
+      "key": "armory.bow.arash.desc",
+      "en": "The bow of legend, earned at the summit of Damavand.",
+      "fa": "کمان افسانه‌ای، که بر قلهٔ دماوند به دست می‌آید."
+    },
+    {
+      "key": "armory.upgrade.health.name",
+      "en": "Endurance",
+      "fa": "پایداری"
+    },
+    {
+      "key": "armory.upgrade.health.desc",
+      "en": "+10% health per level.",
+      "fa": "۱۰ درصد سلامت بیشتر در هر سطح."
+    },
+    {
+      "key": "armory.upgrade.aim.name",
+      "en": "Keen Eye",
+      "fa": "چشم تیزبین"
+    },
+    {
+      "key": "armory.upgrade.aim.desc",
+      "en": "A longer aim guide (not on Hard).",
+      "fa": "راهنمای نشانه‌گیری بلندتر (نه در سطح سخت)."
+    },
+    {
+      "key": "armory.upgrade.farr.name",
+      "en": "Inner Light",
+      "fa": "فروغ درون"
+    },
+    {
+      "key": "armory.upgrade.farr.desc",
+      "en": "Farr fills 15% faster per level.",
+      "fa": "فرّ در هر سطح ۱۵ درصد سریع‌تر پر می‌شود."
+    },
+    {
+      "key": "armory.special.haoma.name",
+      "en": "Haoma Arrow",
+      "fa": "تیر هوم"
+    },
+    {
+      "key": "armory.special.haoma.desc",
+      "en": "Heals a third of your health as it flies.",
+      "fa": "هنگام پرواز یک‌سوم سلامتت را برمی‌گرداند."
+    },
+    {
+      "key": "armory.special.fire.name",
+      "en": "Fire Arrow",
+      "fa": "تیر آتشین"
+    },
+    {
+      "key": "armory.special.fire.desc",
+      "en": "Burns wooden cover where it lands.",
+      "fa": "سنگر چوبی را هر جا بنشیند می‌سوزاند."
+    },
+    {
+      "key": "armory.special.triple.name",
+      "en": "Triple Arrow",
+      "fa": "تیر سه‌شاخه"
+    },
+    {
+      "key": "armory.special.triple.desc",
+      "en": "Three arrows at once in a narrow fan.",
+      "fa": "سه تیر با هم، در بادبزنی باریک."
+    },
+    {
+      "key": "armory.special.piercing.name",
+      "en": "Piercing Arrow",
+      "fa": "تیر شکافنده"
+    },
+    {
+      "key": "armory.special.piercing.desc",
+      "en": "Goes through shields and up to three enemies.",
+      "fa": "از سپر و تا سه دشمن می‌گذرد."
+    },
+    {
+      "key": "armory.special.simurgh.name",
+      "en": "Simurgh Arrow",
+      "fa": "تیر سیمرغ"
+    },
+    {
+      "key": "armory.special.simurgh.desc",
+      "en": "Bends its flight towards the nearest enemy.",
+      "fa": "مسیرش را به سوی نزدیک‌ترین دشمن خم می‌کند."
+    },
+    {
+      "key": "armory.outfit.teal.name",
+      "en": "Border Guard",
+      "fa": "مرزبان"
+    },
+    {
+      "key": "armory.outfit.teal.desc",
+      "en": "The turquoise of the border villages.",
+      "fa": "فیروزه‌ای روستاهای مرزی."
+    },
+    {
+      "key": "armory.outfit.lapis.name",
+      "en": "Lapis Robe",
+      "fa": "جامهٔ لاجوردی"
+    },
+    {
+      "key": "armory.outfit.lapis.desc",
+      "en": "Deep blue, like the tiles of old Isfahan.",
+      "fa": "آبی ژرف، چون کاشی‌های اصفهان کهن."
+    },
+    {
+      "key": "armory.outfit.saffron.name",
+      "en": "Saffron Robe",
+      "fa": "جامهٔ زعفرانی"
+    },
+    {
+      "key": "armory.outfit.saffron.desc",
+      "en": "The gold of the harvest.",
+      "fa": "زرینِ هنگام برداشت."
+    },
+    {
+      "key": "armory.outfit.crimson.name",
+      "en": "Crimson Robe",
+      "fa": "جامهٔ ارغوانی"
+    },
+    {
+      "key": "armory.outfit.crimson.desc",
+      "en": "The red of the archers of Manuchehr.",
+      "fa": "سرخِ کمانداران منوچهر."
+    },
+    {
+      "key": "armory.outfit.royal.name",
+      "en": "Royal Guard",
+      "fa": "گارد شاهی"
+    },
+    {
+      "key": "armory.outfit.royal.desc",
+      "en": "Worn by those who stood on the summit.",
+      "fa": "جامهٔ آنان که بر قله ایستادند."
+    },
+    {
+      "key": "farr.name",
+      "en": "Farr",
+      "fa": "فرّ ایزدی"
+    },
+    {
+      "key": "farr.armed",
+      "en": "{0} ready!",
+      "fa": "{0} آماده!"
+    },
+    {
+      "key": "special.fire",
+      "en": "Fire",
+      "fa": "آتشین"
+    },
+    {
+      "key": "special.triple",
+      "en": "Triple",
+      "fa": "سه‌شاخه"
+    },
+    {
+      "key": "special.piercing",
+      "en": "Piercing",
+      "fa": "شکافنده"
+    },
+    {
+      "key": "special.simurgh",
+      "en": "Simurgh",
+      "fa": "سیمرغ"
+    },
+    {
+      "key": "special.haoma",
+      "en": "Haoma",
+      "fa": "هوم"
+    },
+    {
+      "key": "store.double_coins",
+      "en": "Double coins (ad)",
+      "fa": "دو برابر سکه (تبلیغ)"
+    },
+    {
+      "key": "store.unlock_full",
+      "en": "Unlock the full story · {0}",
+      "fa": "باز کردن کل داستان · {0}"
     }
   ]
 }

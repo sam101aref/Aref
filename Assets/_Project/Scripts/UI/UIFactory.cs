@@ -132,7 +132,11 @@ namespace Arash.UI
             var button = image.gameObject.AddComponent<Button>();
             button.targetGraphic = image;
             if (onClick != null)
-                button.onClick.AddListener(() => onClick());
+                button.onClick.AddListener(() =>
+                {
+                    Audio.AudioService.Play(Audio.Sfx.Click, 0.5f);
+                    onClick();
+                });
 
             var label = Label(image.transform, text, fontSize, Cream, TextAnchor.MiddleCenter, true);
             Stretch(label.rectTransform);

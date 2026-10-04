@@ -17,14 +17,20 @@ namespace Arash.Combat
             if (health == null)
                 health = GetComponentInParent<Health>();
             if (health != null)
+            {
                 health.Damaged += OnDamaged;
+                health.Changed += Refresh;
+            }
             Refresh();
         }
 
         void OnDisable()
         {
             if (health != null)
+            {
                 health.Damaged -= OnDamaged;
+                health.Changed -= Refresh;
+            }
         }
 
         void OnDamaged(DamageInfo info, bool killed)
@@ -37,7 +43,7 @@ namespace Arash.Combat
 
         void Refresh()
         {
-            if (health == null || fill == null)
+            if (health == null || fill == null || !gameObject.activeInHierarchy)
                 return;
 
             var fraction = Mathf.Clamp01(health.Fraction);

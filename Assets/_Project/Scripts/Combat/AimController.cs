@@ -24,6 +24,9 @@ namespace Arash.Combat
         public event Action AimCancelled;
         public event Action<Arrow> Shot;
 
+        /// <summary>Replaces the normal shot, e.g. to fire an armed special arrow (F-32).</summary>
+        public Func<AimState, Arrow> FireOverride;
+
         public bool IsAiming { get; private set; }
         public AimState CurrentAim { get; private set; }
 
@@ -117,7 +120,7 @@ namespace Arash.Combat
                 return;
             }
 
-            var arrow = bow.Fire(aim);
+            var arrow = FireOverride != null ? FireOverride(aim) : bow.Fire(aim);
             if (rig != null)
                 rig.Relax();
             if (arrow == null)

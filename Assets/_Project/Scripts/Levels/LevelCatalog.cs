@@ -82,8 +82,15 @@ namespace Arash.Levels
             return chapters.Find(c => c.levels.Contains(level));
         }
 
+        public int ChapterIndexOf(LevelDefinition level)
+        {
+            return chapters.FindIndex(c => c.levels.Contains(level));
+        }
+
         public bool IsUnlocked(LevelDefinition level, SaveData save)
         {
+            if (!Monetization.IsChapterAccessible(ChapterIndexOf(level), save))
+                return false;
             var all = AllLevels();
             var ids = all.ConvertAll(l => l.id);
             var chapter = ChapterOf(level);

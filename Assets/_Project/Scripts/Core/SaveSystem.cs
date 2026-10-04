@@ -23,7 +23,14 @@ namespace Arash.Core
         public int difficulty = 1;
     }
 
-    /// <summary>Everything that is saved: progress, coins and settings (F-14).</summary>
+    [Serializable]
+    public class UpgradeRecord
+    {
+        public string id;
+        public int level;
+    }
+
+    /// <summary>Everything that is saved: progress, coins, settings, armory and purchases (F-14).</summary>
     [Serializable]
     public class SaveData
     {
@@ -34,6 +41,36 @@ namespace Arash.Core
         public List<LevelRecord> levels = new List<LevelRecord>();
         public SettingsData settings = new SettingsData();
         public List<string> seenCutscenes = new List<string>();
+
+        // Armory (F-33, F-34)
+        public List<string> owned = new List<string>();
+        public List<UpgradeRecord> upgrades = new List<UpgradeRecord>();
+        public string equippedBow = Armory.DefaultBow;
+        public string equippedOutfit = Armory.DefaultOutfit;
+        public string selectedSpecial;
+
+        // Store purchases (F-38)
+        public List<string> entitlements = new List<string>();
+
+        public bool Owns(string itemId)
+        {
+            return owned.Contains(itemId);
+        }
+
+        public int UpgradeLevel(string upgradeId)
+        {
+            var record = upgrades.Find(u => u.id == upgradeId);
+            return record != null ? record.level : 0;
+        }
+
+        public void SetUpgradeLevel(string upgradeId, int level)
+        {
+            var record = upgrades.Find(u => u.id == upgradeId);
+            if (record == null)
+                upgrades.Add(new UpgradeRecord { id = upgradeId, level = level });
+            else
+                record.level = level;
+        }
 
         public bool HasSeen(string cutsceneId)
         {
@@ -146,6 +183,16 @@ namespace Arash.Core
                 save.settings = new SettingsData();
             if (save.seenCutscenes == null)
                 save.seenCutscenes = new List<string>();
+            if (save.owned == null)
+                save.owned = new List<string>();
+            if (save.upgrades == null)
+                save.upgrades = new List<UpgradeRecord>();
+            if (save.entitlements == null)
+                save.entitlements = new List<string>();
+            if (string.IsNullOrEmpty(save.equippedBow))
+                save.equippedBow = Armory.DefaultBow;
+            if (string.IsNullOrEmpty(save.equippedOutfit))
+                save.equippedOutfit = Armory.DefaultOutfit;
             return save;
         }
 

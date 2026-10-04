@@ -37,10 +37,12 @@ namespace Arash.Combat
             if (target == null)
                 return;
 
-            var amount = multiplierOverride >= 0f
+            // Piercing arrows go through armor as if it were the body behind it.
+            var effectiveZone = zone == HitZoneType.Armor && arrow.IgnoresArmor ? HitZoneType.Torso : zone;
+            var amount = multiplierOverride >= 0f && effectiveZone == zone
                 ? arrow.Damage * multiplierOverride
-                : DamageRules.Compute(arrow.Damage, zone);
-            target.ApplyDamage(new DamageInfo(amount, zone, hit.Point, hit.Velocity, hit.Collider, arrow.Shooter));
+                : DamageRules.Compute(arrow.Damage, effectiveZone);
+            target.ApplyDamage(new DamageInfo(amount, effectiveZone, hit.Point, hit.Velocity, hit.Collider, arrow.Shooter));
         }
     }
 }

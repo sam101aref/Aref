@@ -12,6 +12,8 @@ namespace Arash.UI
     /// </summary>
     public class WorldMapScreen : ScreenBase
     {
+        bool armoryOpen;
+
         protected override void Build(RectTransform canvas)
         {
             var save = SaveSystem.Data;
@@ -25,8 +27,15 @@ namespace Arash.UI
             var back = UIFactory.Button(canvas, Loc.T("ui.back"), SceneFlow.ToMainMenu, UIFactory.LapisLight, 40);
             UIFactory.Place((RectTransform)back.transform, new Vector2(0f, 1f), new Vector2(40f, -40f), new Vector2(260f, 90f));
 
+            var armory = UIFactory.Button(canvas, Loc.T("ui.armory"), () =>
+            {
+                armoryOpen = true;
+                OpenArmory(canvas);
+            }, UIFactory.Gold, 40);
+            UIFactory.Place((RectTransform)armory.transform, new Vector2(1f, 1f), new Vector2(-40f, -40f), new Vector2(300f, 90f));
+
             var stats = UIFactory.Label(canvas, Loc.T("map.stats", save.TotalStars, save.coins), 40, UIFactory.Cream, TextAnchor.MiddleRight);
-            UIFactory.Place(stats.rectTransform, new Vector2(1f, 1f), new Vector2(-50f, -40f), new Vector2(700f, 90f));
+            UIFactory.Place(stats.rectTransform, new Vector2(1f, 1f), new Vector2(-370f, -40f), new Vector2(700f, 90f));
 
             var area = UIFactory.Rect(canvas, "Chapters");
             UIFactory.Stretch(area);
@@ -41,14 +50,23 @@ namespace Arash.UI
             }
 
             var levelNumber = 0;
-            foreach (var chapter in catalog.chapters)
+            for (var chapterIndex = 0; chapterIndex < catalog.chapters.Count; chapterIndex++)
             {
-                var locked = save.TotalStars < chapter.starsToUnlock;
+                var chapter = catalog.chapters[chapterIndex];
+                var paywalled = !Monetization.IsChapterAccessible(chapterIndex, save);
+                var locked = paywalled || save.TotalStars < chapter.starsToUnlock;
                 var heading = Loc.T(chapter.titleKey);
-                if (locked)
+                if (!paywalled && locked)
                     heading += "   " + Loc.T("map.locked", chapter.starsToUnlock);
                 var header = UIFactory.Label(content, heading, 48, locked ? UIFactory.Muted : UIFactory.Gold, TextAnchor.MiddleLeft, true);
                 UIFactory.Height(header, 80f);
+
+                if (paywalled && Monetization.CanBuyFullGame(save))
+                {
+                    var unlock = UIFactory.Button(content, Loc.T("store.unlock_full", Monetization.Store.PriceText(Monetization.FullGameProduct)),
+                        () => Monetization.BuyFullGame(save, success => Rebuild()), UIFactory.Gold, 40);
+                    UIFactory.Height(unlock, 90f);
+                }
 
                 var grid = UIFactory.Rect(content, "Levels").gameObject.AddComponent<GridLayoutGroup>();
                 grid.cellSize = new Vector2(200f, 210f);
@@ -66,6 +84,18 @@ namespace Arash.UI
                     LevelButton(grid.transform, level, levelNumber, catalog.IsUnlocked(level, save), save.GetStars(level.id));
                 }
             }
+
+            if (armoryOpen)
+                OpenArmory(canvas);
+        }
+
+        void OpenArmory(RectTransform canvas)
+        {
+            ArmoryPanel.Open(canvas, () =>
+            {
+                armoryOpen = false;
+                Rebuild(); // coins changed
+            });
         }
 
         static void LevelButton(Transform parent, LevelDefinition level, int number, bool unlocked, int stars)

@@ -29,8 +29,12 @@ namespace Arash.Editor.Setup
 
         static bool Configure()
         {
-            if (GraphicsSettings.defaultRenderPipeline is UniversalRenderPipelineAsset)
+            var current = GraphicsSettings.defaultRenderPipeline as UniversalRenderPipelineAsset;
+            if (current != null)
+            {
+                TuneForMobile(current);
                 return true;
+            }
 
             var pipeline = AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(PipelineAssetPath);
             if (pipeline == null)
@@ -40,9 +44,22 @@ namespace Arash.Editor.Setup
                     return false;
             }
 
+            TuneForMobile(pipeline);
             GraphicsSettings.defaultRenderPipeline = pipeline;
             Debug.Log($"[Arash Setup] Render pipeline set to {PipelineAssetPath}.");
             return true;
+        }
+
+        /// <summary>
+        /// Mobile performance (F-36): a 2D game needs neither HDR nor multisampling, and both cost
+        /// bandwidth and battery on phones.
+        /// </summary>
+        static void TuneForMobile(UniversalRenderPipelineAsset pipeline)
+        {
+            pipeline.supportsHDR = false;
+            pipeline.msaaSampleCount = 1;
+            pipeline.renderScale = 1f;
+            EditorUtility.SetDirty(pipeline);
         }
 
         static UniversalRenderPipelineAsset CreatePipelineAsset()

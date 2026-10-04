@@ -81,6 +81,7 @@ Assets/_Project/
     Levels/       level and enemy-type data, catalog, star and unlock rules, level runner
     Story/        dialogue and cutscene data, cutscene player, text wrapping
     Flight/       the final arrow-flight level (F-30)
+    Audio/        synthesized music (Shur, tar, daf) and sound effects, audio service
     Localization/ string table, Persian shaper (right-to-left text)
     UI/           menus, map, settings, battle HUD (built in code)
     Core/         bootstrap, save system, settings, scene flow
@@ -89,6 +90,10 @@ Assets/_Project/
   Editor/Setup/   project setup and CI build (F-01)
   Editor/Content/ builds placeholder art, prefabs, scenes, and all story content (StoryContent.cs)
 ```
+
+## Release · انتشار
+
+Signed Google Play bundles are built by the **Release Build** workflow when a `v*` tag is pushed. Steps, secrets and the Play Console checklist: [docs/RELEASE.md](docs/RELEASE.md). Store texts: [docs/store/listing.md](docs/store/listing.md). Privacy policy: [docs/privacy-policy.md](docs/privacy-policy.md).
 
 ## Credits
 

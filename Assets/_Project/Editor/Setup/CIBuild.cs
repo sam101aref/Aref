@@ -53,16 +53,25 @@ namespace Arash.Editor.Setup
 
         public static void BuildAndroid()
         {
+            // Release builds (F-39) are Android App Bundles signed with the upload key.
+            var appBundle = GetArgument("-androidExportType") == "androidAppBundle";
+            var extension = appBundle ? ".aab" : ".apk";
             var outputPath = GetArgument("-customBuildPath") ?? DefaultOutputPath;
-            if (!outputPath.EndsWith(".apk", StringComparison.OrdinalIgnoreCase))
-                outputPath = Path.Combine(outputPath, "ArashTheArcher.apk");
+            outputPath = Path.HasExtension(outputPath)
+                ? Path.ChangeExtension(outputPath, extension)
+                : Path.Combine(outputPath, "ArashTheArcher" + extension);
             Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outputPath)));
 
             // GitHub's run number always increases, which is what Android expects from the version code.
             if (int.TryParse(Environment.GetEnvironmentVariable("GITHUB_RUN_NUMBER"), out var runNumber))
                 PlayerSettings.Android.bundleVersionCode = runNumber;
 
-            EditorUserBuildSettings.buildAppBundle = false;
+            var version = GetArgument("-buildVersion");
+            if (!string.IsNullOrEmpty(version) && version != "none")
+                PlayerSettings.bundleVersion = version.TrimStart('v');
+
+            EditorUserBuildSettings.buildAppBundle = appBundle;
+            ConfigureSigning();
 
             var scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
             if (scenes.Length == 0)
@@ -82,6 +91,23 @@ namespace Arash.Editor.Setup
                 throw new Exception($"[Arash CI] Build {summary.result} with {summary.totalErrors} error(s).");
 
             Debug.Log($"[Arash CI] Built {outputPath} ({summary.totalSize / (1024 * 1024)} MB) in {summary.totalTime}.");
+        }
+
+        /// <summary>Uses the upload keystore passed by the release workflow; debug signing otherwise.</summary>
+        static void ConfigureSigning()
+        {
+            var keystore = GetArgument("-androidKeystoreName");
+            if (string.IsNullOrEmpty(keystore) || !File.Exists(keystore))
+            {
+                PlayerSettings.Android.useCustomKeystore = false;
+                return;
+            }
+            PlayerSettings.Android.useCustomKeystore = true;
+            PlayerSettings.Android.keystoreName = Path.GetFullPath(keystore);
+            PlayerSettings.Android.keystorePass = GetArgument("-androidKeystorePass");
+            PlayerSettings.Android.keyaliasName = GetArgument("-androidKeyaliasName");
+            PlayerSettings.Android.keyaliasPass = GetArgument("-androidKeyaliasPass");
+            Debug.Log("[Arash CI] Signing with " + Path.GetFileName(keystore) + ".");
         }
 
         static string[] MissingPackages()

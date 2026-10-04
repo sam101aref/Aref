@@ -10,6 +10,8 @@ namespace Arash.Combat
         /// <summary>Raised for every hit on this character; the bool is true when the hit killed it.</summary>
         public event Action<DamageInfo, bool> Damaged;
         public event Action<DamageInfo> Died;
+        /// <summary>Raised whenever current or maximum health changes.</summary>
+        public event Action Changed;
 
         /// <summary>Raised for hits on any character, for scene-wide effects (slow motion, shake…).</summary>
         public static event Action<Health, DamageInfo, bool> AnyDamaged;
@@ -34,6 +36,18 @@ namespace Arash.Combat
         {
             maxHealth = Mathf.Max(1f, max);
             current = maxHealth;
+            if (Changed != null)
+                Changed();
+        }
+
+        /// <summary>Restores health (haoma arrows); the dead stay dead.</summary>
+        public void Heal(float amount)
+        {
+            if (IsDead || amount <= 0f)
+                return;
+            current = Mathf.Min(maxHealth, Current + amount);
+            if (Changed != null)
+                Changed();
         }
 
         public void ApplyDamage(DamageInfo info)
@@ -44,6 +58,8 @@ namespace Arash.Combat
             current = Mathf.Max(0f, Current - info.Amount);
             var killed = current <= 0f;
 
+            if (Changed != null)
+                Changed();
             if (Damaged != null)
                 Damaged(info, killed);
             if (AnyDamaged != null)

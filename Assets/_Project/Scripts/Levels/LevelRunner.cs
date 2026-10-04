@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Arash.Combat;
 using Arash.Core;
 using Arash.Localization;
@@ -29,6 +30,8 @@ namespace Arash.Levels
 
         [Header("Prefabs")]
         [SerializeField] Combatant enemyPrefab;
+        [SerializeField, Tooltip("Projectile used by the player's fire special arrow.")]
+        Arrow fireArrowPrefab;
         [SerializeField, Tooltip("Unarmed companion: envoys to protect, villagers in trials.")]
         Combatant companionPrefab;
 
@@ -48,6 +51,8 @@ namespace Arash.Levels
         LevelDefinition level;
         IBattleMode battle;
         int playerShots;
+        PlayerArsenal arsenal;
+        float startTime;
 
         public LevelDefinition Level { get { return level; } }
 
@@ -69,8 +74,7 @@ namespace Arash.Levels
             BattleEnvironment.Wind = level.wind.strength;
             foreach (var cover in level.covers)
                 CreateCover(cover);
-            if (playerPreview != null)
-                playerPreview.Duration = GameSettings.PreviewDuration;
+            ApplyLoadout();
 
             switch (level.mode)
             {
@@ -87,6 +91,36 @@ namespace Arash.Levels
                     SetUpDuel();
                     break;
             }
+        }
+
+        /// <summary>Equipment from the armory (F-33, F-34): bow, upgrades, outfit and special arrows.</summary>
+        void ApplyLoadout()
+        {
+            var loadout = Armory.CurrentLoadout(SaveSystem.Data);
+            player.Health.SetMax(100f * loadout.HealthMultiplier);
+
+            var bow = player.GetComponentInChildren<Bow>();
+            if (bow != null)
+                bow.SetProjectile(null, 8f, loadout.MaxSpeed, 1f, 1f);
+
+            // Hard difficulty has no aim guide at all (GDD 4.2); otherwise the bow and upgrades extend it.
+            if (playerPreview != null)
+            {
+                var basePreview = GameSettings.PreviewDuration;
+                playerPreview.Duration = basePreview > 0f ? basePreview + loadout.PreviewBonus : 0f;
+            }
+
+            var torso = player.BodyTarget.GetComponent<SpriteRenderer>();
+            if (torso != null)
+                torso.color = loadout.Tunic;
+
+            arsenal = player.gameObject.AddComponent<PlayerArsenal>();
+            arsenal.Configure(bow, playerAim, player.Health, fireArrowPrefab, LivingEnemies, loadout);
+        }
+
+        static IEnumerable<Combatant> LivingEnemies()
+        {
+            return FindObjectsByType<Combatant>(FindObjectsSortMode.None).Where(c => c.Team == Team.Enemy && c.IsAlive);
         }
 
         void SetUpDuel()
@@ -173,6 +207,9 @@ namespace Arash.Levels
             }
 
             hud.SetLevel(level.titleKey, level.hintKey);
+            hud.SetArsenal(arsenal);
+            startTime = Time.time;
+            Telemetry.Event("level_start", "level", level.id, "mode", level.mode.ToString());
             if (level.wind.strength != 0f || level.wind.variance > 0f)
                 hud.SetWind(BattleEnvironment.Wind);
             hud.PlayDialogue(level.introDialogue, () =>
@@ -204,6 +241,9 @@ namespace Arash.Levels
             var stars = ProgressRules.Stars(won, battle.PlayerCondition, arrowsUsed, level.stars);
             var coins = won ? stars * level.coinsPerStar : 0;
 
+            Telemetry.Event("level_end", "level", level.id, "won", won, "stars", stars,
+                "arrows", arrowsUsed, "seconds", Mathf.RoundToInt(Time.time - startTime));
+
             var save = SaveSystem.Data;
             if (won && !string.IsNullOrEmpty(level.id))
             {
@@ -230,6 +270,7 @@ namespace Arash.Levels
                 return;
             hud.SetStatus(null);
             hud.SetWind(null);
+            hud.SetArsenal(null);
             hud.PlayDialogue(won ? level.outroDialogue : null, () => hud.ShowResult(won, stars, coins, next, map));
         }
 

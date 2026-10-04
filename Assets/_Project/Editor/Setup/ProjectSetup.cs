@@ -19,7 +19,7 @@ namespace Arash.Editor.Setup
     public static class ProjectSetup
     {
         // Bump when a new setup step is added so existing checkouts pick it up.
-        const int SetupVersion = 5;
+        const int SetupVersion = 6;
         const string MarkerPath = "ProjectSettings/ArashProjectSetup.json";
 
         // The application ID is permanent once the game is published on Google Play.
@@ -142,6 +142,21 @@ namespace Arash.Editor.Setup
             // Never lower the minimum below what this Unity version already requires.
             if ((int)PlayerSettings.Android.minSdkVersion < MinAndroidApiLevel)
                 PlayerSettings.Android.minSdkVersion = (AndroidSdkVersions)MinAndroidApiLevel;
+
+            // Performance (F-36): steady frame pacing at 60 fps (set in Bootstrap) instead of vsync.
+            // Set by reflection because the property has moved between Unity versions.
+            var framePacing = typeof(PlayerSettings.Android).GetProperty("optimizedFramePacing");
+            if (framePacing != null && framePacing.CanWrite)
+                framePacing.SetValue(null, true);
+
+            var currentQuality = QualitySettings.GetQualityLevel();
+            for (var i = 0; i < QualitySettings.names.Length; i++)
+            {
+                QualitySettings.SetQualityLevel(i, false);
+                QualitySettings.vSyncCount = 0;
+                QualitySettings.antiAliasing = 0;
+            }
+            QualitySettings.SetQualityLevel(currentQuality, false);
         }
 
         /// <summary>Switches Active Input Handling to the Input System package. Returns true if it changed.</summary>

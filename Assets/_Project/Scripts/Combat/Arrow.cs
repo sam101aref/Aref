@@ -48,6 +48,17 @@ namespace Arash.Combat
         public event Action<Arrow> Lost;
         /// <summary>Raised when this arrow is knocked out of the air by another arrow.</summary>
         public event Action<Arrow> Intercepted;
+        /// <summary>Raised for every arrow that sticks into something (sound effects).</summary>
+        public static event Action<Arrow, ArrowHit> AnyStuck;
+
+        /// <summary>Piercing arrows (F-32) pass through bodies and armor.</summary>
+        public bool IgnoresArmor { get { return pierceRemaining > 0 || piercedOnce; } }
+
+        int pierceRemaining;
+        bool piercedOnce;
+        readonly System.Collections.Generic.HashSet<Health> pierced = new System.Collections.Generic.HashSet<Health>();
+        Func<Transform> homingTarget;
+        float homingTurnRate;
 
         public bool IsFlying { get; private set; }
         public Vector2 Velocity { get { return velocity; } }
@@ -78,6 +89,19 @@ namespace Arash.Combat
             PointAlong(velocity);
         }
 
+        /// <summary>Lets the arrow pass through up to <paramref name="bodies"/> characters, ignoring armor.</summary>
+        public void MakePiercing(int bodies)
+        {
+            pierceRemaining = bodies;
+        }
+
+        /// <summary>Simurgh arrow: steers towards the target the function returns, turning at most this fast.</summary>
+        public void MakeHoming(Func<Transform> target, float degreesPerSecond)
+        {
+            homingTarget = target;
+            homingTurnRate = degreesPerSecond;
+        }
+
         /// <summary>Stops the flight and drops the arrow; used when another arrow hits it.</summary>
         public void Intercept()
         {
@@ -97,6 +121,7 @@ namespace Arash.Combat
             age += Time.fixedDeltaTime;
             previousPosition = simulatedPosition;
 
+            Steer();
             var next = simulatedPosition;
             Ballistics.Step(ref next, ref velocity, acceleration, Time.fixedDeltaTime);
 
@@ -108,6 +133,11 @@ namespace Arash.Combat
                 {
                     otherArrow.Intercept();
                     Intercept();
+                    return;
+                }
+                if (TryPierce(hit))
+                {
+                    simulatedPosition = next;
                     return;
                 }
                 StickInto(hit);
@@ -135,6 +165,41 @@ namespace Arash.Combat
             PointAlong(velocity);
         }
 
+        void Steer()
+        {
+            if (homingTarget == null)
+                return;
+            var target = homingTarget();
+            if (target == null)
+                return;
+            var wanted = (Vector2)target.position - simulatedPosition;
+            if (wanted.sqrMagnitude < 0.01f)
+                return;
+            var current = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+            var desired = Mathf.Atan2(wanted.y, wanted.x) * Mathf.Rad2Deg;
+            var angle = Mathf.MoveTowardsAngle(current, desired, homingTurnRate * Time.fixedDeltaTime) * Mathf.Deg2Rad;
+            velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * velocity.magnitude;
+        }
+
+        /// <summary>A piercing arrow damages a body and flies on instead of sticking.</summary>
+        bool TryPierce(RaycastHit2D hit)
+        {
+            if (pierceRemaining <= 0)
+                return false;
+            var zone = hit.collider.GetComponent<HitZone>();
+            if (zone == null || zone.Health == null)
+                return false;
+
+            if (!pierced.Contains(zone.Health))
+            {
+                pierced.Add(zone.Health);
+                pierceRemaining--;
+                piercedOnce = true;
+                zone.ReceiveHit(this, new ArrowHit(hit.collider, hit.point, hit.normal, velocity));
+            }
+            return true;
+        }
+
         bool TryHit(Vector2 from, Vector2 to, out RaycastHit2D closest)
         {
             closest = default(RaycastHit2D);
@@ -156,6 +221,9 @@ namespace Arash.Combat
                 var otherArrow = hit.collider.GetComponent<Arrow>();
                 if (otherArrow != null && (!otherArrow.IsFlying || otherArrow.Shooter == ignoredRoot))
                     continue; // stuck arrows and friendly arrows are not obstacles
+                var hitZone = hit.collider.GetComponent<HitZone>();
+                if (hitZone != null && hitZone.Health != null && pierced.Contains(hitZone.Health))
+                    continue; // already pierced this body
                 if (!found || hit.distance < closest.distance)
                 {
                     closest = hit;
@@ -197,6 +265,8 @@ namespace Arash.Combat
 
             if (Stuck != null)
                 Stuck(this, arrowHit);
+            if (AnyStuck != null)
+                AnyStuck(this, arrowHit);
         }
 
         void PointAlong(Vector2 direction)

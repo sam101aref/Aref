@@ -29,6 +29,8 @@ namespace Arash.Combat
         int maxArrowsInWorld = 20;
 
         public event Action<Arrow> Fired;
+        /// <summary>Raised for every bow in the scene (sound effects).</summary>
+        public static event Action<Bow, Arrow> AnyFired;
 
         readonly Queue<Arrow> spawnedArrows = new Queue<Arrow>();
 
@@ -62,20 +64,28 @@ namespace Arash.Combat
 
         public Arrow Fire(AimState aim)
         {
+            return FireWith(aim, arrowPrefab);
+        }
+
+        /// <summary>Fires a specific projectile, e.g. a special arrow.</summary>
+        public Arrow FireWith(AimState aim, Arrow prefab)
+        {
             if (!aim.IsValid)
                 return null;
-            if (arrowPrefab == null)
+            if (prefab == null)
             {
                 Debug.LogError("[Bow] No arrow prefab assigned.", this);
                 return null;
             }
 
-            var arrow = Instantiate(arrowPrefab, LaunchPosition, Quaternion.identity);
+            var arrow = Instantiate(prefab, LaunchPosition, Quaternion.identity);
             arrow.Launch(LaunchVelocity(aim), FlightAcceleration, Owner);
             Track(arrow);
 
             if (Fired != null)
                 Fired(arrow);
+            if (AnyFired != null)
+                AnyFired(this, arrow);
             return arrow;
         }
 
