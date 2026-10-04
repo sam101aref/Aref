@@ -6,15 +6,31 @@ using UnityEngine;
 
 namespace Arash.Combat
 {
+    /// <summary>A way to run a battle: turn-based duel or one of the real-time modes.</summary>
+    public interface IBattleMode
+    {
+        /// <summary>Raised once; true when the player won.</summary>
+        event Action<bool> BattleEnded;
+
+        /// <summary>Starts the battle (after any intro dialogue).</summary>
+        void Begin();
+
+        /// <summary>0–1 measure of how well the player held up, used for the second star.</summary>
+        float PlayerCondition { get; }
+    }
+
     /// <summary>
-    /// Turn-based duel (F-08): the player shoots, then each living enemy in order, until one side is
-    /// down. Each turn the camera frames the shooter, follows the arrow, and lingers where it lands.
+    /// Turn-based duel (F-08, F-22): the player shoots, then each living enemy in order, until one
+    /// side is down. Each turn the camera frames the shooter, follows the arrow, and lingers where it
+    /// lands. Wind may change every turn (F-26).
     /// </summary>
-    public class TurnManager : MonoBehaviour
+    public class TurnManager : MonoBehaviour, IBattleMode
     {
         [SerializeField] Combatant player;
         [SerializeField] List<Combatant> enemies = new List<Combatant>();
         [SerializeField] BattleCamera battleCamera;
+        [SerializeField, Tooltip("Start by itself; off when a level runner starts it after dialogue.")]
+        bool beginOnStart = true;
 
         [Header("Pacing")]
         [SerializeField, Tooltip("Seconds before the first turn.")]
@@ -34,15 +50,37 @@ namespace Arash.Combat
         public IList<Combatant> Enemies { get { return enemies; } }
         public Combatant CurrentTurn { get; private set; }
         public bool IsOver { get; private set; }
+        public float PlayerCondition { get { return player != null ? player.Health.Fraction : 0f; } }
+
+        bool started;
 
         /// <summary>Sets who fights; call before the battle starts (e.g. from Awake).</summary>
-        public void Configure(Combatant playerCombatant, IEnumerable<Combatant> enemyCombatants)
+        public void Configure(Combatant playerCombatant, IEnumerable<Combatant> enemyCombatants, bool startManually)
         {
             player = playerCombatant;
             enemies = new List<Combatant>(enemyCombatants);
+            beginOnStart = !startManually;
         }
 
-        IEnumerator Start()
+        void Start()
+        {
+            // Nobody shoots until the battle begins (there may be dialogue first).
+            foreach (var combatant in AllCombatants())
+                if (combatant != null && combatant.Controller != null)
+                    combatant.Controller.CancelTurn();
+            if (beginOnStart)
+                Begin();
+        }
+
+        public void Begin()
+        {
+            if (started)
+                return;
+            started = true;
+            StartCoroutine(Run());
+        }
+
+        IEnumerator Run()
         {
             if (player == null || enemies.Count == 0)
             {

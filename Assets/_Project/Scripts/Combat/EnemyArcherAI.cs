@@ -6,14 +6,16 @@ using Random = UnityEngine.Random;
 namespace Arash.Combat
 {
     /// <summary>
-    /// Enemy archer turn: pause, pick head or body, solve the perfect shot, draw the bow over a short
-    /// animation, add an error that shrinks with every miss, and shoot.
+    /// Enemy archer turn: pause, maybe change position, pick head or body, solve the perfect shot,
+    /// draw the bow over a short animation, add an error that shrinks with every miss, and shoot one
+    /// projectile or a fanned volley. Bosses switch phases as their health drops (F-28).
     /// </summary>
     public class EnemyArcherAI : MonoBehaviour, ITurnController
     {
         [SerializeField] Bow bow;
         [SerializeField] ArcherRig rig;
         [SerializeField] AiAccuracy accuracy = new AiAccuracy();
+        [SerializeField] EnemyTactics tactics = new EnemyTactics();
         [SerializeField] float minAngle = -30f;
         [SerializeField] float maxAngle = 80f;
 
@@ -28,6 +30,11 @@ namespace Arash.Combat
 
         float currentError = -1f;
         Coroutine turn;
+        BossPhase phase;
+        float homeX = float.NaN;
+
+        /// <summary>Raised when a boss enters a new phase.</summary>
+        public event Action<EnemyArcherAI, BossPhase> PhaseChanged;
 
         public float CurrentError
         {
@@ -38,6 +45,12 @@ namespace Arash.Combat
         {
             accuracy = newAccuracy;
             currentError = -1f;
+        }
+
+        public void SetTactics(EnemyTactics newTactics)
+        {
+            tactics = newTactics ?? new EnemyTactics();
+            phase = null;
         }
 
         public void BeginTurn(Combatant self, Combatant opponent, Action<Arrow> onShot)
@@ -60,7 +73,15 @@ namespace Arash.Combat
 
         IEnumerator TakeShot(Combatant self, Combatant opponent, Action<Arrow> onShot)
         {
+            UpdatePhase(self);
+            var shots = phase != null ? phase.shotsPerTurn : tactics.shotsPerTurn;
+            var reposition = phase != null && phase.repositionRange > 0f ? phase.repositionRange : tactics.repositionRange;
+            var errorScale = phase != null ? phase.errorMultiplier : 1f;
+
             yield return new WaitForSeconds(thinkTime);
+
+            if (reposition > 0f)
+                yield return Reposition(self.transform, reposition);
 
             var target = Random.value < accuracy.headshotChance ? opponent.HeadTarget : opponent.BodyTarget;
             var facing = self.FacingRight;
@@ -87,7 +108,7 @@ namespace Arash.Combat
                     aim = refined;
             }
 
-            aim = accuracy.ApplyError(aim, CurrentError, Random.Range(-1f, 1f), Random.Range(-1f, 1f), minAngle, maxAngle);
+            aim = accuracy.ApplyError(aim, CurrentError * errorScale, Random.Range(-1f, 1f), Random.Range(-1f, 1f), minAngle, maxAngle);
             if (rig != null)
                 rig.Aim(aim.Direction);
 
@@ -95,6 +116,12 @@ namespace Arash.Combat
 
             turn = null;
             var arrow = bow != null ? bow.Fire(aim) : null;
+            for (var i = 1; i < shots && bow != null; i++)
+            {
+                // Extra volley arrows fan out alternately above and below the main shot.
+                var offset = tactics.volleySpread * ((i + 1) / 2) * (i % 2 == 0 ? -1f : 1f);
+                bow.Fire(new AimState(true, Mathf.Clamp(aim.Angle + offset, minAngle, maxAngle), aim.Power, aim.Facing));
+            }
             if (rig != null)
                 rig.Relax();
             if (arrow == null)
@@ -131,13 +158,38 @@ namespace Arash.Combat
             {
                 float angle;
                 if (AimSolver.TrySolveAngle(offset, bow.SpeedForPower(power), acceleration, Time.fixedDeltaTime,
-                        minAngle, maxAngle, out angle))
+                        minAngle, maxAngle, out angle, tactics.highArc))
                 {
                     aim = new AimState(true, angle, Mathf.Min(power, 1f), facing);
                     return true;
                 }
             }
             return false;
+        }
+
+        void UpdatePhase(Combatant self)
+        {
+            var next = tactics.PhaseFor(self.Health.Fraction);
+            if (next == null || next == phase)
+                return;
+            phase = next;
+            if (PhaseChanged != null)
+                PhaseChanged(this, phase);
+        }
+
+        IEnumerator Reposition(Transform body, float range)
+        {
+            if (float.IsNaN(homeX))
+                homeX = body.position.x;
+            var from = body.position;
+            var to = new Vector3(homeX + Random.Range(-range, range), from.y, from.z);
+            const float duration = 0.5f;
+            for (var t = 0f; t < duration; t += Time.deltaTime)
+            {
+                body.position = Vector3.Lerp(from, to, Mathf.SmoothStep(0f, 1f, t / duration));
+                yield return null;
+            }
+            body.position = to;
         }
 
         static float WorldAngle(AimState aim)

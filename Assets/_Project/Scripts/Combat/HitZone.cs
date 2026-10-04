@@ -16,6 +16,11 @@ namespace Arash.Combat
         Health health;
 
         public HitZoneType Zone { get { return zone; } }
+
+        public void SetZone(HitZoneType newZone)
+        {
+            zone = newZone;
+        }
         public Health Health
         {
             get

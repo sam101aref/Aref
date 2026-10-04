@@ -19,7 +19,7 @@ namespace Arash.Editor.Setup
     public static class ProjectSetup
     {
         // Bump when a new setup step is added so existing checkouts pick it up.
-        const int SetupVersion = 4;
+        const int SetupVersion = 5;
         const string MarkerPath = "ProjectSettings/ArashProjectSetup.json";
 
         // The application ID is permanent once the game is published on Google Play.
@@ -34,7 +34,7 @@ namespace Arash.Editor.Setup
         public const string SettingsFolder = ProjectRoot + "/Settings";
 
         // Order matters: the first scene is the one the game boots into.
-        static readonly string[] SceneNames = { "Boot", "MainMenu", "WorldMap", "Battle", "Cutscene" };
+        static readonly string[] SceneNames = { "Boot", "MainMenu", "WorldMap", "Battle", "Cutscene", "FinalFlight" };
 
         static readonly Color SkyColor = new Color(0.98f, 0.82f, 0.55f); // warm dawn over Damavand
 

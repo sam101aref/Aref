@@ -40,6 +40,13 @@ namespace Arash.Combat
                 health.Died -= Activate;
         }
 
+        /// <summary>Adds a component that must stop when this character dies (movers added at runtime).</summary>
+        public void DisableOnDeath(Behaviour behaviour)
+        {
+            var list = new System.Collections.Generic.List<Behaviour>(disableOnDeath ?? new Behaviour[0]) { behaviour };
+            disableOnDeath = list.ToArray();
+        }
+
         public void Activate(DamageInfo killingBlow)
         {
             if (IsActive)

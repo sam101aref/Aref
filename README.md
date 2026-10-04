@@ -68,8 +68,8 @@ Setup can be re-run any time from **Arash ▸ Setup**. · از منوی **Arash 
 
 ## Playing the current build · بازی کردن نسخهٔ فعلی
 
-Main menu → map → the five prologue levels (turn-based duels against Turanian archers). Touch anywhere, pull back and release to shoot; drag back to where you started to cancel. Headshots kill; body shots take 40%, arms and legs 25%. Up to three stars per level; progress and settings are saved. Language, sound, vibration and difficulty are in Settings.
-منوی اصلی ← نقشه ← پنج مرحلهٔ پیش‌درآمد (دوئل نوبتی با کمانداران تورانی). هر جای صفحه را لمس کنید، به عقب بکشید و رها کنید؛ برای لغو، انگشت را به نقطهٔ شروع برگردانید. تیر به سر کشنده است، به بدن ۴۰٪ و به دست و پا ۲۵٪ آسیب می‌زند. هر مرحله تا سه ستاره دارد و پیشرفت و تنظیمات ذخیره می‌شوند. زبان، صدا، لرزش و سختی در تنظیمات است.
+Main menu → map → 38 levels in six chapters, from the border village to the final flight of the arrow from Damavand to the Oxus: turn-based duels, raids on the palisade, escort missions, archery trials, bosses, wind, and cutscenes with a story book. Touch anywhere, pull back and release to shoot; drag back to where you started to cancel. Headshots kill; body shots take 40%, arms and legs 25%. Up to three stars per level; progress and settings are saved. Language, sound, vibration and difficulty are in Settings.
+منوی اصلی ← نقشه ← ۳۸ مرحله در شش فصل، از روستای مرزی تا پرواز تیر از دماوند تا جیحون: دوئل نوبتی، دفاع از حصار، محافظت از همراه، آزمون تیراندازی، باس‌ها، باد، و میان‌پرده‌ها با کتاب داستان. هر جای صفحه را لمس کنید، به عقب بکشید و رها کنید؛ برای لغو، انگشت را به نقطهٔ شروع برگردانید. تیر به سر کشنده است، به بدن ۴۰٪ و به دست و پا ۲۵٪ آسیب می‌زند. هر مرحله تا سه ستاره دارد و پیشرفت و تنظیمات ذخیره می‌شوند. زبان، صدا، لرزش و سختی در تنظیمات است.
 
 ## Project layout · ساختار پروژه
 
@@ -78,14 +78,16 @@ Assets/_Project/
   Art/  Audio/  Data/  Localization/  Prefabs/  Scenes/  Settings/
   Scripts/        game code (assembly Arash.Runtime)
     Combat/       aiming, bow, arrow, preview, camera, damage, ragdoll, turns, enemy AI
-    Levels/       level data, catalog, star and unlock rules, level runner
+    Levels/       level and enemy-type data, catalog, star and unlock rules, level runner
+    Story/        dialogue and cutscene data, cutscene player, text wrapping
+    Flight/       the final arrow-flight level (F-30)
     Localization/ string table, Persian shaper (right-to-left text)
     UI/           menus, map, settings, battle HUD (built in code)
     Core/         bootstrap, save system, settings, scene flow
   Resources/      strings, Vazirmatn fonts, level catalog, UI sprites
   Tests/EditMode/ unit tests (run in CI before every build)
   Editor/Setup/   project setup and CI build (F-01)
-  Editor/Content/ builds placeholder art, prefabs, prologue levels and scene contents
+  Editor/Content/ builds placeholder art, prefabs, scenes, and all story content (StoryContent.cs)
 ```
 
 ## Credits

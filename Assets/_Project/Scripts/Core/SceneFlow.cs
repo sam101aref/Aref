@@ -1,17 +1,30 @@
+using System;
 using Arash.Levels;
+using Arash.Story;
 using UnityEngine.SceneManagement;
 
 namespace Arash.Core
 {
-    /// <summary>Moves between the game's scenes and remembers which level is being played.</summary>
+    /// <summary>
+    /// Moves between the game's scenes and remembers what to play: the current level, and a cutscene
+    /// with what comes after it. A chapter's intro cutscene plays automatically the first time its
+    /// first level starts.
+    /// </summary>
     public static class SceneFlow
     {
         public const string MainMenuScene = "MainMenu";
         public const string WorldMapScene = "WorldMap";
         public const string BattleScene = "Battle";
+        public const string CutsceneScene = "Cutscene";
+        public const string FinalFlightScene = "FinalFlight";
 
-        /// <summary>The level the Battle scene plays. Null means the first level.</summary>
+        /// <summary>The level being played. Null means the first level.</summary>
         public static LevelDefinition CurrentLevel { get; private set; }
+
+        /// <summary>The cutscene the Cutscene scene plays.</summary>
+        public static CutsceneDefinition PendingCutscene { get; private set; }
+
+        static Action afterCutscene;
 
         public static void ToMainMenu()
         {
@@ -26,12 +39,54 @@ namespace Arash.Core
         public static void Play(LevelDefinition level)
         {
             CurrentLevel = level;
-            Load(BattleScene);
+            var catalog = LevelCatalog.Load();
+            var chapter = catalog != null ? catalog.ChapterOf(level) : null;
+            var intro = chapter != null && chapter.levels.Count > 0 && chapter.levels[0] == level ? chapter.introCutscene : null;
+
+            if (intro != null && !SaveSystem.Data.HasSeen(intro.id))
+                PlayCutscene(intro, () => LoadLevelScene(level));
+            else
+                LoadLevelScene(level);
+        }
+
+        /// <summary>Plays a cutscene, then runs <paramref name="then"/> (the world map if null).</summary>
+        public static void PlayCutscene(CutsceneDefinition cutscene, Action then)
+        {
+            PendingCutscene = cutscene;
+            afterCutscene = then;
+            Load(CutsceneScene);
+        }
+
+        /// <summary>Runs <paramref name="then"/>, first playing <paramref name="cutscene"/> if it has not been seen.</summary>
+        public static Action WithCutscene(CutsceneDefinition cutscene, Action then)
+        {
+            if (cutscene == null || SaveSystem.Data.HasSeen(cutscene.id))
+                return then;
+            return () => PlayCutscene(cutscene, then);
+        }
+
+        /// <summary>Called by the cutscene player when the cutscene ends or is skipped.</summary>
+        public static void FinishCutscene()
+        {
+            if (PendingCutscene != null)
+            {
+                SaveSystem.Data.MarkSeen(PendingCutscene.id);
+                SaveSystem.Save();
+            }
+            var then = afterCutscene ?? ToWorldMap;
+            PendingCutscene = null;
+            afterCutscene = null;
+            then();
         }
 
         public static void Retry()
         {
             Load(SceneManager.GetActiveScene().name);
+        }
+
+        static void LoadLevelScene(LevelDefinition level)
+        {
+            Load(level != null && level.mode == LevelMode.Flight ? FinalFlightScene : BattleScene);
         }
 
         static void Load(string scene)

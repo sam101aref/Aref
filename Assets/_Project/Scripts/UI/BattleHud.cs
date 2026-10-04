@@ -1,15 +1,18 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Arash.Core;
 using Arash.Localization;
+using Arash.Story;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Arash.UI
 {
     /// <summary>
-    /// Battle overlay: level title, pause menu, tutorial hint, pop-ups ("Headshot!"), the level
-    /// intro banner and the end-of-level screen with stars and coins (F-12).
+    /// Battle overlay: level title, pause menu, tutorial hint, mode status (lives, time, targets),
+    /// wind, pop-ups ("Headshot!"), dialogue (F-19), the level intro banner and the end-of-level
+    /// screen with stars and coins (F-12).
     /// Built in code; rebuilt (keeping its state) when the language changes.
     /// </summary>
     public class BattleHud : ScreenBase
@@ -20,6 +23,7 @@ namespace Arash.UI
             public int Stars;
             public int Coins;
             public Action Next;
+            public Action Map;
         }
 
         [SerializeField] float popupDuration = 1.1f;
@@ -29,9 +33,15 @@ namespace Arash.UI
         string hintKey;
         Result result;
         bool pauseOpen;
+        Func<string> status;
+        float? wind;
+        List<DialogueLine> dialogue;
+        int dialogueIndex;
+        Action dialogueDone;
 
         Text popup;
         Text hint;
+        Text statusLabel;
         Coroutine popupRoutine;
 
         protected override int SortingOrder { get { return 10; } }
@@ -68,11 +78,62 @@ namespace Arash.UI
             popupRoutine = StartCoroutine(PopupRoutine(message));
         }
 
-        public void ShowResult(bool won, int stars, int coins, Action next)
+        public void ShowResult(bool won, int stars, int coins, Action next, Action map)
         {
-            result = new Result { Won = won, Stars = stars, Coins = coins, Next = next };
+            result = new Result { Won = won, Stars = stars, Coins = coins, Next = next, Map = map ?? SceneFlow.ToWorldMap };
             pauseOpen = false;
             Rebuild();
+        }
+
+        /// <summary>Shows a status line; the provider is called again whenever the HUD redraws.</summary>
+        public void SetStatus(Func<string> provider)
+        {
+            status = provider;
+            Rebuild();
+        }
+
+        public void RefreshStatus()
+        {
+            if (statusLabel != null && status != null)
+                statusLabel.text = status();
+        }
+
+        /// <summary>Shows the wind (units/s², positive to the right); null hides it.</summary>
+        public void SetWind(float? strength)
+        {
+            wind = strength;
+            Rebuild();
+        }
+
+        /// <summary>Plays dialogue lines one by one, then calls <paramref name="done"/>.</summary>
+        public void PlayDialogue(List<DialogueLine> lines, Action done)
+        {
+            if (lines == null || lines.Count == 0)
+            {
+                if (done != null)
+                    done();
+                return;
+            }
+            dialogue = lines;
+            dialogueIndex = 0;
+            dialogueDone = done;
+            Rebuild();
+        }
+
+        void AdvanceDialogue(bool skip)
+        {
+            dialogueIndex++;
+            if (!skip && dialogue != null && dialogueIndex < dialogue.Count)
+            {
+                Rebuild();
+                return;
+            }
+            var done = dialogueDone;
+            dialogue = null;
+            dialogueDone = null;
+            Rebuild();
+            if (done != null)
+                done();
         }
 
         protected override void Build(RectTransform canvas)
@@ -93,14 +154,36 @@ namespace Arash.UI
             UIFactory.Place(hint.rectTransform, new Vector2(0.5f, 0f), new Vector2(0f, 90f), new Vector2(1700f, 90f));
             hint.gameObject.SetActive(!string.IsNullOrEmpty(hintKey) && result == null);
 
+            if (status != null && result == null)
+            {
+                statusLabel = UIFactory.Label(canvas, status(), 44, UIFactory.Cream, TextAnchor.MiddleCenter, true);
+                UIFactory.Place(statusLabel.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -30f), new Vector2(900f, 80f));
+            }
+
+            if (wind.HasValue && result == null)
+                BuildWind(canvas, wind.Value);
+
             popup = UIFactory.Label(canvas, string.Empty, 100, UIFactory.Gold, TextAnchor.MiddleCenter, true);
             UIFactory.Place(popup.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 280f), new Vector2(1600f, 160f));
             popup.gameObject.SetActive(false);
 
             if (result != null)
                 BuildResult(canvas);
+            else if (dialogue != null && dialogueIndex < dialogue.Count)
+                DialogueView.Show(canvas, dialogue[dialogueIndex], () => AdvanceDialogue(false), () => AdvanceDialogue(true));
             else if (pauseOpen)
                 BuildPause(canvas);
+        }
+
+        static void BuildWind(RectTransform canvas, float strength)
+        {
+            // Direction is drawn with plain ASCII so it is never mirrored in Persian.
+            var level = Mathf.Clamp(Mathf.CeilToInt(Mathf.Abs(strength) / 1.5f), 0, 3);
+            var arrows = level == 0 ? "-" : new string(strength > 0f ? '>' : '<', level);
+            var name = UIFactory.Label(canvas, Loc.T("battle.wind"), 36, UIFactory.Cream, TextAnchor.MiddleCenter);
+            UIFactory.Place(name.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -100f), new Vector2(300f, 50f));
+            var direction = UIFactory.Label(canvas, arrows, 52, UIFactory.Gold, TextAnchor.MiddleCenter, true);
+            UIFactory.Place(direction.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -145f), new Vector2(300f, 60f));
         }
 
         void OpenPause()
@@ -149,7 +232,7 @@ namespace Arash.UI
             if (result.Next != null)
                 MenuButton(overlay, "ui.next", result.Next, UIFactory.Turquoise, ref y);
             MenuButton(overlay, "ui.retry", SceneFlow.Retry, result.Next != null ? UIFactory.LapisLight : UIFactory.Turquoise, ref y);
-            MenuButton(overlay, "ui.map", SceneFlow.ToWorldMap, UIFactory.LapisLight, ref y);
+            MenuButton(overlay, "ui.map", result.Map, UIFactory.LapisLight, ref y);
         }
 
         static void MenuButton(RectTransform parent, string key, Action onClick, Color color, ref float y)

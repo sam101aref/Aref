@@ -33,6 +33,18 @@ namespace Arash.Core
         public int coins;
         public List<LevelRecord> levels = new List<LevelRecord>();
         public SettingsData settings = new SettingsData();
+        public List<string> seenCutscenes = new List<string>();
+
+        public bool HasSeen(string cutsceneId)
+        {
+            return seenCutscenes.Contains(cutsceneId);
+        }
+
+        public void MarkSeen(string cutsceneId)
+        {
+            if (!string.IsNullOrEmpty(cutsceneId) && !seenCutscenes.Contains(cutsceneId))
+                seenCutscenes.Add(cutsceneId);
+        }
 
         public int GetStars(string levelId)
         {
@@ -132,6 +144,8 @@ namespace Arash.Core
                 save.levels = new List<LevelRecord>();
             if (save.settings == null)
                 save.settings = new SettingsData();
+            if (save.seenCutscenes == null)
+                save.seenCutscenes = new List<string>();
             return save;
         }
 

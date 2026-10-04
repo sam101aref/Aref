@@ -63,6 +63,14 @@ namespace Arash.Combat
             homeFacingRight = facingRight;
         }
 
+        /// <summary>Changes the resting zoom and framing offset, e.g. a wide view for real-time battles.</summary>
+        public void SetFraming(float size, Vector2 offset)
+        {
+            baseSize = size;
+            maxSize = Mathf.Max(maxSize, size);
+            homeOffset = offset;
+        }
+
         /// <summary>Shakes the view; runs on unscaled time so it also works in slow motion.</summary>
         public void Shake(float amplitude, float duration)
         {

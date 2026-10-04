@@ -209,6 +209,881 @@
       "key": "level.0_5.intro",
       "en": "Two raiders at once. Stay calm, Arash.",
       "fa": "دو مهاجم با هم. آرام باش، آرش."
+    },
+    {
+      "key": "ui.skip",
+      "en": "Skip",
+      "fa": "رد کردن"
+    },
+    {
+      "key": "ui.story_book",
+      "en": "Story Book",
+      "fa": "کتاب داستان"
+    },
+    {
+      "key": "story.empty",
+      "en": "Stories you see will be collected here.",
+      "fa": "داستان‌هایی که می‌بینی این‌جا جمع می‌شوند."
+    },
+    {
+      "key": "battle.wind",
+      "en": "Wind",
+      "fa": "باد"
+    },
+    {
+      "key": "status.waves",
+      "en": "Palisade: {0}    Wave {1}/{2}",
+      "fa": "حصار: {0}    موج {1} از {2}"
+    },
+    {
+      "key": "status.escort",
+      "en": "Hold out: {0}",
+      "fa": "مقاومت: {0}"
+    },
+    {
+      "key": "status.escort_all",
+      "en": "Defeat every archer",
+      "fa": "همهٔ کمانداران را از پا درآور"
+    },
+    {
+      "key": "status.trial",
+      "en": "Targets: {0}    Arrows: {1}",
+      "fa": "هدف: {0}    تیر: {1}"
+    },
+    {
+      "key": "flight.hint",
+      "en": "Hold to rise, let go to sink.",
+      "fa": "نگه دار تا اوج بگیرد، رها کن تا پایین بیاید."
+    },
+    {
+      "key": "flight.status",
+      "en": "Strength: {0}    Journey: {1}",
+      "fa": "توان: {0}    مسیر: {1}"
+    },
+    {
+      "key": "flight.hit",
+      "en": "Struck!",
+      "fa": "ضربه!"
+    },
+    {
+      "key": "speaker.arash",
+      "en": "Arash",
+      "fa": "آرش"
+    },
+    {
+      "key": "speaker.roshana",
+      "en": "Roshana",
+      "fa": "روشنا"
+    },
+    {
+      "key": "speaker.mobad",
+      "en": "The Mobad",
+      "fa": "موبد"
+    },
+    {
+      "key": "speaker.manuchehr",
+      "en": "King Manuchehr",
+      "fa": "منوچهرشاه"
+    },
+    {
+      "key": "speaker.afrasiab",
+      "en": "Afrasiab",
+      "fa": "افراسیاب"
+    },
+    {
+      "key": "speaker.turanian",
+      "en": "Turanian Commander",
+      "fa": "سردار تورانی"
+    },
+    {
+      "key": "speaker.barman",
+      "en": "Barman",
+      "fa": "بارمان"
+    },
+    {
+      "key": "speaker.garsivaz",
+      "en": "Garsivaz",
+      "fa": "گرسیوز"
+    },
+    {
+      "key": "speaker.whitediv",
+      "en": "The White Div",
+      "fa": "دیو سپید"
+    },
+    {
+      "key": "chapter.1.title",
+      "en": "Chapter 1: Fire on the Border",
+      "fa": "فصل ۱: آتش در مرز"
+    },
+    {
+      "key": "chapter.2.title",
+      "en": "Chapter 2: The Forests of Tabaristan",
+      "fa": "فصل ۲: جنگل‌های تبرستان"
+    },
+    {
+      "key": "chapter.3.title",
+      "en": "Chapter 3: The Peace Pact",
+      "fa": "فصل ۳: پیمان صلح"
+    },
+    {
+      "key": "chapter.4.title",
+      "en": "Chapter 4: The Ascent of Damavand",
+      "fa": "فصل ۴: صعود به دماوند"
+    },
+    {
+      "key": "chapter.5.title",
+      "en": "Chapter 5: The Great Shot",
+      "fa": "فصل ۵: تیر بزرگ"
+    },
+    {
+      "key": "dlg.0_1.1",
+      "en": "Arash! Turanian scouts on the hill. The elders say you are the best bow in the village.",
+      "fa": "آرش! دیده‌بان‌های تورانی روی تپه‌اند. بزرگ‌ترها می‌گویند تو بهترین کماندار روستایی."
+    },
+    {
+      "key": "dlg.0_1.2",
+      "en": "Then let's see if the elders are right.",
+      "fa": "پس ببینیم بزرگ‌ترها درست می‌گویند یا نه."
+    },
+    {
+      "key": "dlg.0_1.3",
+      "en": "Pull the string back and let it go. The bow does the rest.",
+      "fa": "زه را عقب بکش و رها کن. باقی کار با کمان است."
+    },
+    {
+      "key": "dlg.0_5o.1",
+      "en": "You fought well, son. The king's army needs archers like you.",
+      "fa": "خوب جنگیدی پسرم. سپاه شاه به کماندارانی مثل تو نیاز دارد."
+    },
+    {
+      "key": "dlg.0_5o.2",
+      "en": "Then I will go. The village has given me a bow; I will give it my arrows.",
+      "fa": "پس می‌روم. روستا به من کمان داده؛ من هم تیرهایم را به او می‌دهم."
+    },
+    {
+      "key": "level.1_1.title",
+      "en": "The Watchtower",
+      "fa": "برج دیده‌بانی"
+    },
+    {
+      "key": "level.1_1.intro",
+      "en": "Turanian archers have taken the old watchtower. Take it back.",
+      "fa": "کمانداران تورانی برج دیده‌بانی کهنه را گرفته‌اند. پسش بگیر."
+    },
+    {
+      "key": "dlg.1_1.1",
+      "en": "So you are the archer from the border village. Show me what you can do.",
+      "fa": "پس تو همان کماندار روستای مرزی هستی. نشانم بده چه می‌توانی بکنی."
+    },
+    {
+      "key": "dlg.1_1.2",
+      "en": "For Iran, my king.",
+      "fa": "برای ایران، شاه من."
+    },
+    {
+      "key": "level.1_2.title",
+      "en": "Shields at the Gate",
+      "fa": "سپرها در دروازه"
+    },
+    {
+      "key": "level.1_2.intro",
+      "en": "A shield bearer guards the gate.",
+      "fa": "یک سپردار از دروازه نگهبانی می‌کند."
+    },
+    {
+      "key": "level.1_2.hint",
+      "en": "Shields stop body shots. Aim for the head or the legs.",
+      "fa": "سپر جلوی تیر به بدن را می‌گیرد. سر یا پاها را نشانه بگیر."
+    },
+    {
+      "key": "level.1_3.title",
+      "en": "Riders on the Plain",
+      "fa": "سواران دشت"
+    },
+    {
+      "key": "level.1_3.intro",
+      "en": "A Turanian rider circles the plain.",
+      "fa": "سواری تورانی در دشت می‌چرخد."
+    },
+    {
+      "key": "level.1_3.hint",
+      "en": "The rider never stands still. Aim where he will be.",
+      "fa": "سوار هیچ‌وقت ثابت نمی‌ماند. جایی را نشانه بگیر که خواهد بود."
+    },
+    {
+      "key": "level.1_4.title",
+      "en": "Hold the Palisade",
+      "fa": "حصار را نگه دار"
+    },
+    {
+      "key": "level.1_4.intro",
+      "en": "Raiders charge the palisade. Stop them before they break through.",
+      "fa": "مهاجمان به حصار یورش می‌آورند. پیش از آنکه رد شوند جلویشان را بگیر."
+    },
+    {
+      "key": "level.1_4.hint",
+      "en": "Shoot freely! Don't let the raiders reach the palisade.",
+      "fa": "آزادانه تیر بینداز! نگذار مهاجمان به حصار برسند."
+    },
+    {
+      "key": "level.1_5.title",
+      "en": "Two Fronts",
+      "fa": "دو جبهه"
+    },
+    {
+      "key": "level.1_5.intro",
+      "en": "An archer on the field and a shield bearer on the rocks.",
+      "fa": "کمانداری در دشت و سپرداری روی صخره‌ها."
+    },
+    {
+      "key": "level.1_6.title",
+      "en": "The Windy Ridge",
+      "fa": "گردنهٔ بادخیز"
+    },
+    {
+      "key": "level.1_6.intro",
+      "en": "The wind howls over the ridge.",
+      "fa": "باد روی گردنه زوزه می‌کشد."
+    },
+    {
+      "key": "level.1_6.hint",
+      "en": "Watch the wind at the top of the screen. It changes every turn.",
+      "fa": "باد را بالای صفحه ببین. هر نوبت عوض می‌شود."
+    },
+    {
+      "key": "level.1_7.title",
+      "en": "The Archers' Trial",
+      "fa": "آزمون کمانداران"
+    },
+    {
+      "key": "level.1_7.intro",
+      "en": "The king's archers test every new recruit.",
+      "fa": "کمانداران شاه هر تازه‌واردی را می‌آزمایند."
+    },
+    {
+      "key": "level.1_7.hint",
+      "en": "Hit every target. Your arrows are limited.",
+      "fa": "به همهٔ هدف‌ها بزن. تیرهایت محدودند."
+    },
+    {
+      "key": "level.1_8.title",
+      "en": "The Vanguard Commander",
+      "fa": "سردار پیشتاز"
+    },
+    {
+      "key": "level.1_8.intro",
+      "en": "The commander of the Turanian vanguard rides out himself.",
+      "fa": "سردار پیشتاز توران خودش به میدان آمده."
+    },
+    {
+      "key": "dlg.1_8.1",
+      "en": "A village boy with a bow? Go home before you get hurt.",
+      "fa": "پسری روستایی با کمان؟ برگرد خانه پیش از آنکه زخمی شوی."
+    },
+    {
+      "key": "dlg.1_8.2",
+      "en": "My home is behind me. That is why I am standing here.",
+      "fa": "خانه‌ام پشت سر من است. برای همین این‌جا ایستاده‌ام."
+    },
+    {
+      "key": "dlg.1_8o.1",
+      "en": "The border holds, thanks to you. But Afrasiab is not finished with us.",
+      "fa": "مرز به لطف تو پابرجاست. اما کار افراسیاب با ما تمام نشده."
+    },
+    {
+      "key": "boss.1.phase",
+      "en": "The commander lifts his shield and draws two arrows!",
+      "fa": "سردار سپرش را بالا می‌برد و دو تیر می‌کشد!"
+    },
+    {
+      "key": "level.2_1.title",
+      "en": "Into the Mist",
+      "fa": "در دل مه"
+    },
+    {
+      "key": "level.2_1.intro",
+      "en": "The army hides in the forests of Tabaristan. The mist hides the enemy too.",
+      "fa": "سپاه در جنگل‌های تبرستان پنهان شده. مه دشمن را هم پنهان کرده."
+    },
+    {
+      "key": "dlg.2_1.1",
+      "en": "Food is running out. Every night more of us go hungry.",
+      "fa": "آذوقه رو به تمام شدن است. هر شب گرسنه‌ترها بیشتر می‌شوند."
+    },
+    {
+      "key": "dlg.2_1.2",
+      "en": "Then we fight for every road and every cart.",
+      "fa": "پس برای هر راه و هر گاری می‌جنگیم."
+    },
+    {
+      "key": "level.2_2.title",
+      "en": "Supply Run",
+      "fa": "کاروان آذوقه"
+    },
+    {
+      "key": "level.2_2.intro",
+      "en": "A supply carrier must reach the camp alive.",
+      "fa": "باربر آذوقه باید زنده به اردوگاه برسد."
+    },
+    {
+      "key": "level.2_2.hint",
+      "en": "Protect the carrier. You can shoot enemy arrows out of the air!",
+      "fa": "از باربر محافظت کن. می‌توانی تیرهای دشمن را در هوا بزنی!"
+    },
+    {
+      "key": "level.2_3.title",
+      "en": "Slingers in the Trees",
+      "fa": "فلاخن‌اندازها میان درختان"
+    },
+    {
+      "key": "level.2_3.intro",
+      "en": "Stones fall from high above.",
+      "fa": "سنگ‌ها از بالا فرود می‌آیند."
+    },
+    {
+      "key": "level.2_3.hint",
+      "en": "Slingers lob stones on a high arc. Strike first.",
+      "fa": "فلاخن‌اندازها سنگ را با قوس بلند پرتاب می‌کنند. پیش‌دستی کن."
+    },
+    {
+      "key": "level.2_4.title",
+      "en": "Night Raid",
+      "fa": "شبیخون"
+    },
+    {
+      "key": "level.2_4.intro",
+      "en": "Under the cover of night, raiders rush the camp.",
+      "fa": "در پناه شب، مهاجمان به اردوگاه هجوم می‌آورند."
+    },
+    {
+      "key": "level.2_4.hint",
+      "en": "Mounted raiders are faster. Stop them first.",
+      "fa": "سواران سریع‌ترند. اول جلوی آن‌ها را بگیر."
+    },
+    {
+      "key": "level.2_5.title",
+      "en": "Spears in the Dark",
+      "fa": "نیزه‌ها در تاریکی"
+    },
+    {
+      "key": "level.2_5.intro",
+      "en": "A spear thrower and an archer wait in the dark.",
+      "fa": "نیزه‌انداز و کمانداری در تاریکی کمین کرده‌اند."
+    },
+    {
+      "key": "level.2_5.hint",
+      "en": "Spears are slow and heavy, but they hit hard.",
+      "fa": "نیزه‌ها کند و سنگین‌اند، اما سخت می‌زنند."
+    },
+    {
+      "key": "level.2_6.title",
+      "en": "Forest Ambush",
+      "fa": "کمین جنگل"
+    },
+    {
+      "key": "level.2_6.intro",
+      "en": "Someone is moving between the trees.",
+      "fa": "کسی میان درختان جابه‌جا می‌شود."
+    },
+    {
+      "key": "level.2_6.hint",
+      "en": "The assassin moves before every shot. Be quick.",
+      "fa": "آدمکش پیش از هر شلیک جایش را عوض می‌کند. سریع باش."
+    },
+    {
+      "key": "level.2_7.title",
+      "en": "The Hunter's Trial",
+      "fa": "آزمون شکارچی"
+    },
+    {
+      "key": "level.2_7.intro",
+      "en": "An old hunter wants to see your aim before he guides you.",
+      "fa": "شکارچی پیری می‌خواهد پیش از راهنمایی‌ات، نشانه‌گیری‌ات را ببیند."
+    },
+    {
+      "key": "level.2_7.hint",
+      "en": "Hit the apple, not the villager!",
+      "fa": "به سیب بزن، نه به روستایی!"
+    },
+    {
+      "key": "level.2_8.title",
+      "en": "Barman the Champion",
+      "fa": "بارمان پهلوان"
+    },
+    {
+      "key": "level.2_8.intro",
+      "en": "Barman, the champion of Turan, challenges Iran's best archer.",
+      "fa": "بارمان، پهلوان توران، بهترین کماندار ایران را به نبرد می‌خواند."
+    },
+    {
+      "key": "dlg.2_8.1",
+      "en": "They say Iran's arrows are running out. Let's see if yours are too.",
+      "fa": "می‌گویند تیرهای ایران رو به پایان است. ببینیم تیرهای تو هم تمام شده یا نه."
+    },
+    {
+      "key": "dlg.2_8.2",
+      "en": "I have one for every one of yours.",
+      "fa": "به ازای هر تیر تو، یکی دارم."
+    },
+    {
+      "key": "dlg.2_8o.1",
+      "en": "Barman has fallen! For the first time in years, the camp sings tonight.",
+      "fa": "بارمان افتاد! بعد از سال‌ها، امشب اردوگاه آواز می‌خواند."
+    },
+    {
+      "key": "boss.2.phase",
+      "en": "Barman draws three arrows at once!",
+      "fa": "بارمان سه تیر را با هم می‌کشد!"
+    },
+    {
+      "key": "level.3_1.title",
+      "en": "Guarding the Envoy",
+      "fa": "نگهبانی از فرستاده"
+    },
+    {
+      "key": "level.3_1.intro",
+      "en": "An envoy carries the king's offer of peace.",
+      "fa": "فرستاده‌ای پیام صلح شاه را می‌برد."
+    },
+    {
+      "key": "level.3_1.hint",
+      "en": "Keep the envoy alive until the time runs out.",
+      "fa": "تا پایان زمان، فرستاده را زنده نگه دار."
+    },
+    {
+      "key": "dlg.3_1.1",
+      "en": "We are tired of war. Afrasiab has agreed to talk.",
+      "fa": "از جنگ خسته‌ایم. افراسیاب پذیرفته که گفت‌وگو کنیم."
+    },
+    {
+      "key": "dlg.3_1.2",
+      "en": "Let an archer of Iran shoot one arrow. Where it falls, there will be the border.",
+      "fa": "کمانداری ایرانی یک تیر بیندازد. هر جا فرود آمد، همان‌جا مرز باشد."
+    },
+    {
+      "key": "dlg.3_1.3",
+      "en": "A whole land on a single arrow… Keep the envoy safe; I don't trust him.",
+      "fa": "سرزمینی بر یک تیر… فرستاده را سالم نگه دار؛ به او اعتماد ندارم."
+    },
+    {
+      "key": "level.3_2.title",
+      "en": "Broken Truce",
+      "fa": "پیمان‌شکنی"
+    },
+    {
+      "key": "level.3_2.intro",
+      "en": "Turanians break the truce with fire arrows.",
+      "fa": "تورانیان با تیرهای آتشین پیمان را می‌شکنند."
+    },
+    {
+      "key": "level.3_2.hint",
+      "en": "Fire arrows burn wooden cover. Don't count on hiding.",
+      "fa": "تیر آتشین سنگر چوبی را می‌سوزاند. به پنهان شدن دل نبند."
+    },
+    {
+      "key": "level.3_3.title",
+      "en": "Valley of Echoes",
+      "fa": "درهٔ پژواک"
+    },
+    {
+      "key": "level.3_3.intro",
+      "en": "Wind and stones in the valley of echoes.",
+      "fa": "باد و سنگ در درهٔ پژواک."
+    },
+    {
+      "key": "level.3_4.title",
+      "en": "The Burning Camp",
+      "fa": "اردوگاه سوزان"
+    },
+    {
+      "key": "level.3_4.intro",
+      "en": "Riders set the camp on fire. Hold the line!",
+      "fa": "سواران اردوگاه را آتش زده‌اند. خط را نگه دار!"
+    },
+    {
+      "key": "level.3_4.hint",
+      "en": "Four waves this time. Save your strength for the riders.",
+      "fa": "این بار چهار موج. توانت را برای سواران نگه دار."
+    },
+    {
+      "key": "level.3_5.title",
+      "en": "Afrasiab's Deceit",
+      "fa": "نیرنگ افراسیاب"
+    },
+    {
+      "key": "level.3_5.intro",
+      "en": "An assassin and a fire archer, sent in secret.",
+      "fa": "آدمکشی و کمانداری آتشین، که پنهانی فرستاده شده‌اند."
+    },
+    {
+      "key": "level.3_6.title",
+      "en": "Shield Wall",
+      "fa": "دیوار سپر"
+    },
+    {
+      "key": "level.3_6.intro",
+      "en": "Two shield bearers and a spear thrower block the pass.",
+      "fa": "دو سپردار و یک نیزه‌انداز راه را بسته‌اند."
+    },
+    {
+      "key": "level.3_7.title",
+      "en": "The Envoy's Escape",
+      "fa": "گریز فرستاده"
+    },
+    {
+      "key": "level.3_7.intro",
+      "en": "The envoy must escape. Three archers stand in the way.",
+      "fa": "فرستاده باید بگریزد. سه کماندار سر راهند."
+    },
+    {
+      "key": "level.3_7.hint",
+      "en": "Defeat every archer while keeping the envoy alive.",
+      "fa": "همهٔ کمانداران را از پا درآور و فرستاده را زنده نگه دار."
+    },
+    {
+      "key": "level.3_8.title",
+      "en": "Garsivaz the Schemer",
+      "fa": "گرسیوز نیرنگ‌باز"
+    },
+    {
+      "key": "level.3_8.intro",
+      "en": "Garsivaz, Afrasiab's brother, comes to make sure no arrow is ever shot.",
+      "fa": "گرسیوز، برادر افراسیاب، آمده تا مطمئن شود هیچ تیری رها نمی‌شود."
+    },
+    {
+      "key": "dlg.3_8.1",
+      "en": "My brother promised peace. I promise you a grave.",
+      "fa": "برادرم وعدهٔ صلح داد. من به تو وعدهٔ گور می‌دهم."
+    },
+    {
+      "key": "dlg.3_8.2",
+      "en": "Promises from your house are worth nothing.",
+      "fa": "وعدهٔ خاندان شما ارزشی ندارد."
+    },
+    {
+      "key": "dlg.3_8o.1",
+      "en": "The elders have chosen. Arash, the arrow will be yours to shoot.",
+      "fa": "بزرگان انتخاب کرده‌اند. آرش، پرتاب آن تیر با توست."
+    },
+    {
+      "key": "boss.3.phase",
+      "en": "Garsivaz vanishes into the smoke!",
+      "fa": "گرسیوز در دود ناپدید می‌شود!"
+    },
+    {
+      "key": "level.4_1.title",
+      "en": "The Foothills",
+      "fa": "دامنه"
+    },
+    {
+      "key": "level.4_1.intro",
+      "en": "The climb begins. Riders guard the foothills.",
+      "fa": "صعود آغاز می‌شود. سواران از دامنه نگهبانی می‌کنند."
+    },
+    {
+      "key": "dlg.4_1.1",
+      "en": "The shot must be made from the summit of Damavand. The mountain will not make it easy.",
+      "fa": "تیر باید از قلهٔ دماوند رها شود. کوه کار را آسان نمی‌کند."
+    },
+    {
+      "key": "dlg.4_1.2",
+      "en": "Then I will climb, one step at a time.",
+      "fa": "پس بالا می‌روم، قدم به قدم."
+    },
+    {
+      "key": "level.4_2.title",
+      "en": "Mountain Assassins",
+      "fa": "آدمکشان کوهستان"
+    },
+    {
+      "key": "level.4_2.intro",
+      "en": "Afrasiab's assassins hide among the rocks.",
+      "fa": "آدمکشان افراسیاب میان صخره‌ها پنهان شده‌اند."
+    },
+    {
+      "key": "level.4_3.title",
+      "en": "Rockslide",
+      "fa": "ریزش سنگ"
+    },
+    {
+      "key": "level.4_3.intro",
+      "en": "A div hurls boulders down the mountain.",
+      "fa": "دیوی تخته‌سنگ‌ها را از کوه پایین می‌اندازد."
+    },
+    {
+      "key": "level.4_3.hint",
+      "en": "Divs are huge and tough, but their heads make big targets.",
+      "fa": "دیوها بزرگ و سرسخت‌اند، اما سرشان هدف بزرگی است."
+    },
+    {
+      "key": "level.4_4.title",
+      "en": "Snowstorm",
+      "fa": "کولاک"
+    },
+    {
+      "key": "level.4_4.intro",
+      "en": "A snowstorm sweeps the slopes.",
+      "fa": "کولاک دامنه‌ها را درمی‌نوردد."
+    },
+    {
+      "key": "level.4_5.title",
+      "en": "The Narrow Path",
+      "fa": "راه باریک"
+    },
+    {
+      "key": "level.4_5.intro",
+      "en": "Only a narrow path leads up. Hold it.",
+      "fa": "فقط راهی باریک به بالا می‌رود. نگهش دار."
+    },
+    {
+      "key": "level.4_5.hint",
+      "en": "This is the last line. Don't let anyone through.",
+      "fa": "این آخرین خط است. نگذار کسی رد شود."
+    },
+    {
+      "key": "level.4_6.title",
+      "en": "Divs of the Peak",
+      "fa": "دیوهای قله"
+    },
+    {
+      "key": "level.4_6.intro",
+      "en": "Two divs bar the way to the summit.",
+      "fa": "دو دیو راه قله را بسته‌اند."
+    },
+    {
+      "key": "level.4_7.title",
+      "en": "The Mobad's Lanterns",
+      "fa": "فانوس‌های موبد"
+    },
+    {
+      "key": "level.4_7.intro",
+      "en": "The Mobad hangs lanterns in the wind to steady your aim.",
+      "fa": "موبد فانوس‌ها را در باد آویخته تا نشانه‌گیری‌ات استوار شود."
+    },
+    {
+      "key": "level.4_7.hint",
+      "en": "Hit every lantern. Mind the wind.",
+      "fa": "همهٔ فانوس‌ها را بزن. حواست به باد باشد."
+    },
+    {
+      "key": "level.4_8.title",
+      "en": "The White Div",
+      "fa": "دیو سپید"
+    },
+    {
+      "key": "level.4_8.intro",
+      "en": "The White Div of the mountain stands before the summit.",
+      "fa": "دیو سپید کوهستان جلوی قله ایستاده."
+    },
+    {
+      "key": "dlg.4_8.1",
+      "en": "Turn back, little man. This mountain is mine.",
+      "fa": "برگرد، آدمک. این کوه مال من است."
+    },
+    {
+      "key": "dlg.4_8.2",
+      "en": "This mountain belongs to Iran. Step aside.",
+      "fa": "این کوه از آن ایران است. کنار برو."
+    },
+    {
+      "key": "dlg.4_8o.1",
+      "en": "The summit is yours, Arash. Rest tonight. At dawn, the arrow.",
+      "fa": "قله از آن توست، آرش. امشب بیاسا. سپیده‌دم، نوبت تیر است."
+    },
+    {
+      "key": "dlg.4_8o.2",
+      "en": "I will not need rest after it.",
+      "fa": "پس از آن، به آسودن نیازی ندارم."
+    },
+    {
+      "key": "boss.4.phase1",
+      "en": "The White Div roars and grabs two boulders!",
+      "fa": "دیو سپید می‌غرد و دو تخته‌سنگ برمی‌دارد!"
+    },
+    {
+      "key": "boss.4.phase2",
+      "en": "The White Div is furious!",
+      "fa": "دیو سپید خشمگین است!"
+    },
+    {
+      "key": "level.5_1.title",
+      "en": "From Damavand to the Oxus",
+      "fa": "از دماوند تا جیحون"
+    },
+    {
+      "key": "level.5_1.intro",
+      "en": "The arrow flies. Guide it until noon.",
+      "fa": "تیر پرواز می‌کند. تا نیمروز هدایتش کن."
+    },
+    {
+      "key": "dlg.5_1.1",
+      "en": "Everything I am, I put into this bow.",
+      "fa": "هرچه هستم را در این کمان می‌گذارم."
+    },
+    {
+      "key": "dlg.5_1.2",
+      "en": "The whole of Iran is watching you, son.",
+      "fa": "همهٔ ایران چشم به تو دارد، پسرم."
+    },
+    {
+      "key": "dlg.5_1.3",
+      "en": "Then let it fly.",
+      "fa": "پس رهایش می‌کنم."
+    },
+    {
+      "key": "dlg.5_1o.1",
+      "en": "The arrow fell on the bank of the Oxus. And there the border of Iran was drawn.",
+      "fa": "تیر بر کنارهٔ جیحون فرود آمد. و همان‌جا مرز ایران کشیده شد."
+    },
+    {
+      "key": "cut.prologue.title",
+      "en": "The Legend of Arash",
+      "fa": "افسانهٔ آرش"
+    },
+    {
+      "key": "cut.prologue.1",
+      "en": "Long ago, Iran and Turan were at war, year after year.",
+      "fa": "روزگاری دراز، ایران و توران سال‌ها در جنگ بودند."
+    },
+    {
+      "key": "cut.prologue.2",
+      "en": "King Manuchehr and the army of Iran were trapped in the mountains of Tabaristan by Afrasiab, king of Turan.",
+      "fa": "منوچهرشاه و سپاه ایران در کوه‌های تبرستان در محاصرهٔ افراسیاب، شاه توران، گرفتار بودند."
+    },
+    {
+      "key": "cut.prologue.3",
+      "en": "Far away, in a village on the border, lived a young archer named Arash.",
+      "fa": "دورتر، در روستایی مرزی، کمانداری جوان به نام آرش زندگی می‌کرد."
+    },
+    {
+      "key": "cut.prologue.4",
+      "en": "He did not know yet that one day a whole land would rest on a single arrow.",
+      "fa": "او هنوز نمی‌دانست که روزی سرزمینی بر یک تیر استوار خواهد شد."
+    },
+    {
+      "key": "cut.ch1.title",
+      "en": "Fire on the Border",
+      "fa": "آتش در مرز"
+    },
+    {
+      "key": "cut.ch1.1",
+      "en": "Turanian raiders crossed the border and burned everything in their path.",
+      "fa": "مهاجمان تورانی از مرز گذشتند و هرچه سر راهشان بود سوزاندند."
+    },
+    {
+      "key": "cut.ch1.2",
+      "en": "Arash left his village and joined the king's army.",
+      "fa": "آرش روستایش را ترک کرد و به سپاه شاه پیوست."
+    },
+    {
+      "key": "cut.ch1.3",
+      "en": "From watchtower to watchtower, the border was burning.",
+      "fa": "از برجی به برج دیگر، مرز در آتش می‌سوخت."
+    },
+    {
+      "key": "cut.ch2.title",
+      "en": "The Forests of Tabaristan",
+      "fa": "جنگل‌های تبرستان"
+    },
+    {
+      "key": "cut.ch2.1",
+      "en": "The army of Iran fell back into the forests of Tabaristan.",
+      "fa": "سپاه ایران به جنگل‌های تبرستان عقب نشست."
+    },
+    {
+      "key": "cut.ch2.2",
+      "en": "Food ran short, and the mist hid the enemy.",
+      "fa": "آذوقه کم شد و مه دشمن را پنهان کرد."
+    },
+    {
+      "key": "cut.ch2.3",
+      "en": "Night after night, Arash's arrows kept the camp alive.",
+      "fa": "شب از پی شب، تیرهای آرش اردوگاه را زنده نگه داشت."
+    },
+    {
+      "key": "cut.ch3.title",
+      "en": "The Peace Pact",
+      "fa": "پیمان صلح"
+    },
+    {
+      "key": "cut.ch3.1",
+      "en": "After years of war, both sides were weary.",
+      "fa": "پس از سال‌ها جنگ، هر دو سو خسته بودند."
+    },
+    {
+      "key": "cut.ch3.2",
+      "en": "Afrasiab offered peace: an archer of Iran would shoot one arrow, and where it fell, there the border would be.",
+      "fa": "افراسیاب صلح پیشنهاد داد: کمانداری ایرانی یک تیر بیندازد و هر جا فرود آمد، آن‌جا مرز باشد."
+    },
+    {
+      "key": "cut.ch3.3",
+      "en": "But Afrasiab had no intention of keeping his word.",
+      "fa": "اما افراسیاب قصد نداشت به پیمانش وفادار بماند."
+    },
+    {
+      "key": "cut.ch4.title",
+      "en": "The Ascent of Damavand",
+      "fa": "صعود به دماوند"
+    },
+    {
+      "key": "cut.ch4.1",
+      "en": "The elders chose Arash to shoot the arrow.",
+      "fa": "بزرگان آرش را برای پرتاب تیر برگزیدند."
+    },
+    {
+      "key": "cut.ch4.2",
+      "en": "He would shoot from the summit of Damavand, the highest peak in the land.",
+      "fa": "او باید از قلهٔ دماوند، بلندترین قلهٔ سرزمین، تیر می‌انداخت."
+    },
+    {
+      "key": "cut.ch4.3",
+      "en": "Afrasiab sent assassins and divs to stop him.",
+      "fa": "افراسیاب آدمکشان و دیوها را فرستاد تا جلویش را بگیرند."
+    },
+    {
+      "key": "cut.ch5.title",
+      "en": "The Great Shot",
+      "fa": "تیر بزرگ"
+    },
+    {
+      "key": "cut.ch5.1",
+      "en": "At dawn, Arash stood on the summit of Damavand.",
+      "fa": "سپیده‌دم، آرش بر قلهٔ دماوند ایستاد."
+    },
+    {
+      "key": "cut.ch5.2",
+      "en": "He put all his strength, all his soul, into the bow.",
+      "fa": "همهٔ توان و همهٔ جانش را در کمان گذاشت."
+    },
+    {
+      "key": "cut.ch5.3",
+      "en": "And he let the arrow fly.",
+      "fa": "و تیر را رها کرد."
+    },
+    {
+      "key": "cut.ending.title",
+      "en": "Tirgan",
+      "fa": "تیرگان"
+    },
+    {
+      "key": "cut.ending.1",
+      "en": "The arrow flew from dawn until noon and fell on the bank of the Oxus.",
+      "fa": "تیر از سپیده‌دم تا نیمروز پرواز کرد و بر کنارهٔ جیحون فرود آمد."
+    },
+    {
+      "key": "cut.ending.2",
+      "en": "Arash had given his life to the arrow.",
+      "fa": "آرش جانش را در آن تیر گذاشته بود."
+    },
+    {
+      "key": "cut.ending.3",
+      "en": "The war ended, and the border was drawn where the arrow fell.",
+      "fa": "جنگ پایان یافت و مرز همان‌جا کشیده شد که تیر فرود آمد."
+    },
+    {
+      "key": "cut.ending.4",
+      "en": "Every year, at the festival of Tirgan, Iran remembers Arash the Archer.",
+      "fa": "هر سال، در جشن تیرگان، ایران آرش کمانگیر را به یاد می‌آورد."
     }
   ]
 }

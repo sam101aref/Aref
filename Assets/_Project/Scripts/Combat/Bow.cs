@@ -4,7 +4,10 @@ using UnityEngine;
 
 namespace Arash.Combat
 {
-    /// <summary>Spawns and launches arrows. Draw power maps linearly to launch speed.</summary>
+    /// <summary>
+    /// Spawns and launches projectiles (arrows, spears, stones…). Draw power maps linearly to launch
+    /// speed; flight acceleration is gravity plus the current wind.
+    /// </summary>
     public class Bow : MonoBehaviour
     {
         [SerializeField] Arrow arrowPrefab;
@@ -18,6 +21,8 @@ namespace Arash.Combat
         [SerializeField, Min(0f)] float maxLaunchSpeed = 28f;
         [SerializeField, Tooltip("Multiplier on Physics2D gravity for arrow flight.")]
         float gravityScale = 1f;
+        [SerializeField, Tooltip("How strongly wind pushes this bow's projectiles.")]
+        float windScale = 1f;
 
         [Header("Cleanup")]
         [SerializeField, Min(1), Tooltip("Oldest stuck arrows are removed beyond this count.")]
@@ -28,8 +33,22 @@ namespace Arash.Combat
         readonly Queue<Arrow> spawnedArrows = new Queue<Arrow>();
 
         public Vector2 LaunchPosition { get { return (launchPoint != null ? launchPoint : transform).position; } }
-        public Vector2 FlightAcceleration { get { return Physics2D.gravity * gravityScale; } }
-        Transform Owner { get { return owner != null ? owner : transform.root; } }
+        public Vector2 FlightAcceleration
+        {
+            get { return Physics2D.gravity * gravityScale + BattleEnvironment.WindAcceleration * windScale; }
+        }
+        public Transform Owner { get { return owner != null ? owner : transform.root; } }
+
+        /// <summary>Swaps the projectile, e.g. spears or stones for special enemies.</summary>
+        public void SetProjectile(Arrow prefab, float minSpeed, float maxSpeed, float gravity, float wind)
+        {
+            if (prefab != null)
+                arrowPrefab = prefab;
+            minLaunchSpeed = minSpeed;
+            maxLaunchSpeed = maxSpeed;
+            gravityScale = gravity;
+            windScale = wind;
+        }
 
         public Vector2 LaunchVelocity(AimState aim)
         {

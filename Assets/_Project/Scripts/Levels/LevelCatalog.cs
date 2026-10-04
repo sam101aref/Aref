@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Arash.Core;
+using Arash.Story;
 using UnityEngine;
 
 namespace Arash.Levels
@@ -17,10 +18,14 @@ namespace Arash.Levels
             public string titleKey;
             [Min(0), Tooltip("Total stars needed to open this chapter (GDD 4.8).")]
             public int starsToUnlock;
+            [Tooltip("Played before the chapter's first level, the first time.")]
+            public CutsceneDefinition introCutscene;
             public List<LevelDefinition> levels = new List<LevelDefinition>();
         }
 
         public List<Chapter> chapters = new List<Chapter>();
+        [Tooltip("Played after the final level.")]
+        public CutsceneDefinition endingCutscene;
 
         static LevelCatalog loaded;
 
@@ -53,6 +58,23 @@ namespace Arash.Levels
             var all = AllLevels();
             var index = all.IndexOf(level);
             return index >= 0 && index + 1 < all.Count ? all[index + 1] : null;
+        }
+
+        /// <summary>All cutscenes in story order, for the story book.</summary>
+        public List<CutsceneDefinition> AllCutscenes()
+        {
+            var all = new List<CutsceneDefinition>();
+            foreach (var chapter in chapters)
+            {
+                if (chapter.introCutscene != null && !all.Contains(chapter.introCutscene))
+                    all.Add(chapter.introCutscene);
+                foreach (var level in chapter.levels)
+                    if (level != null && level.outroCutscene != null && !all.Contains(level.outroCutscene))
+                        all.Add(level.outroCutscene);
+            }
+            if (endingCutscene != null && !all.Contains(endingCutscene))
+                all.Add(endingCutscene);
+            return all;
         }
 
         public Chapter ChapterOf(LevelDefinition level)

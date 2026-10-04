@@ -25,7 +25,9 @@ namespace Arash.UI
         public static readonly Color Danger = new Color(0.75f, 0.25f, 0.20f);
 
         const string StarSpritePath = "UI/Star";
+        const string CircleSpritePath = "UI/Circle";
         static Sprite starSprite;
+        static Sprite circleSprite;
 
         public static Vector2 ReferenceResolution { get { return new Vector2(1920f, 1080f); } }
 
@@ -148,6 +150,33 @@ namespace Arash.UI
             image.raycastTarget = false;
             image.rectTransform.sizeDelta = new Vector2(size, size);
             return image;
+        }
+
+        public static Image Circle(Transform parent, Color color, float size)
+        {
+            if (circleSprite == null)
+                circleSprite = Resources.Load<Sprite>(CircleSpritePath);
+            var image = Panel(parent, "Circle", color);
+            image.sprite = circleSprite;
+            image.raycastTarget = false;
+            image.rectTransform.sizeDelta = new Vector2(size, size);
+            return image;
+        }
+
+        /// <summary>
+        /// A label whose logical text is word-wrapped to <paramref name="width"/> reference pixels
+        /// before shaping, so Persian lines break in the right order.
+        /// </summary>
+        public static Text WrappedLabel(Transform parent, string logicalText, int size, Color color, float width,
+            TextAnchor alignment = TextAnchor.UpperLeft)
+        {
+            var label = Label(parent, string.Empty, size, color, alignment);
+            var settings = label.GetGenerationSettings(Vector2.zero);
+            var generator = label.cachedTextGeneratorForLayout;
+            var lines = Story.TextLayout.Wrap(logicalText,
+                line => generator.GetPreferredWidth(Loc.Display(line), settings) / label.pixelsPerUnit, width);
+            label.text = Loc.Display(string.Join("\n", lines));
+            return label;
         }
 
         /// <summary>A row of three stars centred on the parent's local position.</summary>
