@@ -146,11 +146,34 @@ namespace Arash.Combat
                 desiredSize = baseSize;
             }
 
-            cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, desiredSize, ref zoomVelocity, zoomSmoothTime);
-
-            var goal = Clamp(new Vector3(desired.x, desired.y, focus.z), cam.orthographicSize);
-            focus = Vector3.SmoothDamp(focus, goal, ref moveVelocity, following ? followSmoothTime : returnSmoothTime);
+            // Real time, so the camera still settles while the game is paused for dialogue. A zero time
+            // step must never reach SmoothDamp: it divides by it and the camera would break for good.
+            var dt = Time.unscaledDeltaTime;
+            if (dt > 0f)
+            {
+                cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, desiredSize, ref zoomVelocity, zoomSmoothTime, Mathf.Infinity, dt);
+                var goal = Clamp(new Vector3(desired.x, desired.y, focus.z), cam.orthographicSize);
+                focus = Vector3.SmoothDamp(focus, goal, ref moveVelocity, following ? followSmoothTime : returnSmoothTime, Mathf.Infinity, dt);
+            }
+            if (!IsFinite(focus) || !IsFinite(cam.orthographicSize))
+            {
+                // Recover from anything that slipped through rather than showing an empty view.
+                zoomVelocity = 0f;
+                moveVelocity = Vector3.zero;
+                cam.orthographicSize = desiredSize;
+                focus = Clamp(new Vector3(desired.x, desired.y, -10f), desiredSize);
+            }
             transform.position = focus + ShakeOffset();
+        }
+
+        static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }
+
+        static bool IsFinite(Vector3 value)
+        {
+            return IsFinite(value.x) && IsFinite(value.y) && IsFinite(value.z);
         }
 
         Vector3 ShakeOffset()
