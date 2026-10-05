@@ -10,6 +10,7 @@ on:
       - 'docs/**'
       - '**.md'
       - 'Siavosh/**' # a separate game; it gets its own workflow
+      - '.github/workflows/siavosh-android.yml'
   workflow_dispatch:
 
 permissions:
