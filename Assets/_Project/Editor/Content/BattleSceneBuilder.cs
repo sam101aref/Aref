@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Arash.Art;
 using Arash.Combat;
 using Arash.Core;
 using Arash.Editor.Setup;
@@ -18,11 +19,11 @@ using Object = UnityEngine.Object;
 namespace Arash.Editor.Content
 {
     /// <summary>
-    /// Builds the placeholder game content: sprites and app icon, the Arrow and archer prefabs
-    /// (ragdoll body parts with hit zones), the prologue levels and level catalog (F-11, F-17), and
-    /// the contents of the Boot, MainMenu, WorldMap and Battle scenes. Runs as part of project setup
-    /// and skips anything that is already up to date, so hand edits are kept. Placeholder art is
-    /// replaced once real art arrives.
+    /// Builds the game content: applies the art manifest (F-50), the app icon, the projectile and
+    /// archer prefabs (drawn body parts with ragdoll physics and hit zones), the story catalog
+    /// (F-11, F-60, F-62) and the contents of the Boot, MainMenu, WorldMap, Battle, Cutscene and
+    /// FinalFlight scenes. Runs as part of project setup and skips anything that is already up to
+    /// date, so hand edits are kept.
     /// </summary>
     [InitializeOnLoad]
     static class BattleSceneBuilder
@@ -54,13 +55,6 @@ namespace Arash.Editor.Content
         const string IconPath = ProjectSetup.ProjectRoot + "/Art/Placeholder/Icon.png";
         const string UnlitMaterialPath = "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Sprite-Unlit-Default.mat";
 
-        static readonly Color PersianTeal = new Color(0.10f, 0.42f, 0.55f);
-        static readonly Color TuranianRed = new Color(0.55f, 0.15f, 0.12f);
-        static readonly Color Skin = new Color(0.87f, 0.68f, 0.52f);
-        static readonly Color Wood = new Color(0.45f, 0.29f, 0.15f);
-        static readonly Color Trousers = new Color(0.28f, 0.22f, 0.18f);
-        static readonly Color Steel = new Color(0.75f, 0.75f, 0.78f);
-        static readonly Color Feather = new Color(0.72f, 0.16f, 0.12f);
         static readonly Color Earth = new Color(0.55f, 0.43f, 0.28f);
         static readonly Color BarBackground = new Color(0.1f, 0.08f, 0.06f, 0.8f);
         static readonly Color BarFill = new Color(0.35f, 0.8f, 0.3f);
@@ -109,6 +103,9 @@ namespace Arash.Editor.Content
                 Debug.LogError("[Arash Setup] Could not create placeholder sprites.");
                 return false;
             }
+            if (!ArtImport.Apply())
+                Debug.LogWarning("[Arash Setup] Some art is missing; run tools/art/render.mjs.");
+            ArtLibrary.SpriteMaterial = s_Material;
 
             Directory.CreateDirectory(PrefabFolder);
             DiscardOutdatedPrefabs();
@@ -121,15 +118,15 @@ namespace Arash.Editor.Content
                 Boulder = LoadOrCreate(BoulderPrefabPath, () => CreateStonePrefab(BoulderPrefabPath, "Boulder", 0.7f, new Color(0.6f, 0.62f, 0.66f), 200f)).GetComponent<Arrow>(),
             };
 
-            var arash = LoadOrCreate(ArashPrefabPath, () => CreateArcherPrefab("Arash", ArashPrefabPath, Role.Player, PersianTeal, arrow));
-            var enemy = LoadOrCreate(EnemyPrefabPath, () => CreateArcherPrefab("Turanian Archer", EnemyPrefabPath, Role.Enemy, TuranianRed, arrow));
-            var companion = LoadOrCreate(CompanionPrefabPath, () => CreateArcherPrefab("Companion", CompanionPrefabPath, Role.Companion, Color.white, arrow));
+            var arash = LoadOrCreate(ArashPrefabPath, () => CreateArcherPrefab("Arash", ArashPrefabPath, Role.Player, CharacterLook.Arash, arrow));
+            var enemy = LoadOrCreate(EnemyPrefabPath, () => CreateArcherPrefab("Turanian Archer", EnemyPrefabPath, Role.Enemy, CharacterLook.Turanian, arrow));
+            var companion = LoadOrCreate(CompanionPrefabPath, () => CreateArcherPrefab("Companion", CompanionPrefabPath, Role.Companion, CharacterLook.Envoy, arrow));
 
             // Checked now: opening scenes below unloads assets, after which the reference reads as null.
             var catalog = StoryContent.EnsureCatalog(projectiles);
             var catalogReady = catalog != null && catalog.chapters.Count > 0;
 
-            BuildBattleScene(arash, enemy, companion);
+            BuildBattleScene(arash, enemy, companion, arrow, projectiles.FireArrow);
             BuildCutsceneScene();
             BuildFlightScene();
             BuildMenuScene<MainMenuScreen>(MainMenuScenePath, "Main Menu");
@@ -139,16 +136,15 @@ namespace Arash.Editor.Content
         }
 
         /// <summary>
-        /// Prefabs from an older builder are rebuilt: the arrow without an intercept collider (before
-        /// escort levels) or archers without a Combatant (before the duel). Archers reference the arrow,
-        /// so everything is rebuilt together.
+        /// Prefabs from an older builder are rebuilt: an arrow without drawn art or archers without a
+        /// drawn body (before the new art). Archers reference the arrow, so everything is rebuilt together.
         /// </summary>
         static void DiscardOutdatedPrefabs()
         {
             var arrow = AssetDatabase.LoadAssetAtPath<GameObject>(ArrowPrefabPath);
             var archer = AssetDatabase.LoadAssetAtPath<GameObject>(ArashPrefabPath);
-            var outdated = (arrow != null && arrow.GetComponent<Collider2D>() == null) ||
-                           (archer != null && archer.GetComponent<Combatant>() == null);
+            var outdated = (arrow != null && arrow.transform.Find("Art") == null) ||
+                           (archer != null && archer.GetComponent<CharacterSkin>() == null);
             if (!outdated)
                 return;
             foreach (var path in AllPrefabPaths)
@@ -299,45 +295,51 @@ namespace Arash.Editor.Content
 
         // ---------------------------------------------------------------- prefabs
 
+        static Sprite ArtSprite(string path)
+        {
+            return AssetDatabase.LoadAssetAtPath<Sprite>(ProjectSetup.ProjectRoot + "/Resources/Art/" + path + ".png");
+        }
+
+        /// <summary>The drawn projectile, pivot at the tip (the point the arrow simulates and line-casts).</summary>
+        static void ProjectileArt(GameObject root, string sprite)
+        {
+            var art = new GameObject("Art");
+            art.transform.SetParent(root.transform, false);
+            AddRenderer(art, ArtSprite("Projectiles/" + sprite), Color.white, 40);
+        }
+
         static GameObject CreateArrowPrefab()
         {
-            // The pivot is the arrow tip: that is the point the arrow simulates and line-casts.
             var root = ProjectileRoot("Arrow", DamageRules.StandardArrowDamage, false);
-            Box("Shaft", root.transform, new Vector2(-0.45f, 0f), new Vector2(0.9f, 0.05f), Wood, 40);
-            var head = Box("Head", root.transform, new Vector2(-0.05f, 0f), new Vector2(0.11f, 0.11f), Steel, 41);
-            head.transform.localRotation = Quaternion.Euler(0f, 0f, 45f);
-            Box("Fletching", root.transform, new Vector2(-0.84f, 0f), new Vector2(0.18f, 0.12f), Feather, 41);
+            ProjectileArt(root, "arrow");
             return SavePrefab(root, ArrowPrefabPath);
         }
 
         static GameObject CreateSpearPrefab()
         {
             var root = ProjectileRoot("Spear", 150f, false);
-            Box("Shaft", root.transform, new Vector2(-0.8f, 0f), new Vector2(1.6f, 0.07f), Wood, 40);
-            var head = Box("Head", root.transform, new Vector2(-0.08f, 0f), new Vector2(0.18f, 0.18f), Steel, 41);
-            head.transform.localRotation = Quaternion.Euler(0f, 0f, 45f);
+            ProjectileArt(root, "spear");
             return SavePrefab(root, SpearPrefabPath);
         }
 
         static GameObject CreateFireArrowPrefab()
         {
             var root = ProjectileRoot("Fire Arrow", DamageRules.StandardArrowDamage, true);
-            Box("Shaft", root.transform, new Vector2(-0.45f, 0f), new Vector2(0.9f, 0.05f), Wood, 40);
-            Disc("Flame", root.transform, new Vector2(-0.12f, 0f), 0.3f, new Color(1f, 0.55f, 0.1f), 42);
-            Box("Fletching", root.transform, new Vector2(-0.84f, 0f), new Vector2(0.18f, 0.12f), new Color(0.2f, 0.15f, 0.1f), 41);
+            ProjectileArt(root, "arrow_fire");
             return SavePrefab(root, FireArrowPrefabPath);
         }
 
         static GameObject CreateStonePrefab(string path, string name, float diameter, Color color, float damage)
         {
             var root = ProjectileRoot(name, damage, false);
-            Disc("Stone", root.transform, new Vector2(-diameter * 0.5f, 0f), diameter, color, 40);
+            ProjectileArt(root, diameter > 0.5f ? "boulder" : "stone");
             return SavePrefab(root, path);
         }
 
         static GameObject ProjectileRoot(string name, float damage, bool ignites)
         {
             var root = new GameObject(name);
+            root.transform.localScale = Vector3.one * LevelRunner.CharacterScale; // drawn to match the characters
             var arrow = root.AddComponent<Arrow>();
             var intercept = root.AddComponent<CircleCollider2D>();
             intercept.isTrigger = true;
@@ -349,57 +351,50 @@ namespace Arash.Editor.Content
         }
 
         /// <summary>
-        /// Builds an archer whose body parts are kinematic rigidbodies joined to the torso by hinges
-        /// (they become a ragdoll on death). Parts are siblings under the root so physics never fights
-        /// the hierarchy. A left-facing archer is built mirrored rather than with a negative scale.
+        /// Builds an archer from the drawn body parts (<see cref="CharacterSkin"/>): the torso, legs,
+        /// head and aim pivot become kinematic rigidbodies joined to the torso by hinges (they turn
+        /// into a ragdoll on death), each with a collider and hit zone. Parts are siblings under the
+        /// root so physics never fights the hierarchy. A left-facing archer is built mirrored rather
+        /// than with a negative scale. The look can be swapped at runtime.
         /// </summary>
-        static GameObject CreateArcherPrefab(string name, string path, Role role, Color tunic, GameObject arrowPrefab)
+        static GameObject CreateArcherPrefab(string name, string path, Role role, CharacterLook look, GameObject arrowPrefab)
         {
             var isPlayer = role == Role.Player;
             var armed = role != Role.Companion;
             var facingRight = role != Role.Enemy;
-            var facing = facingRight ? 1f : -1f;
             var root = new GameObject(name);
             root.AddComponent<Health>();
+            var skin = CharacterSkin.Build(root.transform, facingRight, look);
 
-            var torso = Box("Torso", root.transform, new Vector2(0f, 1.25f), new Vector2(0.6f, 0.9f), tunic, 31);
+            var torso = root.transform.Find("Torso").gameObject;
             var torsoBody = AddBody(torso, 2f);
             torso.AddComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.9f);
             AddZone(torso, HitZoneType.Torso);
 
-            var legs = Box("Legs", root.transform, new Vector2(0f, 0.4f), new Vector2(0.45f, 0.8f), Trousers, 30);
+            var legs = root.transform.Find("Legs").gameObject;
             AddBody(legs, 1f);
             legs.AddComponent<BoxCollider2D>().size = new Vector2(0.45f, 0.8f);
             AddZone(legs, HitZoneType.Limb);
             AddHinge(legs, torsoBody, new Vector2(0f, 0.4f), 25f);
 
-            var head = Disc("Head", root.transform, new Vector2(0f, 1.95f), 0.5f, Skin, 32);
+            var head = root.transform.Find("Head").gameObject;
             AddBody(head, 0.6f);
-            head.AddComponent<CircleCollider2D>().radius = 0.5f;
+            head.AddComponent<CircleCollider2D>().radius = 0.25f;
             AddZone(head, HitZoneType.Head);
-            AddHinge(head, torsoBody, new Vector2(0f, -0.5f), 30f);
+            AddHinge(head, torsoBody, new Vector2(0f, -0.25f), 30f);
 
-            var pivot = new GameObject("AimPivot");
-            pivot.transform.SetParent(root.transform, false);
-            pivot.transform.localPosition = new Vector2(0.1f * facing, 1.55f);
+            var pivot = root.transform.Find("AimPivot").gameObject;
             AddBody(pivot, 0.5f);
             AddHinge(pivot, torsoBody, Vector2.zero, 0f);
-            var arm = Box("Arm", pivot.transform, new Vector2(0.3f, 0f), new Vector2(0.6f, 0.12f), Skin, 33);
-            arm.AddComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.12f);
+            var arm = pivot.transform.Find("Arm").gameObject;
+            var armCollider = arm.AddComponent<BoxCollider2D>();
+            armCollider.size = new Vector2(0.6f, 0.12f);
+            armCollider.offset = new Vector2(0.3f, 0f);
             AddZone(arm, HitZoneType.Limb);
-            GameObject bowObject = null;
-            Transform launchPoint = null;
-            if (armed)
-            {
-                bowObject = Box("Bow", pivot.transform, new Vector2(0.62f, 0f), new Vector2(0.1f, 1.1f), Wood, 34);
-                launchPoint = new GameObject("LaunchPoint").transform;
-                launchPoint.SetParent(pivot.transform, false);
-                launchPoint.localPosition = new Vector2(0.72f, 0f);
-            }
 
             var bar = new GameObject("HealthBar");
             bar.transform.SetParent(root.transform, false);
-            bar.transform.localPosition = new Vector2(0f, 2.75f);
+            bar.transform.localPosition = new Vector2(0f, 3.1f);
             Box("Background", bar.transform, Vector2.zero, new Vector2(1.24f, 0.2f), BarBackground, 60);
             var fill = Box("Fill", bar.transform, Vector2.zero, new Vector2(1.16f, 0.12f), BarFill, 61);
             var healthBar = bar.AddComponent<HealthBar>();
@@ -408,7 +403,11 @@ namespace Arash.Editor.Content
             Bow bow = null;
             if (armed)
             {
-                bow = bowObject.AddComponent<Bow>();
+                var weapon = pivot.transform.Find("Weapon").gameObject;
+                var launchPoint = new GameObject("LaunchPoint").transform;
+                launchPoint.SetParent(pivot.transform, false);
+                launchPoint.localPosition = new Vector2(CharacterSkin.LaunchDistance, 0f);
+                bow = weapon.AddComponent<Bow>();
                 Wire(bow, "arrowPrefab", arrowPrefab.GetComponent<Arrow>());
                 Wire(bow, "launchPoint", launchPoint);
                 Wire(bow, "owner", root.transform);
@@ -454,6 +453,7 @@ namespace Arash.Editor.Content
             var ragdoll = root.AddComponent<Ragdoll2D>();
             WireArray(ragdoll, "disableOnDeath", controller != null ? new Object[] { rig, controller } : new Object[] { rig });
 
+            EditorUtility.SetDirty(skin);
             return SavePrefab(root, path);
         }
 
@@ -573,14 +573,16 @@ namespace Arash.Editor.Content
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        static void BuildBattleScene(GameObject arashPrefab, GameObject enemyPrefab, GameObject companionPrefab)
+        const string BattleMarker = "Battle v2";
+
+        static void BuildBattleScene(GameObject arashPrefab, GameObject enemyPrefab, GameObject companionPrefab, GameObject arrowPrefab, Arrow fireArrow)
         {
             if (!File.Exists(BattleScenePath))
                 return;
 
             var scene = EditorSceneManager.OpenScene(BattleScenePath, OpenSceneMode.Single);
             var roots = scene.GetRootGameObjects();
-            if (roots.Any(go => go.GetComponent<RealtimeBattle>() != null))
+            if (roots.Any(go => go.name == BattleMarker))
                 return;
 
             // Replace anything an older builder generated; keep the camera and the global light.
@@ -608,11 +610,7 @@ namespace Arash.Editor.Content
                 Debug.LogWarning("[Arash Setup] Battle scene has no camera; the BattleCamera was not added.");
             }
 
-            var battle = new GameObject("Battle");
-            var turns = battle.AddComponent<TurnManager>();
-            Wire(turns, "player", arash.GetComponent<Combatant>());
-            Wire(turns, "battleCamera", battleCamera);
-
+            var battle = new GameObject(BattleMarker);
             var realtime = battle.AddComponent<RealtimeBattle>();
             Wire(realtime, "battleCamera", battleCamera);
 
@@ -623,14 +621,16 @@ namespace Arash.Editor.Content
             Wire(feedback, "hud", hud);
 
             var runner = battle.AddComponent<LevelRunner>();
-            Wire(runner, "turnManager", turns);
             Wire(runner, "realtimeBattle", realtime);
-            Wire(runner, "companionPrefab", companionPrefab.GetComponent<Combatant>());
+            Wire(runner, "battleCamera", battleCamera);
             Wire(runner, "hud", hud);
             Wire(runner, "player", arash.GetComponent<Combatant>());
             Wire(runner, "playerAim", arash.GetComponent<AimController>());
             Wire(runner, "playerPreview", arash.GetComponentInChildren<TrajectoryPreview>());
             Wire(runner, "enemyPrefab", enemyPrefab.GetComponent<Combatant>());
+            Wire(runner, "arrowPrefab", arrowPrefab.GetComponent<Arrow>());
+            Wire(runner, "fireArrowPrefab", fireArrow);
+            Wire(runner, "companionPrefab", companionPrefab.GetComponent<Combatant>());
             Wire(runner, "ground", ground.GetComponent<SpriteRenderer>());
             Wire(runner, "sceneCamera", camera);
             Wire(runner, "squareSprite", s_Square);
@@ -685,14 +685,23 @@ namespace Arash.Editor.Content
 
             var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
             var roots = scene.GetRootGameObjects();
-            if (roots.Any(go => go.GetComponent<T>() != null))
-                return;
+            var screen = roots.Select(go => go.GetComponent<T>()).FirstOrDefault(c => c != null);
+            if (screen == null)
+            {
+                var camera = roots.Select(go => go.GetComponent<Camera>()).FirstOrDefault(c => c != null);
+                if (camera != null)
+                    camera.backgroundColor = Lapis;
+                screen = new GameObject(name).AddComponent<T>();
+            }
 
-            var camera = roots.Select(go => go.GetComponent<Camera>()).FirstOrDefault(c => c != null);
-            if (camera != null)
-                camera.backgroundColor = Lapis;
-
-            new GameObject(name).AddComponent<T>();
+            // Screens that draw sprites (the main menu's scene) need the unlit sprite material.
+            var serialized = new SerializedObject(screen);
+            var material = serialized.FindProperty("spriteMaterial");
+            if (material != null && material.objectReferenceValue != s_Material)
+            {
+                material.objectReferenceValue = s_Material;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+            }
             EditorSceneManager.SaveScene(scene);
         }
 

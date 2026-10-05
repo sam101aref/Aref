@@ -26,7 +26,7 @@ namespace Arash.Tests
         }
 
         [Test]
-        public void Armory_BuyingCostsCoinsAndRespectsStoryLocks()
+        public void Shop_BuyingCostsCoinsAndRespectsStoryLocks()
         {
             var save = new SaveData { coins = 1000 };
             var horn = Armory.Find("bow.horn");
@@ -34,56 +34,133 @@ namespace Arash.Tests
             Assert.AreEqual(PurchaseResult.Locked, Armory.TryBuy(save, horn));
             save.RecordWin("ch0_5", 1);
             Assert.AreEqual(PurchaseResult.Bought, Armory.TryBuy(save, horn));
-            Assert.AreEqual(700, save.coins);
+            Assert.AreEqual(800, save.coins);
             Assert.AreEqual(PurchaseResult.AlreadyOwned, Armory.TryBuy(save, horn));
 
             save.coins = 10;
+            save.RecordWin("ch0_2", 1);
             Assert.AreEqual(PurchaseResult.NotEnoughCoins, Armory.TryBuy(save, Armory.Find("outfit.lapis")));
         }
 
         [Test]
-        public void Armory_UpgradesHaveLevels()
+        public void Shop_RareItemsCostGems()
         {
-            var save = new SaveData { coins = 10000 };
-            var health = Armory.Find(Armory.HealthUpgrade);
-            for (var i = 0; i < health.MaxLevel; i++)
-                Assert.AreEqual(PurchaseResult.Bought, Armory.TryBuy(save, health));
-
-            Assert.AreEqual(PurchaseResult.MaxedOut, Armory.TryBuy(save, health));
-            Assert.AreEqual(10000 - 100 - 200 - 350, save.coins);
-            Assert.AreEqual(1.3f, Armory.CurrentLoadout(save).HealthMultiplier, 0.0001f);
+            var save = new SaveData { coins = 100000, gems = 10 };
+            save.RecordWin("ch2_1", 1);
+            var slot = Armory.Find("slot.3");
+            Assert.AreEqual(PurchaseResult.NotEnoughGems, Armory.TryBuy(save, slot));
+            save.gems = 45;
+            Assert.AreEqual(PurchaseResult.Bought, Armory.TryBuy(save, slot));
+            Assert.AreEqual(5, save.gems);
+            Assert.AreEqual(100000, save.coins);
         }
 
         [Test]
-        public void Armory_StoryBowIsGivenAndLoadoutFollowsEquipment()
+        public void Shop_BowSlotsLimitTheBowsCarried()
+        {
+            var save = new SaveData { coins = 100000 };
+            foreach (var level in new[] { "ch0_5", "ch1_1", "ch1_4" })
+                save.RecordWin(level, 1);
+
+            // One slot: a new bow replaces the one carried.
+            Assert.AreEqual(PurchaseResult.Bought, Armory.TryBuy(save, Armory.Find("bow.horn")));
+            CollectionAssert.AreEqual(new[] { "bow.horn" }, save.equippedBows);
+
+            // A second slot: the next bow is carried as well.
+            Assert.AreEqual(PurchaseResult.Bought, Armory.TryBuy(save, Armory.Find("slot.2")));
+            Assert.AreEqual(2, Armory.Slots(save));
+            Assert.AreEqual(PurchaseResult.Bought, Armory.TryBuy(save, Armory.Find("bow.fire")));
+            CollectionAssert.AreEqual(new[] { "bow.horn", "bow.fire" }, save.equippedBows);
+
+            // Equipping an owned bow when the slots are full swaps out the last one; the last bow cannot be removed.
+            save.owned.Add(Armory.DefaultBow);
+            Armory.Equip(save, Armory.Find(Armory.DefaultBow));
+            CollectionAssert.AreEqual(new[] { "bow.horn", Armory.DefaultBow }, save.equippedBows);
+            Armory.Equip(save, Armory.Find("bow.horn"));
+            Armory.Equip(save, Armory.Find(Armory.DefaultBow));
+            CollectionAssert.AreEqual(new[] { Armory.DefaultBow }, save.equippedBows);
+
+            var loadout = Armory.CurrentLoadout(save);
+            Assert.AreEqual(1, loadout.Bows.Count);
+            Assert.AreEqual(BowAbility.None, loadout.Bows[0].Item.Ability);
+            Assert.AreEqual(0f, loadout.Bows[0].Item.Trail.a, 0.0001f, "the starting bow leaves no trail");
+        }
+
+        [Test]
+        public void Shop_StoryBowIsGivenAndEquipped()
         {
             var save = new SaveData();
-            var arashBow = Armory.Find("bow.arash");
+            var arashBow = Armory.Find(Armory.ArashBow);
             Assert.IsFalse(Armory.IsOwned(save, arashBow));
 
             save.RecordWin("ch4_8", 3);
-            Assert.IsTrue(Armory.IsOwned(save, arashBow));
-            Assert.IsTrue(Armory.Equip(save, arashBow));
-            var loadout = Armory.CurrentLoadout(save);
-            Assert.AreEqual(34f, loadout.MaxSpeed, 0.0001f);
-            Assert.AreEqual(1.2f, loadout.FarrMultiplier, 0.0001f);
-
-            // Equipment that is not owned falls back to the defaults.
-            save.equippedBow = "bow.champion";
-            Assert.AreEqual(28f, Armory.CurrentLoadout(save).MaxSpeed, 0.0001f);
+            Armory.GrantStoryItems(save);
+            Assert.IsTrue(save.Owns(Armory.ArashBow));
+            Assert.AreEqual(Armory.ArashBow, Armory.CurrentLoadout(save).Bows[0].Item.Id);
         }
 
         [Test]
-        public void Armory_SelectedSpecialArrowComesFirst()
+        public void Loadout_AddsUpArmourHelmetAndQuiver()
         {
             var save = new SaveData();
-            save.owned.Add("special.fire");
-            save.owned.Add("special.triple");
-            save.selectedSpecial = "special.triple";
+            save.owned.AddRange(new[] { "armor.scale", "helmet.iron", "quiver.2" });
+            save.equippedArmor = "armor.scale";
+            save.equippedHelmet = "helmet.iron";
 
-            var specials = Armory.CurrentLoadout(save).Specials;
-            Assert.AreEqual(2, specials.Count);
-            Assert.AreEqual(SpecialArrow.Triple, specials[0]);
+            var loadout = Armory.CurrentLoadout(save);
+            Assert.AreEqual(0.3f, loadout.ResistBody, 0.0001f);
+            Assert.AreEqual(0.4f, loadout.ResistHead, 0.0001f);
+            Assert.AreEqual(1.2f, loadout.HealthMultiplier, 0.0001f);
+            Assert.AreEqual(42, loadout.Bows[0].Capacity); // 30 arrows + 40%
+
+            // Gear that is not owned is ignored.
+            save.equippedShield = "shield.simurgh";
+            Assert.IsNull(Armory.CurrentLoadout(save).Shield);
+        }
+
+        [Test]
+        public void Save_OldArmoryIsMigrated()
+        {
+            var save = new SaveData { version = 1, coins = 100 };
+            save.owned.AddRange(new[] { "bow.horn", "bow.champion", "special.fire", "outfit.lapis" });
+            save.upgrades.Add(new UpgradeRecord { id = "upgrade.health", level = 2 });
+            save.equippedBow = "bow.horn";
+
+            Armory.MigrateFromVersion1(save);
+
+            Assert.IsTrue(save.Owns("bow.fire"));
+            Assert.IsTrue(save.Owns("outfit.lapis"));
+            Assert.IsFalse(save.Owns("bow.champion"));
+            Assert.AreEqual(100 + 900 + 100 + 200, save.coins);
+            Assert.AreEqual(0, save.upgrades.Count);
+            CollectionAssert.AreEqual(new[] { "bow.horn" }, save.equippedBows);
+        }
+
+        [Test]
+        public void Gems_AreClaimedOnce()
+        {
+            var save = new SaveData();
+            Assert.IsTrue(save.ClaimGems("stars3.ch0_1", 3));
+            Assert.IsFalse(save.ClaimGems("stars3.ch0_1", 3));
+            Assert.AreEqual(3, save.gems);
+        }
+
+        [Test]
+        public void Health_ArmourReducesDamageByZone()
+        {
+            var go = new UnityEngine.GameObject("Target");
+            try
+            {
+                var health = go.AddComponent<Health>();
+                health.SetResistance(0.5f, 0.25f, 0f);
+                Assert.AreEqual(0.5f, health.DamageTaken(HitZoneType.Head), 0.0001f);
+                Assert.AreEqual(0.75f, health.DamageTaken(HitZoneType.Torso), 0.0001f);
+                Assert.AreEqual(1f, health.DamageTaken(HitZoneType.Limb), 0.0001f);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(go);
+            }
         }
 
         [Test]

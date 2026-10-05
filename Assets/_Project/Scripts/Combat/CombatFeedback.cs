@@ -45,7 +45,9 @@ namespace Arash.Combat
             if (battleCamera != null)
                 battleCamera.Shake(killed ? killShake : hitShake, shakeDuration);
 
-            if (!info.IsHeadshot)
+            // Slow motion and the pop-up celebrate the player's headshots, not the enemies'.
+            var victim = health.GetComponent<Combatant>();
+            if (!info.IsHeadshot || victim == null || victim.Team != Team.Enemy)
                 return;
 
             if (hud != null)

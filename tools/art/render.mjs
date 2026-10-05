@@ -96,6 +96,34 @@ async function preview() {
   const sheet = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><defs>${defs}</defs><rect width="100%" height="100%" fill="#5b7f99"/>${body}</svg>`;
   writeFileSync(join(dir, 'characters.png'), await renderSvg(page, sheet, w, h));
 
+  // A battle mock-up: the view a phone shows (camera half-height 7.5), Arash on the left.
+  {
+    const left = -14.5, right = 25.5, top = -14.5, bottom = 2;
+    const W = (right - left) * 100, H = (bottom - top) * 100;
+    const k = 0.45;
+    const sky = `<linearGradient id="bsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a5a8a"/><stop offset="1" stop-color="#f2a066"/></linearGradient>`;
+    const b = composeBackdrop('border', true);
+    let defs = sky;
+    let chars = '';
+    const place = (id, x, h, flip, opts = {}) => {
+      const c = composeCharacter(id, opts);
+      defs += c.defs;
+      const sc = opts.scale || 1;
+      chars += `<g transform="translate(${x * 100} ${-h * 100}) scale(${flip ? -sc : sc} ${sc})">${c.content}</g>`;
+      if (h > 0)
+        chars += `<rect x="${x * 100 - 120}" y="${-h * 100}" width="240" height="${h * 100}" rx="12" fill="#7d7468" stroke="#2b1d14" stroke-width="3"/>`;
+    };
+    place('arash', -6, 0, false, { angle: -8 });
+    place('shieldbearer', 9, 0, true, { tunic: '#6b5242' });
+    place('turanian', 13, 2.5, true, { tunic: '#8c2a1f', angle: -18 });
+    place('rider', 17, 0, true, { tunic: '#80331f' });
+    place('shaman', 21, 3.5, true, { tunic: '#5c3375', angle: 60 });
+    const alert = `<path d="M1288,-560 L1312,-560 L1307,-518 L1293,-518 Z" fill="#e02a2a" stroke="#fff" stroke-width="4"/><circle cx="1300" cy="-506" r="7.5" fill="#e02a2a" stroke="#fff" stroke-width="4"/>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W * k}" height="${H * k}" viewBox="${left * 100} ${top * 100} ${W} ${H}"><defs>${defs}</defs>` +
+      `<rect x="${left * 100}" y="${top * 100}" width="${W}" height="${H}" fill="url(#bsky)"/><g style="filter:url(#dusk)">${b.layers}</g>${chars}${alert}</svg>`;
+    writeFileSync(join(dir, 'battle_mockup.png'), await renderSvg(page, svg.replace('</defs>', '<filter id="dusk"><feColorMatrix type="matrix" values="0.95 0 0 0 0  0 0.8 0 0 0  0 0 0.74 0 0  0 0 0 1 0"/></filter></defs>'), Math.round(W * k), Math.round(H * k)));
+  }
+
   for (const biome of Object.keys(BIOMES)) {
     const b = composeBackdrop(biome);
     writeFileSync(join(dir, `backdrop_${biome}.png`), await renderSvg(page, b.svg, b.width, b.height));

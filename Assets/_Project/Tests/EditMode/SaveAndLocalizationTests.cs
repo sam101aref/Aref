@@ -42,6 +42,17 @@ namespace Arash.Tests
         }
 
         [Test]
+        public void StoryTable_HasEveryKeyInBothLanguages()
+        {
+            var asset = Resources.Load<TextAsset>("Localization/Story");
+            Assert.IsNotNull(asset, "Resources/Localization/Story.json is missing (run tools/story/extract_strings.py)");
+            StringAssert.Contains("\"cut.prologue.1\"", asset.text);
+            StringAssert.Contains("\"level.0_1.title\"", asset.text);
+            Assert.IsFalse(asset.text.Contains("\"fa\": \"\""), "A Persian story string is empty");
+            Assert.IsFalse(asset.text.Contains("\"en\": \"\""), "An English story string is empty");
+        }
+
+        [Test]
         public void PersianFont_IsAvailable()
         {
             Assert.IsNotNull(Resources.Load<Font>("Fonts/Vazirmatn-Regular"));

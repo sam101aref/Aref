@@ -68,8 +68,8 @@ Setup can be re-run any time from **Arash ▸ Setup**. · از منوی **Arash 
 
 ## Playing the current build · بازی کردن نسخهٔ فعلی
 
-Main menu → map → 38 levels in six chapters, from the border village to the final flight of the arrow from Damavand to the Oxus: turn-based duels, raids on the palisade, escort missions, archery trials, bosses, wind, and cutscenes with a story book. Touch anywhere, pull back and release to shoot; drag back to where you started to cancel. Headshots kill; body shots take 40%, arms and legs 25%. Up to three stars per level; progress and settings are saved. Language, sound, vibration and difficulty are in Settings.
-منوی اصلی ← نقشه ← ۳۸ مرحله در شش فصل، از روستای مرزی تا پرواز تیر از دماوند تا جیحون: دوئل نوبتی، دفاع از حصار، محافظت از همراه، آزمون تیراندازی، باس‌ها، باد، و میان‌پرده‌ها با کتاب داستان. هر جای صفحه را لمس کنید، به عقب بکشید و رها کنید؛ برای لغو، انگشت را به نقطهٔ شروع برگردانید. تیر به سر کشنده است، به بدن ۴۰٪ و به دست و پا ۲۵٪ آسیب می‌زند. هر مرحله تا سه ستاره دارد و پیشرفت و تنظیمات ذخیره می‌شوند. زبان، صدا، لرزش و سختی در تنظیمات است.
+Main menu → map → 38 levels in six chapters, from the border village to the final flight of the arrow from Damavand to the Oxus. Battles are real time: enemies come in waves and shoot at the same time as you; a red "!" warns that an archer is drawing, and hitting him cancels the shot. Arrows are limited (each bow has its own quiver, refilled a little after every wave). Every level opens with an illustrated story scene; bosses also close with one, and all scenes stay in the story book. The bazaar sells bows with abilities and coloured trails, bow slots, armour, helmets, standing shields, quivers and outfits, paid with coins and gems. Touch anywhere, pull back and release to shoot; drag back to where you started to cancel. When the golden farr circle is full, tap it for a rain of arrows.
+منوی اصلی ← نقشه ← ۳۸ مرحله در شش فصل، از روستای مرزی تا پرواز تیر از دماوند تا جیحون. نبردها هم‌زمان‌اند: دشمنان موج‌به‌موج می‌آیند و هم‌زمان با شما تیر می‌زنند؛ «!» قرمز یعنی کمانداری دارد کمان می‌کشد و اگر بزنیدش، تیرش هدر می‌رود. تیرها محدودند (هر کمان ترکش خودش را دارد و بعد از هر موج کمی پر می‌شود). هر مرحله با یک صحنهٔ مصور داستانی شروع می‌شود؛ باس‌ها صحنهٔ پایانی هم دارند و همه در کتاب داستان می‌مانند. در بازار کمان‌هایی با توانایی و ردِ رنگی، جایگاه کمان، زره، کلاه‌خود، سپر ایستاده، ترکش و جامه با سکه و الماس فروخته می‌شود. هر جای صفحه را لمس کنید، به عقب بکشید و رها کنید. وقتی دایرهٔ زرین فرّ پر شد، رویش بزنید تا باران تیر ببارد.
 
 ## Project layout · ساختار پروژه
 
@@ -77,7 +77,8 @@ Main menu → map → 38 levels in six chapters, from the border village to the 
 Assets/_Project/
   Art/  Audio/  Data/  Localization/  Prefabs/  Scenes/  Settings/
   Scripts/        game code (assembly Arash.Runtime)
-    Combat/       aiming, bow, arrow, preview, camera, damage, ragdoll, turns, enemy AI
+    Art/          art library, drawn characters (CharacterSkin), biome backdrops
+    Combat/       aiming, bows and arsenal, arrows, camera, damage, ragdoll, real-time battle, enemy AI
     Levels/       level and enemy-type data, catalog, star and unlock rules, level runner
     Story/        dialogue and cutscene data, cutscene player, text wrapping
     Flight/       the final arrow-flight level (F-30)
@@ -85,10 +86,13 @@ Assets/_Project/
     Localization/ string table, Persian shaper (right-to-left text)
     UI/           menus, map, settings, battle HUD (built in code)
     Core/         bootstrap, save system, settings, scene flow
-  Resources/      strings, Vazirmatn fonts, level catalog, UI sprites
+  Resources/      strings (Strings.json, Story.json), fonts, level catalog, all sprites (Art/)
   Tests/EditMode/ unit tests (run in CI before every build)
   Editor/Setup/   project setup and CI build (F-01)
-  Editor/Content/ builds placeholder art, prefabs, scenes, and all story content (StoryContent.cs)
+  Editor/Content/ applies the art manifest, builds prefabs and scenes, and turns the story
+                  script (StoryScript.json) into levels and cutscenes (StoryContent.cs)
+tools/art/        SVG art generator: node tools/art/render.mjs
+tools/story/      python3 tools/story/extract_strings.py (story text → Resources/Localization/Story.json)
 ```
 
 ## Release · انتشار

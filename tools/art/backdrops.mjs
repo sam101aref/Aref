@@ -377,7 +377,7 @@ export function backdropAssets() {
 }
 
 /** A preview of one biome with all layers stacked over a sky, 30 units wide. */
-export function composeBackdrop(biome) {
+export function composeBackdrop(biome, layersOnly = false) {
   const w = 3000;
   const top = -1100;
   const bottom = 400;
@@ -392,6 +392,8 @@ export function composeBackdrop(biome) {
       g += `<g transform="translate(${x} 0)">${content}</g>`;
     return g;
   };
+  if (layersOnly)
+    return { layers: `<g transform="translate(-2000 0)">${layer('far')}${layer('mid')}${layer('ground')}</g>` };
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w * scale}" height="${(bottom - top) * scale}" viewBox="0 ${top} ${w} ${bottom - top}">` +
     `<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fa8dc"/><stop offset="1" stroke-color="#f6e2b8" stop-color="#f6e2b8"/></linearGradient></defs>` +
     `<rect x="0" y="${top}" width="${w}" height="${bottom - top}" fill="url(#sky)"/>${layer('far')}${layer('mid')}${layer('ground')}</svg>`;

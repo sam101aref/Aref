@@ -19,6 +19,8 @@ namespace Arash.Localization
     public static class Loc
     {
         const string TablePath = "Localization/Strings";
+        /// <summary>Story text (titles, dialogue, captions), generated from the story script; overrides Strings.</summary>
+        const string StoryTablePath = "Localization/Story";
         const string RegularFontPath = "Fonts/Vazirmatn-Regular";
         const string BoldFontPath = "Fonts/Vazirmatn-Bold";
 
@@ -157,16 +159,21 @@ namespace Arash.Localization
         static void LoadTable()
         {
             entries = new Dictionary<string, Entry>();
-            var asset = Resources.Load<TextAsset>(TablePath);
-            if (asset == null)
-            {
+            if (!LoadTable(TablePath))
                 Debug.LogError("[Loc] String table not found at Resources/" + TablePath);
-                return;
-            }
+            LoadTable(StoryTablePath);
+        }
 
+        static bool LoadTable(string path)
+        {
+            var asset = Resources.Load<TextAsset>(path);
+            if (asset == null)
+                return false;
             var table = JsonUtility.FromJson<Table>(asset.text);
-            foreach (var entry in table.entries)
-                entries[entry.key] = entry;
+            if (table != null && table.entries != null)
+                foreach (var entry in table.entries)
+                    entries[entry.key] = entry;
+            return true;
         }
 
         static Font LoadFont(string path)

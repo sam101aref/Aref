@@ -485,6 +485,41 @@ export function characterAssets() {
     out.push(asset(dir + 'weapon', BOX.weapon, weapon(l), { anchor: [0, 0] }));
   }
 
+  // Arash's bows (F-55): the weapon sprite changes with the bow in hand.
+  const skin = LOOKS.arash.skin;
+  const bows = {
+    wood: ['#6e3f1c', '#4a2a14', ''],
+    horn: ['#d8c49a', '#6a4a2a', ''],
+    fire: ['#8a1a10', '#f08a1a', 'flame'],
+    haoma: ['#3a7a3a', '#a0e080', 'leaf'],
+    triple: ['#2a4a8a', '#c0d8ff', 'triple'],
+    frost: ['#4a9ac0', '#e0f6ff', 'drop'],
+    piercing: ['#5a2a7a', '#d0a0ff', ''],
+    simurgh: ['#1a7a6a', GOLD, 'feather'],
+    thunder: ['#3a3a4a', '#fff060', 'bolt'],
+    arash: ['#d9a53a', '#fff2c0', 'glow'],
+  };
+  for (const [id, [color, tips, extra]] of Object.entries(bows)) {
+    let s = bowShape(color, tips);
+    if (extra === 'triple')
+      s += `<g transform="rotate(-6 6 0)">${nockedArrow()}</g><g transform="rotate(6 6 0)">${nockedArrow()}</g>`;
+    s += nockedArrow(id === 'piercing' ? '#d0a0ff' : '#c8d0d8');
+    if (extra === 'flame')
+      s += `<path d="M78,0 C80,-10 88,-14 92,-20 C92,-12 98,-8 96,0 C94,6 86,8 80,5 Z" fill="#f08a1a" ${OT}/><path d="M82,0 C84,-6 88,-8 90,-12 C90,-6 92,-2 90,2 Z" fill="#ffd040"/>`;
+    if (extra === 'leaf')
+      s += `<path d="M50,-30 C40,-36 36,-46 42,-52 C50,-46 52,-38 50,-30 Z" fill="#6ac04a" ${OT}/>`;
+    if (extra === 'drop')
+      s += `<path d="M44,-40 C40,-46 44,-52 46,-56 C48,-52 52,-46 48,-40 C47,-38 45,-38 44,-40 Z" fill="#a0e0ff" ${OT}/>`;
+    if (extra === 'feather')
+      s += `<path d="M58,-58 C70,-70 84,-72 92,-66 C82,-64 72,-60 62,-52 Z" fill="${GOLD}" ${OT}/><path d="M58,-58 C70,-66 80,-68 88,-66" stroke="#1a7a6a" stroke-width="1.5" fill="none"/>`;
+    if (extra === 'bolt')
+      s += `<path d="M46,-48 L40,-34 L46,-34 L42,-22 L52,-38 L46,-38 L50,-48 Z" fill="#fff060" ${OT}/>`;
+    if (extra === 'glow')
+      s += `<circle cx="62" cy="0" r="18" fill="#fff2c0" opacity="0.35"/>`;
+    s += hand(6, 0, skin, 5.5) + hand(60, 0, skin);
+    out.push(asset(`Equipment/bow_${id}`, BOX.weapon, s, { anchor: [0, 0] }));
+  }
+
   // Equipment for Arash: helmets replace the hat, armour goes over the tunic.
   for (const kind of ['felt', 'iron', 'gold'])
     out.push(asset(`Equipment/helmet_${kind}`, BOX.hat, hat(kind), { anchor: ANCHORS.head }));

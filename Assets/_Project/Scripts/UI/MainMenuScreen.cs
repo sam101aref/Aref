@@ -1,3 +1,4 @@
+using Arash.Art;
 using Arash.Core;
 using Arash.Levels;
 using Arash.Localization;
@@ -8,11 +9,55 @@ namespace Arash.UI
     /// <summary>Main menu (F-13): title, play, story book (F-21), settings and a quick language switch.</summary>
     public class MainMenuScreen : ScreenBase
     {
+        [SerializeField] Material spriteMaterial;
+
         bool storyBookOpen;
+
+        protected override void Start()
+        {
+            ArtLibrary.SpriteMaterial = spriteMaterial;
+            DrawScene();
+            base.Start();
+        }
+
+        /// <summary>The menu's backdrop: Arash on the mountainside at dusk, Damavand behind him.</summary>
+        void DrawScene()
+        {
+            var camera = Camera.main;
+            if (camera == null)
+                return;
+            camera.orthographic = true;
+            camera.orthographicSize = 5f;
+            camera.transform.position = new Vector3(0f, 1.6f, -10f);
+            const float ground = -2.4f;
+            Backdrop.Build(Biome.Mountain, TimeOfDay.Dusk, camera, ground, 0f, 40f);
+
+            var mountain = ArtLibrary.Renderer(null, "Damavand", ArtLibrary.Prop("damavand"), -40, new Vector2(5.5f, ground + 0.6f));
+            mountain.transform.localScale = Vector3.one * 0.9f;
+            mountain.color = new Color(0.95f, 0.78f, 0.75f);
+            var bird = ArtLibrary.Renderer(null, "Simurgh", ArtLibrary.Prop("simurgh"), -30, new Vector2(4f, 6f));
+            bird.transform.localScale = Vector3.one * 0.45f;
+            bird.color = new Color(1f, 0.9f, 0.85f, 0.85f);
+            bird.gameObject.AddComponent<Story.ParallaxDrift>().velocity = new Vector2(-0.15f, 0.02f);
+
+            var arash = new GameObject("Arash").transform;
+            arash.position = new Vector3(-5.2f, ground, 0f);
+            arash.localScale = Vector3.one * 1.25f;
+            var skin = CharacterSkin.Build(arash, true, CharacterLook.Arash);
+            var outfit = Armory.Find(SaveSystem.Data.equippedOutfit) ?? Armory.Find(Armory.DefaultOutfit);
+            skin.SetColors(outfit.Tunic, outfit.Cape);
+            skin.SetHat(null, outfit.Cap);
+            skin.Tint(new Color(1f, 0.9f, 0.84f));
+            var pivot = arash.Find("AimPivot");
+            if (pivot != null)
+                pivot.rotation = Quaternion.Euler(0f, 0f, 28f);
+        }
 
         protected override void Build(RectTransform canvas)
         {
-            UIFactory.PatternBackground(canvas);
+            var shade = UIFactory.Panel(canvas, "Shade", new Color(0.03f, 0.05f, 0.12f, 0.35f));
+            UIFactory.Stretch(shade.rectTransform);
+            shade.raycastTarget = false;
 
             var title = UIFactory.Label(canvas, Loc.T("game.title"), 130, UIFactory.Gold, TextAnchor.MiddleCenter, true);
             UIFactory.Place(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 300f), new Vector2(1700f, 200f));

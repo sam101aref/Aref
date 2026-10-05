@@ -22,6 +22,8 @@ namespace Arash.Levels
     /// </summary>
     public class LevelRunner : MonoBehaviour
     {
+        /// <summary>Everyone is drawn a little larger than the physics was designed for, to read well on phones.</summary>
+        public const float CharacterScale = 1.3f;
         const float HorseHeight = 1.05f;
         const float EntryDistance = 9f;
         const float WindChangeSeconds = 9f;
@@ -64,6 +66,7 @@ namespace Arash.Levels
         void Awake()
         {
             ArtLibrary.SpriteMaterial = spriteMaterial;
+            player.transform.localScale = Vector3.one * CharacterScale;
             catalog = LevelCatalog.Load();
             level = SceneFlow.CurrentLevel != null ? SceneFlow.CurrentLevel : (catalog != null ? catalog.First() : null);
             if (level == null)
@@ -327,11 +330,11 @@ namespace Arash.Levels
         Combatant SpawnEnemy(EnemySpawn spawn, int order)
         {
             var type = spawn.type != null ? spawn.type : DefaultType;
-            var standHeight = spawn.height + (type.mounted ? HorseHeight : 0f);
+            var standHeight = spawn.height + (type.mounted ? HorseHeight * CharacterScale * type.scale : 0f);
             var stand = new Vector3(spawn.x, groundY + standHeight, 0f);
             var enemy = Instantiate(enemyPrefab, stand, Quaternion.identity);
             enemy.name = type.name;
-            enemy.transform.localScale = Vector3.one * type.scale;
+            enemy.transform.localScale = Vector3.one * type.scale * CharacterScale;
             enemy.Health.SetMax(type.maxHealth);
 
             var skin = enemy.GetComponent<CharacterSkin>();
@@ -461,6 +464,7 @@ namespace Arash.Levels
         Combatant SpawnCompanion(float x, CharacterLook look)
         {
             var spawned = Instantiate(companionPrefab, new Vector3(x, groundY, 0f), Quaternion.identity);
+            spawned.transform.localScale = Vector3.one * CharacterScale;
             var skin = spawned.GetComponent<CharacterSkin>();
             if (skin != null)
                 skin.Apply(look);
@@ -547,8 +551,8 @@ namespace Arash.Levels
 
         void CreatePlatform(float x, float height)
         {
-            var block = Sliced("Rock Platform", "rock_platform", new Vector2(x, groundY + height * 0.5f), new Vector2(2.4f, height + 0.15f), 11);
-            block.AddComponent<BoxCollider2D>().size = new Vector2(2.4f, height);
+            var block = Sliced("Rock Platform", "rock_platform", new Vector2(x, groundY + height * 0.5f), new Vector2(3f, height + 0.15f), 11);
+            block.AddComponent<BoxCollider2D>().size = new Vector2(3f, height);
         }
 
         GameObject Sliced(string name, string prop, Vector2 position, Vector2 size, int order)

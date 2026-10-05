@@ -34,8 +34,19 @@ namespace Arash.UI
             }, UIFactory.Gold, 40);
             UIFactory.Place((RectTransform)armory.transform, new Vector2(1f, 1f), new Vector2(-40f, -40f), new Vector2(300f, 90f));
 
-            var stats = UIFactory.Label(canvas, Loc.T("map.stats", save.TotalStars, save.coins), 40, UIFactory.Cream, TextAnchor.MiddleRight);
-            UIFactory.Place(stats.rectTransform, new Vector2(1f, 1f), new Vector2(-370f, -40f), new Vector2(700f, 90f));
+            var x = -380f;
+            var icons = new[] { "gem", "coin", "star" };
+            var amounts = new[] { save.gems, save.coins, save.TotalStars };
+            for (var i = 0; i < icons.Length; i++)
+            {
+                var icon = icons[i];
+                var amount = amounts[i];
+                var image = UIFactory.Icon(canvas, icon, 64f);
+                UIFactory.Place(image.rectTransform, new Vector2(1f, 1f), new Vector2(x, -52f), new Vector2(64f, 64f));
+                var label = UIFactory.Label(canvas, Loc.Number(amount), 42, UIFactory.Cream, TextAnchor.MiddleRight, true);
+                UIFactory.Place(label.rectTransform, new Vector2(1f, 1f), new Vector2(x - 70f, -50f), new Vector2(150f, 70f));
+                x -= 240f;
+            }
 
             var area = UIFactory.Rect(canvas, "Chapters");
             UIFactory.Stretch(area);
