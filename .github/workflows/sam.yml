@@ -1,0 +1,34 @@
+name: Sam Nariman
+
+# Checks that every chapter map can be finished, then plays all four chapters in headless Chromium.
+
+on:
+  push:
+    paths:
+      - 'Sam/**'
+      - '.github/workflows/sam.yml'
+  pull_request:
+    paths:
+      - 'Sam/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Level check and playtest
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: Sam
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - run: npm run check
+      - run: npm run playtest

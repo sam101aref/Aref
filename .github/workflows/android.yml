@@ -9,6 +9,8 @@ on:
     paths-ignore:
       - 'docs/**'
       - '**.md'
+      - 'Sam/**' # a separate game; it has its own workflow (sam.yml)
+      - '.github/workflows/sam.yml'
   workflow_dispatch:
 
 permissions:

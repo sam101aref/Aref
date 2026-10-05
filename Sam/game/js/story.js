@@ -1,0 +1,87 @@
+// Cutscenes, told by the storyteller (naqqal) in front of his painted curtain — the frame from Siavosh.
+// Each beat: scene painter name, speaker key (or null), Persian text, English text.
+// 📜 marks events from the Shahnameh, ✏️ marks additions made for the game (see docs/sam/GDD.md).
+var SAM = window.SAM || (window.SAM = {});
+
+SAM.STORY = {
+  intro1: [
+    ['coffeehouse', 'naqqal', 'ای شنوندگان! امشب از پهلوانی می‌گویم که پیش از رستم، جهان به نام او آرام می‌گرفت: سام، پسر نریمان.',
+      'Listen, friends! Tonight I tell of a hero who kept the world safe before Rostam was born: Sam, son of Nariman.'],
+    ['coffeehouse', 'naqqal', 'گرزش اژدهای کشف‌رود را از پا انداخت و دیوان مازندران از نامش گریختند…',
+      'His mace felled the dragon of Kashafrud, and the demons of Mazandaran fled at his name…'],
+    ['coffeehouse', 'naqqal', '…اما سخت‌ترین نبردِ سام، نبرد با خودش بود.',
+      '…yet the hardest battle Sam ever fought was the one with himself.'],
+    ['nariman', 'naqqal', 'سام جوان بود که پدرش، نریمانِ پهلوان، او را نزد خود خواند.',
+      'Sam was still young when his father, the hero Nariman, called for him.'],
+    ['nariman', 'nariman', 'پسرم، گرز گاوسرِ نیای ما گرشاسب در دل دژی کهن خفته است. راهزنان آن‌جا لانه کرده‌اند.',
+      'My son, the ox-head mace of our forefather Garshasp sleeps in the heart of an old fortress. Bandits have made it their den.'],
+    ['nariman', 'sam', 'گرز را می‌آورم، پدر — یا بازنمی‌گردم.',
+      'I will bring back the mace, father — or not come back at all.'],
+  ],
+  outro1: [
+    ['mace', 'naqqal', 'سام گرز نیا را برداشت. گفتی گاوِ سرِ گرز نعره زد و دیوارهای دژ لرزید.',
+      "Sam lifted his forefather's mace. It was as if the ox-head bellowed, and the fortress walls trembled."],
+    ['court', 'naqqal', 'منوچهر شاه، سام را جهان‌پهلوان خواند و زابلستان را به او سپرد.',
+      'King Manuchehr named Sam Champion of the World, and gave Zabulistan into his keeping.'],
+  ],
+  intro2: [
+    ['river', 'naqqal', 'روزی از رود کشف اژدهایی برآمد؛ درازایش از شهری تا شهری، و بالایش چون کوه.',
+      'One day a dragon rose out of the river Kashaf — as long as the road from one city to the next, as tall as a mountain.'],
+    ['river', 'naqqal', 'نه پرنده در آسمان می‌ماند و نه ماهی در آب. مردم شب و روز پاس می‌دادند.',
+      'No bird stayed in the sky, no fish in the water. People kept watch day and night.'],
+    ['river', 'sam', 'کمان و تیرهای الماس‌پیکان را بیاورید. خودم به کشف‌رود می‌روم.',
+      'Bring my bow and the diamond-tipped arrows. I am going to Kashafrud myself.'],
+    ['river', 'naqqal', 'گویند سام نخست تیر در کام اژدها نشاند، سپس با گرز بر سرش کوبید.',
+      "They say Sam first sent his arrows into the dragon's open jaws, then brought his mace down on its head."],
+  ],
+  outro2: [
+    ['dragon_dead', 'naqqal', 'اژدها فرو افتاد و تا روزها از رود، زهر به جای آب روان بود. مردم از کوه‌ها به خانه‌هایشان بازگشتند.',
+      'The dragon fell, and for days the river ran with venom instead of water. People came down from the mountains and went home.'],
+  ],
+  intro3: [
+    ['zal_birth', 'naqqal', 'سال‌ها گذشت. سام را پسری زاد با رویی چون خورشید… اما مویی سپید، چون برف.',
+      'Years passed. A son was born to Sam, with a face like the sun… and hair as white as snow.'],
+    ['zal_birth', 'naqqal', 'سام از زخم زبان مردم ترسید و فرمان داد کودک را بر کوه البرز رها کنند.',
+      'Sam feared what people would say, and ordered the child left on Mount Alborz.'],
+    ['alborz', 'naqqal', 'سیمرغ، که آشیانه‌اش بر البرز بود، کودک را دید و بر او مهر آورد. سال‌ها او را پرورد.',
+      'The Simorgh, who nested on Alborz, saw the child and took pity on him. For years she raised him as her own.'],
+    ['dream', 'naqqal', 'شبی سام به خواب دید که سواری از هندوستان آمد و مژده داد که پسرش زنده است.',
+      'One night Sam dreamed that a rider came from India with the news that his son was alive.'],
+    ['dream', 'mobed', 'شیر و ماهی هم بچهٔ خود را رها نمی‌کنند. تو چگونه پسرت را رها کردی؟',
+      'Even the lion and the fish do not abandon their young. How could you abandon your son?'],
+    ['alborz', 'sam', 'ای آفریننده، گناه از من بود. مرا به پسرم برسان.',
+      'O Creator, the fault was mine. Lead me to my son.'],
+  ],
+  outro3: [
+    ['simorgh', 'naqqal', 'سیمرغ سام را دید، و کودک را — که اکنون جوانی برومند بود — از آشیانه فرود آورد.',
+      'The Simorgh saw Sam, and carried the child — now a tall young man — down from her nest.'],
+    ['simorgh', 'simorgh', 'این پر را با خود داشته باش. اگر روزی سختی رسید، آن را بر آتش بنه تا بیایم.',
+      'Keep this feather. If hardship ever comes, lay it on the fire and I will come.'],
+    ['simorgh', 'sam', 'پسرم، از من بگذر. از این پس هرگز دل از تو برنمی‌گیرم.',
+      'My son, forgive me. From this day my heart will never turn from you.'],
+    ['simorgh', 'naqqal', 'سام او را زال نامید، و سیمرغ، دستان. و پری از سیمرغ اکنون همراه سام بود.',
+      'Sam named him Zal; the Simorgh called him Dastan. And a feather of the Simorgh now went with Sam.'],
+  ],
+  intro4: [
+    ['court', 'naqqal', 'منوچهر شاه سام را به جنگ گرگساران و دیوان مازندران فرستاد.',
+      'King Manuchehr sent Sam to war against the Gorgsar and the demons of Mazandaran.'],
+    ['court', 'sam', 'زال، زابلستان را به تو سپردم. داد کن و شاد باش.',
+      'Zal, I leave Zabulistan in your hands. Rule with justice, and be glad.'],
+    ['mazandaran', 'naqqal', 'سرِ سپاه دیوان کرکوی بود، نوادهٔ سلم؛ دلیر و بدکنش.',
+      'At the head of the demon host stood Karkoy, grandson of Salm — as brave as he was cruel.'],
+  ],
+  outro4: [
+    ['karkoy_down', 'naqqal', 'سام کرکوی را از پا درآورد و سپاه دیوان پراکنده شد. مازندران آرام گرفت.',
+      'Sam brought Karkoy down, and the demon host scattered. Mazandaran was at peace.'],
+  ],
+  ending: [
+    ['rostam', 'naqqal', 'در بازگشت، سام شنید که زال دل به رودابه بسته است. اخترشناسان گفتند: از این پیوند پهلوانی زاید که جهان مانندش ندیده.',
+      'On his way home, Sam heard that Zal had given his heart to Rudabeh. The astrologers said: from this union a hero will be born such as the world has never seen.'],
+    ['rostam', 'naqqal', 'نامش رستم شد. و روزی که رستم بزرگ شد، گرز گاوسرِ سام را به دست گرفت.',
+      "His name was Rostam. And when Rostam grew up, he took Sam's ox-head mace in his hand."],
+    ['coffeehouse', 'naqqal', 'سام اژدها کشت و دیو شکست… اما بزرگی‌اش آن‌جا بود که از خطای خود بازگشت.',
+      'Sam slew a dragon and broke the demons… but his true greatness was that he turned back from his own wrong.'],
+    ['coffeehouse', 'naqqal', 'این داستان به سر آمد. شبی دیگر، داستان رستم را برایتان می‌گویم…',
+      'Here the tale ends. Another night, I shall tell you of Rostam…'],
+  ],
+};
