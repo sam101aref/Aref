@@ -69,5 +69,5 @@ export function asset(path, bbox, content, { scale = 1.28, anchor = null, ppu = 
   const h = Math.round((y1 - y0) * scale);
   const pivot = anchor ? [(anchor[0] - x0) / (x1 - x0), (y1 - anchor[1]) / (y1 - y0)] : [0.5, 0.5];
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${x0} ${y0} ${x1 - x0} ${y1 - y0}">${defs ? `<defs>${defs}</defs>` : ''}${content}</svg>`;
-  return { path, svg, width: w, height: h, pivot: pivot.map(v => +v.toFixed(4)), ppu, border };
+  return { path, svg, width: w, height: h, pivot: pivot.map(v => +v.toFixed(4)), ppu, border, bbox, content, defs };
 }
