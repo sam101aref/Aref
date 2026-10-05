@@ -27,6 +27,15 @@ namespace Arash.Editor.Setup
 
         public static void InstallPackages()
         {
+            // Switching to the Input System only takes effect after a restart; doing it here means the
+            // build pass starts with editor and player compiled alike (otherwise Unity refuses to build:
+            // "script class layout is incompatible between the editor and the player").
+            if (ProjectSetup.ConfigureInputHandling())
+            {
+                AssetDatabase.SaveAssets();
+                Debug.Log("[Arash CI] Switched Active Input Handling to the Input System package.");
+            }
+
             var missing = MissingPackages();
             if (missing.Length == 0)
             {

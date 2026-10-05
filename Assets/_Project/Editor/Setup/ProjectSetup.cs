@@ -160,7 +160,7 @@ namespace Arash.Editor.Setup
         }
 
         /// <summary>Switches Active Input Handling to the Input System package. Returns true if it changed.</summary>
-        static bool ConfigureInputHandling()
+        internal static bool ConfigureInputHandling()
         {
             const int inputSystemOnly = 1;
 
@@ -175,6 +175,7 @@ namespace Arash.Editor.Setup
 
             handler.intValue = inputSystemOnly;
             settings.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(assets[0]);
             return true;
         }
 
