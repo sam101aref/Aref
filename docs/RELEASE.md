@@ -55,6 +55,8 @@ The tag becomes the version name; the version code always increases with the wor
 
 Start with an **internal testing** track, then closed testing, then production.
 
+**New personal developer accounts** must run a **closed test with at least 12 testers for 14 days in a row** before Google allows production access. Plan for this: gather 12+ testers (friends with Android phones and Google accounts) early. The developer account itself needs a one-time $25 fee and identity verification in the name of the account owner.
+
 ## 5. Other stores (P2, F-46)
 
 Cafe Bazaar and Myket accept APKs; build an APK with the normal Android Build workflow and sign it with the same key.
