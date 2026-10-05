@@ -14,11 +14,14 @@ namespace Arash.Editor.Setup
     /// Entry points for the cloud build (.github/workflows/android.yml), called with -executeMethod.
     /// The build runs Unity twice, because newly installed packages only compile after a restart:
     ///   1. <see cref="InstallPackages"/>     — adds any missing packages, then Unity quits.
-    ///   2. <see cref="ConfigureAndBuild"/>   — applies <see cref="ProjectSetup"/> and builds the APK.
+    ///   2. <see cref="ConfigureAndBuild"/>   — runs the EditMode tests, applies <see cref="ProjectSetup"/> and builds the APK.
     /// Any exception makes Unity exit with a non-zero code, which fails the workflow step.
     /// </summary>
     public static class CIBuild
     {
+        /// <summary>Set by the CI test assembly once the Test Framework is installed; returns true if all tests pass.</summary>
+        internal static Func<bool> RunTests;
+
         const string DefaultOutputPath = "build/Android/ArashTheArcher.apk";
         static readonly TimeSpan PackageTimeout = TimeSpan.FromMinutes(15);
 
@@ -44,6 +47,11 @@ namespace Arash.Editor.Setup
             var missing = MissingPackages();
             if (missing.Length > 0)
                 throw new Exception("[Arash CI] Packages missing (run InstallPackages first): " + string.Join(", ", missing));
+
+            if (RunTests == null)
+                throw new Exception("[Arash CI] Test runner not available (Test Framework package or CI assembly missing).");
+            if (!RunTests())
+                throw new Exception("[Arash CI] Tests failed, see the log above.");
 
             if (!ProjectSetup.Configure())
                 throw new Exception("[Arash CI] Project setup failed, see the log above.");

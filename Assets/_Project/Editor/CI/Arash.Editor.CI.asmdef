@@ -1,0 +1,28 @@
+{
+    "name": "Arash.Editor.CI",
+    "rootNamespace": "Arash.Editor.Setup",
+    "references": [
+        "Arash.Editor.Setup",
+        "UnityEditor.TestRunner",
+        "UnityEngine.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "ARASH_TEST_FRAMEWORK"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.test-framework",
+            "expression": "1.0.0",
+            "define": "ARASH_TEST_FRAMEWORK"
+        }
+    ],
+    "noEngineReferences": false
+}

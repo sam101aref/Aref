@@ -68,21 +68,8 @@ jobs:
           versioning: None
           allowDirtyBuild: true
 
-      - name: Run EditMode tests
-        uses: game-ci/unity-test-runner@v4
-        with:
-          testMode: EditMode
-          artifactsPath: test-results
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: test-results
-          if-no-files-found: ignore
-
-      # Pass 2: apply the project setup (F-01) and build the APK.
+      # Pass 2: run the EditMode tests, apply the project setup and build the APK.
+      # (Tests run inside this licensed Unity session; a failing test stops the build.)
       - name: Configure project and build APK
         uses: game-ci/unity-builder@v4
         with:
