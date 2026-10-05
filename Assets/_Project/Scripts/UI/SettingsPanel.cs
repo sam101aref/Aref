@@ -24,7 +24,7 @@ namespace Arash.UI
             for (var i = overlay.childCount - 1; i >= 0; i--)
                 UnityEngine.Object.Destroy(overlay.GetChild(i).gameObject);
 
-            var window = UIFactory.Panel(overlay, "Window", UIFactory.LapisLight).rectTransform;
+            var window = UIFactory.Window(overlay);
             UIFactory.Place(window, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1000f, 860f));
 
             var title = UIFactory.Label(window, Loc.T("ui.settings"), 64, UIFactory.Gold, TextAnchor.MiddleCenter, true);

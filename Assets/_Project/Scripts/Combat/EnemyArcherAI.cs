@@ -32,10 +32,21 @@ namespace Arash.Combat
         Coroutine turn;
         BossPhase phase;
         float homeX = float.NaN;
+        float slowFactor = 1f;
 
         /// <summary>Raised when a boss enters a new phase.</summary>
         public event Action<EnemyArcherAI, BossPhase> PhaseChanged;
+        /// <summary>Raised when the bow starts to be drawn: the moment to warn the player (F-52).</summary>
+        public event Action<EnemyArcherAI> DrawStarted;
+        /// <summary>Raised when the turn ends, shot or not.</summary>
+        public event Action<EnemyArcherAI> TurnFinished;
 
+        /// <summary>Damage of each projectile; negative keeps the projectile's own.</summary>
+        public float ProjectileDamage { get; set; } = -1f;
+        /// <summary>True while aiming, drawing or about to shoot.</summary>
+        public bool IsBusy { get { return turn != null; } }
+        /// <summary>True from the start of the draw until the shot.</summary>
+        public bool IsDrawing { get; private set; }
         public float CurrentError
         {
             get { return currentError < 0f ? accuracy.initialAngleError : currentError; }
@@ -61,9 +72,27 @@ namespace Arash.Combat
 
         public void CancelTurn()
         {
+            var wasBusy = turn != null;
             if (turn != null)
                 StopCoroutine(turn);
             turn = null;
+            IsDrawing = false;
+            if (wasBusy && TurnFinished != null)
+                TurnFinished(this);
+        }
+
+        /// <summary>A hit while drawing spoils the shot (F-52).</summary>
+        public void Interrupt()
+        {
+            CancelTurn();
+            if (rig != null)
+                rig.Relax();
+        }
+
+        /// <summary>Tishtrya's rain (F-55): every step of the turn takes this many times longer.</summary>
+        public void SetSlow(float factor)
+        {
+            slowFactor = Mathf.Max(1f, factor);
         }
 
         void OnDisable()
@@ -78,7 +107,7 @@ namespace Arash.Combat
             var reposition = phase != null && phase.repositionRange > 0f ? phase.repositionRange : tactics.repositionRange;
             var errorScale = phase != null ? phase.errorMultiplier : 1f;
 
-            yield return new WaitForSeconds(thinkTime);
+            yield return new WaitForSeconds(thinkTime * slowFactor);
 
             if (reposition > 0f)
                 yield return Reposition(self.transform, reposition);
@@ -91,13 +120,16 @@ namespace Arash.Combat
                 aim = new AimState(true, 45f, 1f, facing ? 1f : -1f); // out of range: best effort
 
             // Draw the bow towards the solution.
+            IsDrawing = true;
+            if (DrawStarted != null)
+                DrawStarted(this);
             if (rig != null)
             {
                 var from = rig.CurrentWorldAngle;
                 var to = WorldAngle(aim);
-                for (var t = 0f; t < drawTime; t += Time.deltaTime)
+                for (var t = 0f; t < drawTime * slowFactor; t += Time.deltaTime)
                 {
-                    rig.AimAtAngle(Mathf.LerpAngle(from, to, Mathf.SmoothStep(0f, 1f, t / drawTime)));
+                    rig.AimAtAngle(Mathf.LerpAngle(from, to, Mathf.SmoothStep(0f, 1f, t / (drawTime * slowFactor))));
                     yield return null;
                 }
                 rig.Aim(aim.Direction);
@@ -112,18 +144,22 @@ namespace Arash.Combat
             if (rig != null)
                 rig.Aim(aim.Direction);
 
-            yield return new WaitForSeconds(holdTime);
+            yield return new WaitForSeconds(holdTime * slowFactor);
 
             turn = null;
+            IsDrawing = false;
             var arrow = bow != null ? bow.Fire(aim) : null;
+            SetDamage(arrow);
             for (var i = 1; i < shots && bow != null; i++)
             {
                 // Extra volley arrows fan out alternately above and below the main shot.
                 var offset = tactics.volleySpread * ((i + 1) / 2) * (i % 2 == 0 ? -1f : 1f);
-                bow.Fire(new AimState(true, Mathf.Clamp(aim.Angle + offset, minAngle, maxAngle), aim.Power, aim.Facing));
+                SetDamage(bow.Fire(new AimState(true, Mathf.Clamp(aim.Angle + offset, minAngle, maxAngle), aim.Power, aim.Facing)));
             }
             if (rig != null)
                 rig.Relax();
+            if (TurnFinished != null)
+                TurnFinished(this);
             if (arrow == null)
             {
                 Debug.LogError("[EnemyArcherAI] Could not fire.", this);
@@ -140,6 +176,12 @@ namespace Arash.Combat
             arrow.Lost += a => currentError = accuracy.NextError(CurrentError);
 
             onShot(arrow);
+        }
+
+        void SetDamage(Arrow arrow)
+        {
+            if (arrow != null && ProjectileDamage >= 0f)
+                arrow.SetDamage(ProjectileDamage);
         }
 
         bool TrySolve(Vector2 target, bool facingRight, out AimState aim)

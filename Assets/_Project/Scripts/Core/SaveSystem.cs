@@ -34,19 +34,29 @@ namespace Arash.Core
     [Serializable]
     public class SaveData
     {
-        public const int CurrentVersion = 1;
+        public const int CurrentVersion = 2;
 
         public int version = CurrentVersion;
         public int coins;
+        /// <summary>The rare currency (F-59): first three-star wins and bosses.</summary>
+        public int gems;
+        /// <summary>Levels whose first three-star win has paid out gems.</summary>
+        public List<string> gemRewards = new List<string>();
         public List<LevelRecord> levels = new List<LevelRecord>();
         public SettingsData settings = new SettingsData();
         public List<string> seenCutscenes = new List<string>();
 
-        // Armory (F-33, F-34)
+        // Shop and equipment (F-55 to F-58)
         public List<string> owned = new List<string>();
-        public List<UpgradeRecord> upgrades = new List<UpgradeRecord>();
-        public string equippedBow = Armory.DefaultBow;
+        public List<string> equippedBows = new List<string> { Armory.DefaultBow };
+        public string equippedArmor;
+        public string equippedHelmet;
+        public string equippedShield;
         public string equippedOutfit = Armory.DefaultOutfit;
+
+        // Version 1 armory, kept only so old saves can be migrated
+        public List<UpgradeRecord> upgrades = new List<UpgradeRecord>();
+        public string equippedBow;
         public string selectedSpecial;
 
         // Store purchases (F-38)
@@ -70,6 +80,16 @@ namespace Arash.Core
                 upgrades.Add(new UpgradeRecord { id = upgradeId, level = level });
             else
                 record.level = level;
+        }
+
+        /// <summary>Pays out a one-time gem reward; false if it was already claimed.</summary>
+        public bool ClaimGems(string rewardId, int amount)
+        {
+            if (string.IsNullOrEmpty(rewardId) || gemRewards.Contains(rewardId))
+                return false;
+            gemRewards.Add(rewardId);
+            gems += amount;
+            return true;
         }
 
         public bool HasSeen(string cutsceneId)
@@ -177,6 +197,8 @@ namespace Arash.Core
             if (string.IsNullOrEmpty(json))
                 return new SaveData();
             var save = JsonUtility.FromJson<SaveData>(json) ?? new SaveData();
+            // A save without a version field is older than versioning: treat it as version 1.
+            var hasVersion = json.Contains("\"version\"");
             if (save.levels == null)
                 save.levels = new List<LevelRecord>();
             if (save.settings == null)
@@ -189,10 +211,19 @@ namespace Arash.Core
                 save.upgrades = new List<UpgradeRecord>();
             if (save.entitlements == null)
                 save.entitlements = new List<string>();
-            if (string.IsNullOrEmpty(save.equippedBow))
-                save.equippedBow = Armory.DefaultBow;
+            if (save.gemRewards == null)
+                save.gemRewards = new List<string>();
+            if (save.equippedBows == null)
+                save.equippedBows = new List<string>();
             if (string.IsNullOrEmpty(save.equippedOutfit))
                 save.equippedOutfit = Armory.DefaultOutfit;
+            if (!hasVersion || save.version < 2)
+            {
+                Armory.MigrateFromVersion1(save);
+                save.version = SaveData.CurrentVersion;
+            }
+            if (save.equippedBows.Count == 0)
+                save.equippedBows.Add(Armory.DefaultBow);
             return save;
         }
 

@@ -1,4 +1,5 @@
 using System;
+using Arash.Art;
 using Arash.Localization;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -126,9 +127,81 @@ namespace Arash.UI
             return label;
         }
 
+        /// <summary>The drawn button for one of the palette colours; null for other colours.</summary>
+        static Sprite ButtonSprite(Color color)
+        {
+            if (color == Turquoise)
+                return ArtLibrary.UI("button_turquoise");
+            if (color == Gold)
+                return ArtLibrary.UI("button_gold");
+            if (color == LapisLight || color == Lapis)
+                return ArtLibrary.UI("button_lapis");
+            if (color == Danger)
+                return ArtLibrary.UI("button_crimson");
+            if (color == Muted)
+                return ArtLibrary.UI("button_grey");
+            return null;
+        }
+
+        /// <summary>Gives an image a drawn 9-slice sprite, keeping the plain colour if the sprite is missing.</summary>
+        public static Image Skin(Image image, Sprite sprite)
+        {
+            if (sprite == null)
+                return image;
+            image.sprite = sprite;
+            image.type = sprite.border != Vector4.zero ? Image.Type.Sliced : Image.Type.Simple;
+            image.color = Color.white;
+            return image;
+        }
+
+        /// <summary>A window: lapis with a gold frame and corner ornaments.</summary>
+        public static RectTransform Window(Transform parent, string name = "Window")
+        {
+            var image = Panel(parent, name, LapisLight);
+            Skin(image, ArtLibrary.UI("frame"));
+            return image.rectTransform;
+        }
+
+        /// <summary>A full-screen girih pattern behind menus.</summary>
+        public static Image PatternBackground(RectTransform canvas)
+        {
+            var image = Panel(canvas, "Background", Lapis);
+            Stretch(image.rectTransform);
+            var pattern = ArtLibrary.UI("pattern");
+            if (pattern != null)
+            {
+                image.sprite = pattern;
+                image.type = Image.Type.Tiled;
+                image.color = Color.white;
+            }
+            return image;
+        }
+
+        /// <summary>An icon from Resources/Art/UI/Icons; a plain disc if the icon is missing.</summary>
+        public static Image Icon(Transform parent, string name, float size)
+        {
+            var sprite = ArtLibrary.Icon(name);
+            var image = Panel(parent, "Icon " + name, sprite != null ? Color.white : Gold);
+            image.sprite = sprite;
+            image.preserveAspect = true;
+            image.raycastTarget = false;
+            image.rectTransform.sizeDelta = new Vector2(size, size);
+            return image;
+        }
+
+        /// <summary>A round button showing only an icon.</summary>
+        public static Button IconButton(Transform parent, string icon, Action onClick, float size, Color color)
+        {
+            var button = Button(parent, string.Empty, onClick, color, 30);
+            var glyph = Icon(button.transform, icon, size * 0.62f);
+            glyph.rectTransform.anchoredPosition = new Vector2(0f, 3f);
+            return button;
+        }
+
         public static Button Button(Transform parent, string text, Action onClick, Color color, int fontSize = 44)
         {
             var image = Panel(parent, "Button", color);
+            Skin(image, ButtonSprite(color));
             var button = image.gameObject.AddComponent<Button>();
             button.targetGraphic = image;
             if (onClick != null)
@@ -140,15 +213,23 @@ namespace Arash.UI
 
             var label = Label(image.transform, text, fontSize, Cream, TextAnchor.MiddleCenter, true);
             Stretch(label.rectTransform);
+            label.rectTransform.offsetMin = new Vector2(10f, 8f);
+            label.rectTransform.offsetMax = new Vector2(-10f, 0f);
+            if (image.sprite != null)
+            {
+                var colors = button.colors;
+                colors.disabledColor = new Color(0.6f, 0.6f, 0.6f, 0.8f);
+                button.colors = colors;
+            }
             return button;
         }
 
         public static Image Star(Transform parent, bool earned, float size)
         {
             if (starSprite == null)
-                starSprite = Resources.Load<Sprite>(StarSpritePath);
+                starSprite = ArtLibrary.Icon("star") ?? Resources.Load<Sprite>(StarSpritePath);
 
-            var image = Panel(parent, "Star", earned ? Gold : new Color(0f, 0f, 0f, 0.35f));
+            var image = Panel(parent, "Star", earned ? Color.white : new Color(0f, 0f, 0f, 0.4f));
             image.sprite = starSprite;
             image.preserveAspect = true;
             image.raycastTarget = false;

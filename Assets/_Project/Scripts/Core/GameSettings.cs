@@ -85,6 +85,34 @@ namespace Arash.Core
             }
         }
 
+        /// <summary>Enemy projectile damage (real-time battles, F-51).</summary>
+        public static float EnemyDamageMultiplier
+        {
+            get
+            {
+                switch (Difficulty)
+                {
+                    case Difficulty.Easy: return 0.65f;
+                    case Difficulty.Hard: return 1.3f;
+                    default: return 1f;
+                }
+            }
+        }
+
+        /// <summary>Time between enemy shots (real-time battles, F-51).</summary>
+        public static float EnemyCooldownMultiplier
+        {
+            get
+            {
+                switch (Difficulty)
+                {
+                    case Difficulty.Easy: return 1.3f;
+                    case Difficulty.Hard: return 0.8f;
+                    default: return 1f;
+                }
+            }
+        }
+
         static void SaveAndNotify()
         {
             SaveSystem.Save();

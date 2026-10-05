@@ -12,7 +12,7 @@ namespace Arash.UI
 
         protected override void Build(RectTransform canvas)
         {
-            UIFactory.Stretch(UIFactory.Panel(canvas, "Background", UIFactory.Lapis).rectTransform);
+            UIFactory.PatternBackground(canvas);
 
             var title = UIFactory.Label(canvas, Loc.T("game.title"), 130, UIFactory.Gold, TextAnchor.MiddleCenter, true);
             UIFactory.Place(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0f, 300f), new Vector2(1700f, 200f));
@@ -50,7 +50,7 @@ namespace Arash.UI
         void BuildStoryBook(RectTransform canvas)
         {
             var overlay = UIFactory.Overlay(canvas, "Story Book");
-            var window = UIFactory.Panel(overlay, "Window", UIFactory.LapisLight).rectTransform;
+            var window = UIFactory.Window(overlay);
             UIFactory.Place(window, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1200f, 900f));
 
             var title = UIFactory.Label(window, Loc.T("ui.story_book"), 64, UIFactory.Gold, TextAnchor.MiddleCenter, true);

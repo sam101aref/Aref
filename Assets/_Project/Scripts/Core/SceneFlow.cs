@@ -8,7 +8,7 @@ namespace Arash.Core
     /// <summary>
     /// Moves between the game's scenes and remembers what to play: the current level, and a cutscene
     /// with what comes after it. A chapter's intro cutscene plays automatically the first time its
-    /// first level starts.
+    /// first level starts, and each level's own story scene the first time that level starts.
     /// </summary>
     public static class SceneFlow
     {
@@ -41,12 +41,12 @@ namespace Arash.Core
             CurrentLevel = level;
             var catalog = LevelCatalog.Load();
             var chapter = catalog != null ? catalog.ChapterOf(level) : null;
-            var intro = chapter != null && chapter.levels.Count > 0 && chapter.levels[0] == level ? chapter.introCutscene : null;
+            var chapterIntro = chapter != null && chapter.levels.Count > 0 && chapter.levels[0] == level ? chapter.introCutscene : null;
 
-            if (intro != null && !SaveSystem.Data.HasSeen(intro.id))
-                PlayCutscene(intro, () => LoadLevelScene(level));
-            else
-                LoadLevelScene(level);
+            // Chapter story first, then the level's own scene (F-60), each only the first time.
+            Action load = () => LoadLevelScene(level);
+            var then = WithCutscene(level != null ? level.introCutscene : null, load);
+            WithCutscene(chapterIntro, then)();
         }
 
         /// <summary>Plays a cutscene, then runs <paramref name="then"/> (the world map if null).</summary>

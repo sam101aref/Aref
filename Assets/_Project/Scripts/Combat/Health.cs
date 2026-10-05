@@ -17,6 +17,9 @@ namespace Arash.Combat
         public static event Action<Health, DamageInfo, bool> AnyDamaged;
 
         float current = -1f;
+        float headResistance;
+        float bodyResistance;
+        float limbResistance;
 
         public float Max { get { return maxHealth; } }
         public float Current
@@ -38,6 +41,28 @@ namespace Arash.Combat
             current = maxHealth;
             if (Changed != null)
                 Changed();
+        }
+
+        /// <summary>
+        /// Armour (F-57): the fraction of damage blocked on the head, the torso and the limbs.
+        /// </summary>
+        public void SetResistance(float head, float body, float limb)
+        {
+            headResistance = Mathf.Clamp01(head);
+            bodyResistance = Mathf.Clamp01(body);
+            limbResistance = Mathf.Clamp01(limb);
+        }
+
+        /// <summary>How much of a hit on this zone gets through the armour.</summary>
+        public float DamageTaken(HitZoneType zone)
+        {
+            switch (zone)
+            {
+                case HitZoneType.Head: return 1f - headResistance;
+                case HitZoneType.Torso: return 1f - bodyResistance;
+                case HitZoneType.Limb: return 1f - limbResistance;
+                default: return 1f;
+            }
         }
 
         /// <summary>Restores health (haoma arrows); the dead stay dead.</summary>

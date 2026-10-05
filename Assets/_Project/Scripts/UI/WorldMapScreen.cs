@@ -19,7 +19,7 @@ namespace Arash.UI
             var save = SaveSystem.Data;
             var catalog = LevelCatalog.Load();
 
-            UIFactory.Stretch(UIFactory.Panel(canvas, "Background", UIFactory.Lapis).rectTransform);
+            UIFactory.PatternBackground(canvas);
 
             var title = UIFactory.Label(canvas, Loc.T("ui.map"), 72, UIFactory.Gold, TextAnchor.MiddleCenter, true);
             UIFactory.Place(title.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -30f), new Vector2(900f, 110f));

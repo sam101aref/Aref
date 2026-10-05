@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Arash.Combat
@@ -36,7 +37,14 @@ namespace Arash.Combat
         [SerializeField] float returnSmoothTime = 0.4f;
         [SerializeField] float zoomSmoothTime = 0.35f;
 
+        [Header("Auto framing (real-time battles)")]
+        [SerializeField] float autoMinSize = 6.2f;
+        [SerializeField] float autoMaxSize = 11f;
+        [SerializeField, Tooltip("Space kept around the framed characters, in units.")]
+        Vector2 autoMargin = new Vector2(2.5f, 3.5f);
+
         Camera cam;
+        Func<Rect?> frameProvider;
         Arrow arrowTarget;
         Transform target;
         Vector3 moveVelocity;
@@ -69,6 +77,15 @@ namespace Arash.Combat
             baseSize = size;
             maxSize = Mathf.Max(maxSize, size);
             homeOffset = offset;
+        }
+
+        /// <summary>
+        /// Real-time battles (F-53): keeps the rectangle the provider returns (Arash and every living
+        /// enemy) in view, zooming out as far as needed and no further.
+        /// </summary>
+        public void SetAutoFrame(Func<Rect?> provider)
+        {
+            frameProvider = provider;
         }
 
         /// <summary>Shakes the view; runs on unscaled time so it also works in slow motion.</summary>
@@ -115,6 +132,14 @@ namespace Arash.Combat
                 var heightAboveHome = desired.y - HomePoint().y;
                 desiredSize = Mathf.Clamp(baseSize + Mathf.Max(0f, heightAboveHome) * zoomPerHeight, baseSize, maxSize);
             }
+            else if (frameProvider != null && frameProvider().HasValue)
+            {
+                var rect = frameProvider().Value;
+                var aspect = cam != null ? cam.aspect : 16f / 9f;
+                var halfHeight = Mathf.Max((rect.height + autoMargin.y) * 0.5f, (rect.width + autoMargin.x * 2f) / (2f * aspect));
+                desiredSize = Mathf.Clamp(halfHeight, autoMinSize, autoMaxSize);
+                desired = new Vector2(rect.center.x, groundY - groundMargin + desiredSize);
+            }
             else
             {
                 desired = HomePoint();
@@ -134,7 +159,7 @@ namespace Arash.Combat
                 return Vector3.zero;
             shakeRemaining -= Time.unscaledDeltaTime;
             var strength = shakeAmplitude * Mathf.Clamp01(shakeRemaining / shakeDuration);
-            return (Vector3)(Random.insideUnitCircle * strength);
+            return (Vector3)(UnityEngine.Random.insideUnitCircle * strength);
         }
 
         Vector2 HomePoint()

@@ -176,10 +176,16 @@ namespace Arash.Flight
             ended = true;
             var stars = level != null ? ProgressRules.Stars(won, state.Energy / FlightRules.MaxEnergy, state.Hits, level.stars) : (won ? 1 : 0);
             var coins = won && level != null ? stars * level.coinsPerStar : 0;
+            var gems = 0;
             if (won && level != null)
             {
-                SaveSystem.Data.RecordWin(level.id, stars);
-                SaveSystem.Data.coins += coins;
+                var save = SaveSystem.Data;
+                save.RecordWin(level.id, stars);
+                save.coins += coins;
+                if (stars >= 3 && save.ClaimGems("stars3." + level.id, ProgressRules.GemsForThreeStars))
+                    gems += ProgressRules.GemsForThreeStars;
+                if (level.firstWinGems > 0 && save.ClaimGems("win." + level.id, level.firstWinGems))
+                    gems += level.firstWinGems;
                 SaveSystem.Save();
             }
 
@@ -189,7 +195,7 @@ namespace Arash.Flight
             if (hud == null)
                 return;
             hud.SetStatus(null);
-            hud.PlayDialogue(won && level != null ? level.outroDialogue : null, () => hud.ShowResult(won, stars, coins, null, toMap));
+            hud.PlayDialogue(won && level != null ? level.outroDialogue : null, () => hud.ShowResult(won, stars, coins, gems, won ? null : "defeat.flight", null, toMap));
         }
 
         Transform DrawObstacle(FlightObstacle obstacle)

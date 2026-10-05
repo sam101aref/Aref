@@ -89,6 +89,12 @@ namespace Arash.Combat
             PointAlong(velocity);
         }
 
+        /// <summary>Sets the damage before launch, e.g. from the bow's strength (F-55).</summary>
+        public void SetDamage(float value)
+        {
+            damage = Mathf.Max(0f, value);
+        }
+
         /// <summary>Lets the arrow pass through up to <paramref name="bodies"/> characters, ignoring armor.</summary>
         public void MakePiercing(int bodies)
         {
@@ -256,6 +262,9 @@ namespace Arash.Combat
             }
 
             var arrowHit = new ArrowHit(hit.collider, hit.point, hit.normal, velocity);
+            var barrier = hit.collider.GetComponentInParent<Barrier>();
+            if (barrier != null)
+                barrier.Absorb(damage);
             var trialTarget = hit.collider.GetComponent<TrialTarget>();
             if (trialTarget != null)
                 trialTarget.RegisterHit();

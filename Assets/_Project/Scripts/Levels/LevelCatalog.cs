@@ -69,8 +69,14 @@ namespace Arash.Levels
                 if (chapter.introCutscene != null && !all.Contains(chapter.introCutscene))
                     all.Add(chapter.introCutscene);
                 foreach (var level in chapter.levels)
-                    if (level != null && level.outroCutscene != null && !all.Contains(level.outroCutscene))
+                {
+                    if (level == null)
+                        continue;
+                    if (level.introCutscene != null && !all.Contains(level.introCutscene))
+                        all.Add(level.introCutscene);
+                    if (level.outroCutscene != null && !all.Contains(level.outroCutscene))
                         all.Add(level.outroCutscene);
+                }
             }
             if (endingCutscene != null && !all.Contains(endingCutscene))
                 all.Add(endingCutscene);

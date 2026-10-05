@@ -42,6 +42,7 @@ namespace Arash.Combat
             var amount = multiplierOverride >= 0f && effectiveZone == zone
                 ? arrow.Damage * multiplierOverride
                 : DamageRules.Compute(arrow.Damage, effectiveZone);
+            amount *= target.DamageTaken(effectiveZone);
             target.ApplyDamage(new DamageInfo(amount, effectiveZone, hit.Point, hit.Velocity, hit.Collider, arrow.Shooter));
         }
     }

@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Arash.Art;
 using Arash.Combat;
 using Arash.Core;
 using Arash.Localization;
@@ -12,15 +14,20 @@ namespace Arash.Levels
 {
     /// <summary>
     /// Builds the Battle scene from the current <see cref="LevelDefinition"/> (F-11) and runs it:
-    /// look, covers, wind (F-26), enemies with their types (F-27, F-28) or the real-time modes
-    /// (waves, escort, trial — F-23 to F-25), intro and outro dialogue (F-19). When the battle ends
-    /// it rates it (F-12), saves the result (F-14) and shows the end screen, playing the level's
-    /// outro cutscene (F-20) on the way out the first time.
+    /// the biome backdrop (F-50), covers, wind (F-26), Arash's equipment (F-55 to F-58), and the
+    /// waves of enemies that walk, ride or jump in and fight in real time (F-51, F-63). Dialogue
+    /// plays before the battle, before waves (F-61) and after it. When the battle ends it rates it
+    /// (F-12), pays coins and gems (F-59), saves (F-14) and shows the end screen, playing the
+    /// level's outro cutscene on the way out the first time.
     /// </summary>
     public class LevelRunner : MonoBehaviour
     {
-        [SerializeField] TurnManager turnManager;
+        const float HorseHeight = 1.05f;
+        const float EntryDistance = 9f;
+        const float WindChangeSeconds = 9f;
+
         [SerializeField] RealtimeBattle realtimeBattle;
+        [SerializeField] BattleCamera battleCamera;
         [SerializeField] BattleHud hud;
 
         [Header("Player")]
@@ -30,7 +37,8 @@ namespace Arash.Levels
 
         [Header("Prefabs")]
         [SerializeField] Combatant enemyPrefab;
-        [SerializeField, Tooltip("Projectile used by the player's fire special arrow.")]
+        [SerializeField] Arrow arrowPrefab;
+        [SerializeField, Tooltip("Projectile of the fire bow.")]
         Arrow fireArrowPrefab;
         [SerializeField, Tooltip("Unarmed companion: envoys to protect, villagers in trials.")]
         Combatant companionPrefab;
@@ -43,122 +51,111 @@ namespace Arash.Levels
         [SerializeField] Sprite circleSprite;
         [SerializeField] Material spriteMaterial;
 
-        static readonly Color RockColor = new Color(0.42f, 0.38f, 0.34f);
-        static readonly Color WoodColor = new Color(0.5f, 0.33f, 0.18f);
-        static readonly Color ShieldColor = new Color(0.55f, 0.45f, 0.3f);
-
         LevelCatalog catalog;
         LevelDefinition level;
         IBattleMode battle;
-        int playerShots;
         PlayerArsenal arsenal;
+        Barrier playerShield;
+        Combatant companion;
         float startTime;
 
         public LevelDefinition Level { get { return level; } }
 
         void Awake()
         {
+            ArtLibrary.SpriteMaterial = spriteMaterial;
             catalog = LevelCatalog.Load();
             level = SceneFlow.CurrentLevel != null ? SceneFlow.CurrentLevel : (catalog != null ? catalog.First() : null);
             if (level == null)
             {
-                Debug.LogWarning("[LevelRunner] No level catalog found; using a default duel.");
+                Debug.LogWarning("[LevelRunner] No level catalog found; using a default battle.");
                 level = ScriptableObject.CreateInstance<LevelDefinition>();
-                level.enemies.Add(new EnemySpawn());
+                level.waves.Add(new EnemyWave { enemies = { new EnemySpawn() } });
             }
 
-            if (sceneCamera != null)
-                sceneCamera.backgroundColor = level.skyColor;
+            Backdrop.Build(level.biome, level.time, sceneCamera, groundY, 8f, 110f);
             if (ground != null)
-                ground.color = level.groundColor;
+                ground.enabled = false; // the backdrop draws the ground; the collider stays
+
             BattleEnvironment.Wind = level.wind.strength;
             foreach (var cover in level.covers)
                 CreateCover(cover);
+            foreach (var wave in level.waves)
+                foreach (var spawn in wave.enemies)
+                    if (spawn.height > 0.05f)
+                        CreatePlatform(spawn.x, spawn.height);
+
             ApplyLoadout();
 
-            switch (level.mode)
-            {
-                case LevelMode.Waves:
-                    SetUpWaves();
-                    break;
-                case LevelMode.Escort:
-                    SetUpEscort();
-                    break;
-                case LevelMode.Trial:
-                    SetUpTrial();
-                    break;
-                default:
-                    SetUpDuel();
-                    break;
-            }
+            if (level.mode == LevelMode.Trial)
+                SetUpTrial();
+            else
+                SetUpBattle();
         }
 
-        /// <summary>Equipment from the armory (F-33, F-34): bow, upgrades, outfit and special arrows.</summary>
+        // ------------------------------------------------------------------ player
+
+        /// <summary>Equipment from the shop (F-55 to F-58): bows, armour, helmet, shield and outfit.</summary>
         void ApplyLoadout()
         {
             var loadout = Armory.CurrentLoadout(SaveSystem.Data);
             player.Health.SetMax(100f * loadout.HealthMultiplier);
+            player.Health.SetResistance(loadout.ResistHead, loadout.ResistBody, loadout.ResistLimb);
 
-            var bow = player.GetComponentInChildren<Bow>();
-            if (bow != null)
-                bow.SetProjectile(null, 8f, loadout.MaxSpeed, 1f, 1f);
-
-            // Hard difficulty has no aim guide at all (GDD 4.2); otherwise the bow and upgrades extend it.
-            if (playerPreview != null)
+            var skin = player.GetComponent<CharacterSkin>();
+            if (skin != null)
             {
-                var basePreview = GameSettings.PreviewDuration;
-                playerPreview.Duration = basePreview > 0f ? basePreview + loadout.PreviewBonus : 0f;
+                skin.Apply(CharacterLook.Arash);
+                var outfit = loadout.Outfit;
+                if (outfit != null)
+                    skin.SetColors(outfit.Tunic, outfit.Cape);
+                if (loadout.Helmet != null)
+                    skin.SetHat(ArtLibrary.Get(loadout.Helmet.Sprite), Color.white);
+                else if (outfit != null)
+                    skin.SetHat(null, outfit.Cap);
+                if (loadout.Armor != null)
+                    skin.SetArmor(ArtLibrary.Get(loadout.Armor.Sprite));
             }
 
-            var torso = player.BodyTarget.GetComponent<SpriteRenderer>();
-            if (torso != null)
-                torso.color = loadout.Tunic;
+            if (loadout.Shield != null)
+                playerShield = CreatePavise(loadout.Shield);
 
+            var bow = player.GetComponentInChildren<Bow>();
             arsenal = player.gameObject.AddComponent<PlayerArsenal>();
-            arsenal.Configure(bow, playerAim, player.Health, fireArrowPrefab, LivingEnemies, loadout);
+            arsenal.Configure(bow, playerAim, playerPreview, player.Health, skin, arrowPrefab, fireArrowPrefab,
+                () => realtimeBattle.LivingEnemies, loadout, GameSettings.PreviewDuration);
         }
 
-        static IEnumerable<Combatant> LivingEnemies()
+        Barrier CreatePavise(ShopItem item)
         {
-            return FindObjectsByType<Combatant>(FindObjectsSortMode.None).Where(c => c.Team == Team.Enemy && c.IsAlive);
+            var go = new GameObject("Shield");
+            go.transform.SetParent(player.transform, false);
+            go.transform.localPosition = new Vector3(1.3f, 0f, 0f);
+            ArtLibrary.Renderer(go.transform, "Art", ArtLibrary.Prop(item.Sprite), 38);
+            var box = go.AddComponent<BoxCollider2D>();
+            box.size = new Vector2(0.5f, 1.3f);
+            box.offset = new Vector2(0f, 0.62f);
+            var barrier = go.AddComponent<Barrier>();
+            barrier.Configure(item.Durability, true);
+            return barrier;
         }
 
-        void SetUpDuel()
-        {
-            var enemies = new List<Combatant>();
-            foreach (var spawn in level.enemies)
-                enemies.Add(SpawnEnemy(spawn));
-            if (enemies.Count == 0)
-                enemies.Add(SpawnEnemy(new EnemySpawn()));
+        // ------------------------------------------------------------------ modes
 
-            turnManager.Configure(player, enemies, true);
-            turnManager.TurnStarted += OnTurnStarted;
-            battle = turnManager;
-            if (realtimeBattle != null)
-                realtimeBattle.enabled = false;
-        }
-
-        void SetUpWaves()
+        void SetUpBattle()
         {
-            var palisadeX = player.transform.position.x + 3f;
-            CreateCover(new CoverSpawn { x = palisadeX, width = 0.5f, height = 1.4f, flammable = false });
-            realtimeBattle.ConfigureWaves(player, playerAim, level.waves, level.palisadeLives,
-                wave => SpawnWalker(wave, palisadeX + 0.6f));
-            UseRealtime(() => Loc.T("status.waves", realtimeBattle.Lives, realtimeBattle.Wave, realtimeBattle.WaveCount));
-        }
-
-        void SetUpEscort()
-        {
-            var archers = new List<Combatant>();
-            foreach (var spawn in level.enemies)
-                archers.Add(SpawnEnemy(spawn));
-            // The companion stands behind Arash, so only enemy arrows threaten it.
-            var companion = SpawnCompanion(player.transform.position.x - 2.2f, new Color(0.95f, 0.9f, 0.75f));
-            realtimeBattle.ConfigureEscort(player, playerAim, companion, archers, level.enemyFireInterval, level.surviveSeconds);
-            if (level.surviveSeconds > 0f)
-                UseRealtime(() => Loc.T("status.escort", Mathf.CeilToInt(realtimeBattle.TimeLeft)));
-            else
-                UseRealtime(() => Loc.T("status.escort_all"));
+            if (level.mode == LevelMode.Escort)
+            {
+                companion = SpawnCompanion(player.transform.position.x - 2.2f, level.companion);
+                companion.Health.SetMax(80f);
+            }
+            realtimeBattle.ConfigureBattle(player, playerAim, arsenal, level.waves.Count, SpawnWave, BeforeWave, companion);
+            realtimeBattle.Resupplied += added =>
+            {
+                if (hud != null)
+                    hud.ShowPopup(Loc.T("battle.resupplied", added));
+            };
+            UseRealtime(() => Loc.T("status.wave", realtimeBattle.Wave, realtimeBattle.WaveCount));
         }
 
         void SetUpTrial()
@@ -174,7 +171,6 @@ namespace Arash.Levels
         void UseRealtime(Func<string> status)
         {
             battle = realtimeBattle;
-            turnManager.enabled = false;
             realtimeBattle.StatusChanged += () =>
             {
                 if (hud != null)
@@ -182,6 +178,30 @@ namespace Arash.Levels
             };
             if (hud != null)
                 hud.SetStatus(status);
+        }
+
+        void BeforeWave(int index, Action proceed)
+        {
+            var lines = index < level.waves.Count ? level.waves[index].dialogue : null;
+            if (index > 0 && hud != null)
+                hud.ShowPopup(Loc.T("battle.wave", index + 1));
+            if (hud == null || lines == null || lines.Count == 0)
+            {
+                proceed();
+                return;
+            }
+            hud.PlayDialogue(lines, proceed);
+        }
+
+        List<Combatant> SpawnWave(int index)
+        {
+            var spawned = new List<Combatant>();
+            if (index >= level.waves.Count)
+                return spawned;
+            var order = 0;
+            foreach (var spawn in level.waves[index].enemies)
+                spawned.Add(SpawnEnemy(spawn, order++));
+            return spawned;
         }
 
         void OnEnable()
@@ -200,6 +220,8 @@ namespace Arash.Levels
         void Start()
         {
             battle.BattleEnded += OnBattleEnded;
+            if (level.wind.variance > 0f)
+                StartCoroutine(ChangeWind());
             if (hud == null)
             {
                 battle.Begin();
@@ -207,7 +229,9 @@ namespace Arash.Levels
             }
 
             hud.SetLevel(level.titleKey, level.hintKey);
-            hud.SetArsenal(arsenal);
+            hud.SetArsenal(arsenal, () => arsenal.CastRain(groundY));
+            if (playerShield != null)
+                hud.SetShield(playerShield);
             startTime = Time.time;
             Telemetry.Event("level_start", "level", level.id, "mode", level.mode.ToString());
             if (level.wind.strength != 0f || level.wind.variance > 0f)
@@ -219,36 +243,43 @@ namespace Arash.Levels
             });
         }
 
-        void OnTurnStarted(Combatant actor)
+        IEnumerator ChangeWind()
         {
-            if (level.wind.variance <= 0f)
-                return;
-            BattleEnvironment.Wind = BattleEnvironment.RollWind(level.wind.strength, level.wind.variance, Random.Range(-1f, 1f));
-            if (hud != null)
-                hud.SetWind(BattleEnvironment.Wind);
+            while (true)
+            {
+                yield return new WaitForSeconds(WindChangeSeconds);
+                BattleEnvironment.Wind = BattleEnvironment.RollWind(level.wind.strength, level.wind.variance, Random.Range(-1f, 1f));
+                if (hud != null && realtimeBattle.IsRunning)
+                    hud.SetWind(BattleEnvironment.Wind);
+            }
         }
 
         void OnPlayerShot(Arrow arrow)
         {
-            playerShots++;
             if (hud != null)
                 hud.HideHint();
         }
 
         void OnBattleEnded(bool won)
         {
-            var arrowsUsed = battle is RealtimeBattle ? realtimeBattle.ArrowsUsed : playerShots;
+            var arrowsUsed = realtimeBattle.ArrowsUsed;
             var stars = ProgressRules.Stars(won, battle.PlayerCondition, arrowsUsed, level.stars);
             var coins = won ? stars * level.coinsPerStar : 0;
+            var gems = 0;
 
-            Telemetry.Event("level_end", "level", level.id, "won", won, "stars", stars,
-                "arrows", arrowsUsed, "seconds", Mathf.RoundToInt(Time.time - startTime));
+            Telemetry.Event("level_end", "level", level.id, "won", won, "stars", stars, "arrows", arrowsUsed,
+                "reason", realtimeBattle.Defeat.ToString(), "seconds", Mathf.RoundToInt(Time.time - startTime));
 
             var save = SaveSystem.Data;
             if (won && !string.IsNullOrEmpty(level.id))
             {
                 save.RecordWin(level.id, stars);
                 save.coins += coins;
+                if (stars >= 3 && save.ClaimGems("stars3." + level.id, ProgressRules.GemsForThreeStars))
+                    gems += ProgressRules.GemsForThreeStars;
+                if (level.firstWinGems > 0 && save.ClaimGems("win." + level.id, level.firstWinGems))
+                    gems += level.firstWinGems;
+                Armory.GrantStoryItems(save);
                 SaveSystem.Save();
             }
 
@@ -270,36 +301,53 @@ namespace Arash.Levels
                 return;
             hud.SetStatus(null);
             hud.SetWind(null);
-            hud.SetArsenal(null);
-            hud.PlayDialogue(won ? level.outroDialogue : null, () => hud.ShowResult(won, stars, coins, next, map));
+            hud.SetArsenal(null, null);
+            hud.SetShield(null);
+            var defeatKey = won ? null : "defeat." + realtimeBattle.Defeat.ToString().ToLowerInvariant();
+            hud.PlayDialogue(won ? level.outroDialogue : null, () => hud.ShowResult(won, stars, coins, gems, defeatKey, next, map));
         }
 
-        // ------------------------------------------------------------------ spawning
+        // ------------------------------------------------------------------ enemies
 
-        Combatant SpawnEnemy(EnemySpawn spawn)
+        static EnemyDefinition defaultType;
+
+        static EnemyDefinition DefaultType
         {
-            if (spawn.height > 0.05f)
-                CreateBlock("Rock Platform", new Vector2(spawn.x, groundY + spawn.height * 0.5f), new Vector2(2.4f, spawn.height), RockColor, 11);
-
-            var enemy = Instantiate(enemyPrefab, new Vector3(spawn.x, groundY + spawn.height, 0f), Quaternion.identity);
-            var ai = enemy.GetComponent<EnemyArcherAI>();
-            var type = spawn.type;
-            if (type == null)
+            get
             {
-                enemy.Health.SetMax(spawn.maxHealth);
-                if (ai != null && spawn.accuracy != null)
-                    ai.SetAccuracy(spawn.accuracy.Scaled(GameSettings.EnemyErrorMultiplier));
-                return enemy;
+                if (defaultType == null)
+                {
+                    defaultType = ScriptableObject.CreateInstance<EnemyDefinition>();
+                    defaultType.name = "Turanian Archer";
+                }
+                return defaultType;
             }
+        }
 
+        Combatant SpawnEnemy(EnemySpawn spawn, int order)
+        {
+            var type = spawn.type != null ? spawn.type : DefaultType;
+            var standHeight = spawn.height + (type.mounted ? HorseHeight : 0f);
+            var stand = new Vector3(spawn.x, groundY + standHeight, 0f);
+            var enemy = Instantiate(enemyPrefab, stand, Quaternion.identity);
             enemy.name = type.name;
             enemy.transform.localScale = Vector3.one * type.scale;
             enemy.Health.SetMax(type.maxHealth);
-            Tint(enemy, type.tint);
+
+            var skin = enemy.GetComponent<CharacterSkin>();
+            if (skin != null)
+            {
+                skin.Apply(type.look);
+                if (type.tint != Color.white)
+                    skin.Tint(type.tint);
+            }
+
+            var ai = enemy.GetComponent<EnemyArcherAI>();
             if (ai != null)
             {
                 ai.SetAccuracy(type.accuracy.Scaled(GameSettings.EnemyErrorMultiplier));
                 ai.SetTactics(type.tactics.Clone());
+                ai.ProjectileDamage = type.damage * GameSettings.EnemyDamageMultiplier;
                 ai.PhaseChanged += OnBossPhase;
             }
             var bow = enemy.GetComponentInChildren<Bow>();
@@ -307,14 +355,101 @@ namespace Arash.Levels
                 bow.SetProjectile(type.projectile, type.minSpeed, type.maxSpeed, type.gravityScale, type.windScale);
             if (type.shield)
                 AddShield(enemy);
-            if (type.patrolRange > 0f)
+            if (type.mounted)
+                AddHorse(enemy);
+
+            var ragdoll = enemy.GetComponent<Ragdoll2D>();
+            enemy.Health.Died += info => StartCoroutine(RemoveBody(enemy));
+
+            switch (type.role)
             {
-                var patrol = enemy.gameObject.AddComponent<Patrol>();
-                patrol.range = type.patrolRange;
-                patrol.speed = type.patrolSpeed;
-                enemy.GetComponent<Ragdoll2D>().DisableOnDeath(patrol);
+                case EnemyRole.Raider:
+                    if (ai != null)
+                        ai.enabled = false;
+                    var raider = enemy.gameObject.AddComponent<Raider>();
+                    raider.speed = type.runSpeed;
+                    raider.damage = type.meleeDamage * GameSettings.EnemyDamageMultiplier;
+                    raider.goalX = player.transform.position.x + (playerShield != null ? 2.2f : 1.5f) + order * 0.4f;
+                    raider.Target = player.Health;
+                    raider.Shield = () => playerShield;
+                    ragdoll.DisableOnDeath(raider);
+                    // Raiders run in from beyond the edge of the view.
+                    enemy.transform.position = stand + Vector3.right * EntryDistance;
+                    return enemy;
+
+                case EnemyRole.Shaman:
+                    if (ai != null)
+                        ai.enabled = false;
+                    var shaman = enemy.gameObject.AddComponent<ShamanCaster>();
+                    shaman.interval = type.castInterval;
+                    shaman.shieldStrength = type.shieldStrength;
+                    shaman.Allies = () => realtimeBattle.LivingEnemies.Where(e => e != enemy);
+                    shaman.enabled = false;
+                    ragdoll.DisableOnDeath(shaman);
+                    StartCoroutine(Enter(enemy, stand, spawn.height > 0.05f, order, () => shaman.enabled = true));
+                    return enemy;
+
+                default:
+                    var brain = enemy.gameObject.AddComponent<EnemyBrain>();
+                    var cooldown = type.cooldown * GameSettings.EnemyCooldownMultiplier;
+                    brain.minCooldown = cooldown.x;
+                    brain.maxCooldown = Mathf.Max(cooldown.x, cooldown.y);
+                    brain.ChooseTarget = ChooseTarget;
+                    ragdoll.DisableOnDeath(brain);
+                    StartCoroutine(Enter(enemy, stand, spawn.height > 0.05f, order, () =>
+                    {
+                        if (type.patrolRange > 0f)
+                        {
+                            var patrol = enemy.gameObject.AddComponent<Patrol>();
+                            patrol.range = type.patrolRange;
+                            patrol.speed = type.patrolSpeed;
+                            ragdoll.DisableOnDeath(patrol);
+                        }
+                        brain.Run();
+                    }));
+                    return enemy;
             }
-            return enemy;
+        }
+
+        /// <summary>In escort levels most arrows fly at the companion.</summary>
+        Combatant ChooseTarget()
+        {
+            if (companion != null && companion.IsAlive && Random.value < 0.6f)
+                return companion;
+            return player;
+        }
+
+        /// <summary>Walks (or rides) in from the right, or drops onto a rock from above.</summary>
+        IEnumerator Enter(Combatant enemy, Vector3 stand, bool onPlatform, int order, Action arrived)
+        {
+            var from = onPlatform ? stand + Vector3.up * 7f : stand + Vector3.right * (EntryDistance + order * 1.5f);
+            enemy.transform.position = from;
+            var duration = onPlatform ? 0.5f + order * 0.15f : 1.6f + order * 0.3f;
+            for (var t = 0f; t < duration && enemy != null && enemy.IsAlive; t += Time.deltaTime)
+            {
+                var k = t / duration;
+                var p = onPlatform ? Vector3.Lerp(from, stand, k * k) : Vector3.Lerp(from, stand, Mathf.SmoothStep(0f, 1f, k));
+                if (!onPlatform)
+                    p.y += Mathf.Abs(Mathf.Sin(k * 14f)) * 0.12f;
+                enemy.transform.position = p;
+                yield return null;
+            }
+            if (enemy == null || !enemy.IsAlive)
+                yield break;
+            enemy.transform.position = stand;
+            arrived();
+        }
+
+        IEnumerator RemoveBody(Combatant enemy)
+        {
+            yield return new WaitForSeconds(4f);
+            if (enemy == null)
+                yield break;
+            var skin = enemy.GetComponent<CharacterSkin>();
+            if (skin != null)
+                yield return skin.FadeOut(0.8f);
+            if (enemy != null)
+                Destroy(enemy.gameObject);
         }
 
         void OnBossPhase(EnemyArcherAI ai, BossPhase phase)
@@ -323,29 +458,44 @@ namespace Arash.Levels
                 hud.ShowPopup(Loc.T(phase.announceKey));
         }
 
-        Walker SpawnWalker(WaveSpawn wave, float goalX)
+        Combatant SpawnCompanion(float x, CharacterLook look)
         {
-            // Raiders appear just beyond the right edge of the wide real-time view.
-            var raider = Instantiate(enemyPrefab, new Vector3(player.transform.position.x + 26f, groundY, 0f), Quaternion.identity);
-            raider.Health.SetMax(wave.health * (wave.mounted ? 1.5f : 1f));
-            var ai = raider.GetComponent<EnemyArcherAI>();
-            if (ai != null)
-                ai.enabled = false; // raiders charge instead of shooting
-            if (wave.mounted)
-                Tint(raider, new Color(0.75f, 0.6f, 0.45f));
-
-            var walker = raider.gameObject.AddComponent<Walker>();
-            walker.speed = wave.speed * (wave.mounted ? 1.8f : 1f);
-            walker.goalX = goalX;
-            raider.GetComponent<Ragdoll2D>().DisableOnDeath(walker);
-            return walker;
+            var spawned = Instantiate(companionPrefab, new Vector3(x, groundY, 0f), Quaternion.identity);
+            var skin = spawned.GetComponent<CharacterSkin>();
+            if (skin != null)
+                skin.Apply(look);
+            return spawned;
         }
 
-        Combatant SpawnCompanion(float x, Color tint)
+        void AddShield(Combatant enemy)
         {
-            var companion = Instantiate(companionPrefab, new Vector3(x, groundY, 0f), Quaternion.identity);
-            Tint(companion, tint);
-            return companion;
+            var torso = enemy.BodyTarget;
+            var facing = enemy.FacingRight ? 1f : -1f;
+            var shield = new GameObject("Shield");
+            shield.transform.SetParent(torso, false);
+            shield.transform.localPosition = new Vector3(0.42f * facing, -0.05f, 0f);
+            ArtLibrary.Renderer(shield.transform, "Art", ArtLibrary.Prop("turan_shield"), 38);
+            shield.AddComponent<BoxCollider2D>().size = new Vector2(0.2f, 1.1f);
+            shield.AddComponent<HitZone>().SetZone(HitZoneType.Armor);
+        }
+
+        void AddHorse(Combatant enemy)
+        {
+            var horse = new GameObject("Horse");
+            horse.transform.SetParent(enemy.transform, false);
+            horse.transform.localPosition = new Vector3(0.2f, -HorseHeight, 0f);
+            var renderer = ArtLibrary.Renderer(horse.transform, "Art", ArtLibrary.Prop("horse"), 29);
+            renderer.flipX = !enemy.FacingRight;
+            var box = horse.AddComponent<BoxCollider2D>();
+            box.size = new Vector2(2.2f, 0.7f);
+            box.offset = new Vector2(0f, 1.0f);
+            horse.AddComponent<HitZone>().SetZone(HitZoneType.Limb);
+            enemy.Health.Died += info =>
+            {
+                box.enabled = false;
+                horse.transform.SetParent(null, true);
+                horse.AddComponent<RunAway>();
+            };
         }
 
         TrialTarget CreateTarget(TrialTargetSpawn spawn, List<Health> bystanders)
@@ -355,17 +505,21 @@ namespace Arash.Levels
             switch (spawn.kind)
             {
                 case TrialTargetKind.Apple:
-                    var villager = SpawnCompanion(spawn.position.x, new Color(0.85f, 0.75f, 0.55f));
+                    var villager = SpawnCompanion(spawn.position.x, CharacterLook.Villager);
                     bystanders.Add(villager.Health);
-                    target = CreateDisc("Apple", villager.HeadTarget.position + new Vector3(0f, 0.42f, 0f), 0.32f, new Color(0.8f, 0.1f, 0.1f), 40);
+                    target = PropObject("Apple", "apple", villager.HeadTarget.position + new Vector3(0f, 0.42f, 0f), 40);
+                    target.AddComponent<CircleCollider2D>().radius = 0.17f;
                     target.transform.SetParent(villager.transform, true);
                     break;
                 case TrialTargetKind.Lantern:
-                    target = CreateDisc("Lantern", position, 0.6f, new Color(1f, 0.78f, 0.25f), 20);
+                    target = PropObject("Lantern", "lantern", position, 20);
+                    target.AddComponent<CircleCollider2D>().radius = 0.25f;
                     break;
                 default:
-                    CreateBlock("Post", new Vector2(position.x, groundY + spawn.position.y * 0.5f), new Vector2(0.15f, Mathf.Max(0.1f, spawn.position.y)), WoodColor, 19);
-                    target = CreateBlock("Board", position + new Vector2(0f, 0.5f), new Vector2(0.25f, 1f), new Color(0.9f, 0.8f, 0.55f), 20);
+                    target = PropObject("Target", "target", position + new Vector2(0f, 0.44f), 20);
+                    target.AddComponent<CircleCollider2D>().radius = 0.26f;
+                    if (spawn.position.y > 0.3f)
+                        Sliced("Post", "cover_wood", new Vector2(position.x, groundY + spawn.position.y * 0.5f), new Vector2(0.15f, spawn.position.y), 19);
                     break;
             }
 
@@ -380,68 +534,55 @@ namespace Arash.Levels
             return trialTarget;
         }
 
+        // ------------------------------------------------------------------ scenery
+
         void CreateCover(CoverSpawn cover)
         {
-            var block = CreateBlock(cover.flammable ? "Wooden Cover" : "Palisade", new Vector2(cover.x, groundY + cover.height * 0.5f),
-                new Vector2(cover.width, cover.height), WoodColor, 12);
+            var block = Sliced(cover.flammable ? "Wooden Cover" : "Palisade", cover.flammable ? "cover_wood" : "palisade",
+                new Vector2(cover.x, groundY + cover.height * 0.5f), new Vector2(cover.width, cover.height), 12);
+            block.AddComponent<BoxCollider2D>().size = new Vector2(cover.width, cover.height);
             if (cover.flammable)
                 block.AddComponent<Flammable>();
         }
 
-        void AddShield(Combatant enemy)
+        void CreatePlatform(float x, float height)
         {
-            var torso = enemy.BodyTarget;
-            var facing = enemy.FacingRight ? 1f : -1f;
-            var shield = new GameObject("Shield");
-            shield.transform.SetParent(torso, false);
-            shield.transform.localPosition = new Vector3(0.42f * facing, 0f, 0f);
-            var renderer = AddRenderer(shield, squareSprite, ShieldColor, 35);
-            renderer.drawMode = SpriteDrawMode.Sliced;
-            renderer.size = new Vector2(0.18f, 1.05f);
-            shield.AddComponent<BoxCollider2D>().size = new Vector2(0.18f, 1.05f);
-            shield.AddComponent<HitZone>().SetZone(HitZoneType.Armor);
+            var block = Sliced("Rock Platform", "rock_platform", new Vector2(x, groundY + height * 0.5f), new Vector2(2.4f, height + 0.15f), 11);
+            block.AddComponent<BoxCollider2D>().size = new Vector2(2.4f, height);
         }
 
-        static void Tint(Combatant combatant, Color tint)
+        GameObject Sliced(string name, string prop, Vector2 position, Vector2 size, int order)
         {
-            if (tint == Color.white)
-                return;
-            var bar = combatant.GetComponentInChildren<HealthBar>();
-            foreach (var renderer in combatant.GetComponentsInChildren<SpriteRenderer>(true))
-                if (bar == null || !renderer.transform.IsChildOf(bar.transform))
-                    renderer.color *= tint;
-        }
-
-        GameObject CreateBlock(string name, Vector2 position, Vector2 size, Color color, int order)
-        {
-            var block = new GameObject(name);
-            block.transform.position = position;
-            var renderer = AddRenderer(block, squareSprite, color, order);
+            var sprite = ArtLibrary.Prop(prop) ?? squareSprite;
+            var renderer = ArtLibrary.Renderer(null, name, sprite, order, position);
             renderer.drawMode = SpriteDrawMode.Sliced;
             renderer.size = size;
-            block.AddComponent<BoxCollider2D>().size = size;
-            return block;
+            return renderer.gameObject;
         }
 
-        GameObject CreateDisc(string name, Vector2 position, float diameter, Color color, int order)
+        GameObject PropObject(string name, string prop, Vector2 position, int order)
         {
-            var disc = new GameObject(name);
-            disc.transform.position = position;
-            disc.transform.localScale = new Vector3(diameter, diameter, 1f);
-            AddRenderer(disc, circleSprite, color, order);
-            disc.AddComponent<CircleCollider2D>().radius = 0.5f;
-            return disc;
+            return ArtLibrary.Renderer(null, name, ArtLibrary.Prop(prop) ?? circleSprite, order, position).gameObject;
         }
+    }
 
-        SpriteRenderer AddRenderer(GameObject go, Sprite sprite, Color color, int order)
+    /// <summary>A riderless horse gallops off and fades away.</summary>
+    public class RunAway : MonoBehaviour
+    {
+        float t;
+
+        void Update()
         {
-            var renderer = go.AddComponent<SpriteRenderer>();
-            renderer.sprite = sprite;
-            if (spriteMaterial != null)
-                renderer.sharedMaterial = spriteMaterial;
-            renderer.color = color;
-            renderer.sortingOrder = order;
-            return renderer;
+            t += Time.deltaTime;
+            transform.position += Vector3.right * 5f * Time.deltaTime;
+            foreach (var renderer in GetComponentsInChildren<SpriteRenderer>())
+            {
+                var c = renderer.color;
+                c.a = 1f - t / 1.5f;
+                renderer.color = c;
+            }
+            if (t > 1.5f)
+                Destroy(gameObject);
         }
     }
 }

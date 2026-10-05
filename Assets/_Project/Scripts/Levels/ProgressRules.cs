@@ -6,6 +6,9 @@ namespace Arash.Levels
     /// <summary>Star rating and unlock rules (F-12, F-13), kept free of Unity objects for testing.</summary>
     public static class ProgressRules
     {
+        /// <summary>Gems for the first three-star win of a level (F-59).</summary>
+        public const int GemsForThreeStars = 3;
+
         /// <summary>
         /// 0 stars for a loss. A win earns one star, plus one for finishing with enough health,
         /// plus one for winning with few arrows.

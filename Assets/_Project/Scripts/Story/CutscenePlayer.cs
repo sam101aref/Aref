@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Linq;
+using Arash.Art;
 using Arash.Core;
 using Arash.Levels;
 using Arash.Localization;
@@ -8,24 +10,40 @@ using UnityEngine.UI;
 
 namespace Arash.Story
 {
-    /// <summary>Drifts a layer slowly for parallax.</summary>
+    /// <summary>Drifts an object slowly (clouds, walkers, the flying arrow).</summary>
     public class ParallaxDrift : MonoBehaviour
     {
         public Vector2 velocity;
+        public bool bob;
+
+        float t;
+        Vector3 origin;
+
+        void Start()
+        {
+            origin = transform.position;
+        }
 
         void Update()
         {
-            transform.position += (Vector3)(velocity * Time.deltaTime);
+            t += Time.deltaTime;
+            var p = origin + (Vector3)(velocity * t);
+            if (bob)
+                p.y += Mathf.Abs(Mathf.Sin(t * 7f)) * 0.08f;
+            transform.position = p;
         }
     }
 
     /// <summary>
-    /// Plays a <see cref="CutsceneDefinition"/> (F-20) in the Cutscene scene: each panel is a simple
-    /// illustrated scene drawn from placeholder shapes, drifting in parallax layers, with a caption.
-    /// Tap for the next panel, Skip to leave. Real illustrations replace the motifs later.
+    /// Plays a <see cref="CutsceneDefinition"/> (F-20, F-60) in the Cutscene scene. Each panel is an
+    /// illustrated scene built from the game's art: the biome backdrop, characters in poses and
+    /// props, with a slow camera move and a caption (with the speaker's portrait when someone
+    /// speaks). Panels change with a short fade; tap for the next one, Skip to leave.
     /// </summary>
     public class CutscenePlayer : ScreenBase
     {
+        const float FadeTime = 0.35f;
+
         [SerializeField] Sprite square;
         [SerializeField] Sprite circle;
         [SerializeField] Material spriteMaterial;
@@ -36,9 +54,13 @@ namespace Arash.Story
         float panelTime;
         Transform world;
         bool finished;
+        bool switching;
+        CanvasGroup fade;
+        CanvasGroup captionGroup;
 
         protected override void Start()
         {
+            ArtLibrary.SpriteMaterial = spriteMaterial;
             cutscene = SceneFlow.PendingCutscene;
             if (cutscene == null)
             {
@@ -52,6 +74,7 @@ namespace Arash.Story
             }
             ShowPanel(0);
             base.Start();
+            StartCoroutine(FadeFrom(1f));
         }
 
         void Update()
@@ -59,16 +82,61 @@ namespace Arash.Story
             if (finished || cutscene == null || GamePause.IsPaused)
                 return;
             panelTime += Time.deltaTime;
-            if (panelTime >= cutscene.panels[index].duration)
+            var panel = cutscene.panels[index];
+            MoveCamera(panel, Mathf.Clamp01(panelTime / panel.duration));
+            if (captionGroup != null)
+                captionGroup.alpha = Mathf.Clamp01((panelTime - 0.2f) / 0.5f);
+            if (panelTime >= panel.duration)
                 Next();
         }
 
         void Next()
         {
+            if (switching || finished)
+                return;
             if (index + 1 >= cutscene.panels.Count)
-                Finish();
+                StartCoroutine(FadeOutAndFinish());
             else
-                ShowPanel(index + 1);
+                StartCoroutine(SwitchTo(index + 1));
+        }
+
+        IEnumerator SwitchTo(int panelIndex)
+        {
+            switching = true;
+            yield return FadeTo(1f);
+            ShowPanel(panelIndex);
+            switching = false;
+            yield return FadeFrom(1f);
+        }
+
+        IEnumerator FadeOutAndFinish()
+        {
+            switching = true;
+            yield return FadeTo(1f);
+            Finish();
+        }
+
+        IEnumerator FadeTo(float target)
+        {
+            if (fade == null)
+                yield break;
+            var start = fade.alpha;
+            for (var t = 0f; t < FadeTime; t += Time.unscaledDeltaTime)
+            {
+                if (fade == null)
+                    yield break;
+                fade.alpha = Mathf.Lerp(start, target, t / FadeTime);
+                yield return null;
+            }
+            if (fade != null)
+                fade.alpha = target;
+        }
+
+        IEnumerator FadeFrom(float from)
+        {
+            if (fade != null)
+                fade.alpha = from;
+            yield return FadeTo(0f);
         }
 
         void Finish()
@@ -84,8 +152,19 @@ namespace Arash.Story
             index = panelIndex;
             panelTime = 0f;
             DrawWorld(cutscene.panels[index]);
+            MoveCamera(cutscene.panels[index], 0f);
             if (Canvas != null)
                 Rebuild();
+        }
+
+        void MoveCamera(CutscenePanel panel, float k)
+        {
+            if (sceneCamera == null)
+                return;
+            var t = Mathf.SmoothStep(0f, 1f, k);
+            var p = Vector2.Lerp(panel.cameraFrom, panel.cameraTo, t);
+            sceneCamera.transform.position = new Vector3(p.x, p.y, -10f);
+            sceneCamera.orthographicSize = Mathf.Lerp(panel.zoomFrom, panel.zoomTo, t);
         }
 
         protected override void Build(RectTransform canvas)
@@ -104,11 +183,31 @@ namespace Arash.Story
                 UIFactory.Place(title.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -50f), new Vector2(1600f, 100f));
             }
 
-            var band = UIFactory.Panel(canvas, "Caption", new Color(0f, 0f, 0f, 0.6f));
+            var band = UIFactory.Panel(canvas, "Caption", new Color(0f, 0f, 0f, 0.62f));
             band.raycastTarget = false;
-            UIFactory.Place(band.rectTransform, new Vector2(0.5f, 0f), Vector2.zero, new Vector2(1920f, 230f));
-            var caption = UIFactory.WrappedLabel(band.transform, Loc.Get(panel.captionKey), 44, UIFactory.Cream, 1600f, TextAnchor.MiddleCenter);
-            UIFactory.Place(caption.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1700f, 200f));
+            UIFactory.Place(band.rectTransform, new Vector2(0.5f, 0f), Vector2.zero, new Vector2(1920f, 250f));
+            captionGroup = band.gameObject.AddComponent<CanvasGroup>();
+            captionGroup.blocksRaycasts = false;
+            captionGroup.alpha = 0f;
+
+            var speaking = panel.speaker != Speaker.Narrator;
+            var textX = 0f;
+            if (speaking)
+            {
+                var portrait = UIFactory.Circle(band.transform, DialogueView.SpeakerColor(panel.speaker), 190f);
+                UIFactory.Place(portrait.rectTransform, new Vector2(0f, 0.5f), new Vector2(60f, 20f), new Vector2(190f, 190f));
+                DialogueView.Portrait(portrait.rectTransform, panel.speaker, 1.3f);
+                var name = UIFactory.Label(band.transform, Loc.T(DialogueView.SpeakerKey(panel.speaker)), 40, UIFactory.Gold, TextAnchor.MiddleLeft, true);
+                UIFactory.Place(name.rectTransform, new Vector2(0f, 1f), new Vector2(290f, -18f), new Vector2(1400f, 56f));
+                textX = 290f;
+            }
+            var width = speaking ? 1520f : 1700f;
+            var caption = UIFactory.WrappedLabel(band.transform, Loc.Get(panel.captionKey), 42, UIFactory.Cream, width,
+                speaking ? TextAnchor.UpperLeft : TextAnchor.MiddleCenter);
+            if (speaking)
+                UIFactory.Place(caption.rectTransform, new Vector2(0f, 1f), new Vector2(textX, -78f), new Vector2(width, 160f));
+            else
+                UIFactory.Place(caption.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(width, 220f));
 
             var skip = UIFactory.Button(canvas, Loc.T("ui.skip"), Finish, new Color(0f, 0f, 0f, 0.45f), 36);
             UIFactory.Place((RectTransform)skip.transform, new Vector2(1f, 1f), new Vector2(-30f, -30f), new Vector2(220f, 80f));
@@ -116,9 +215,17 @@ namespace Arash.Story
             var progress = UIFactory.Label(canvas, Loc.Number(index + 1) + " / " + Loc.Number(cutscene.panels.Count),
                 30, new Color(1f, 1f, 1f, 0.6f), TextAnchor.MiddleLeft);
             UIFactory.Place(progress.rectTransform, new Vector2(0f, 1f), new Vector2(40f, -40f), new Vector2(300f, 60f));
+
+            var black = UIFactory.Panel(canvas, "Fade", Color.black);
+            UIFactory.Stretch(black.rectTransform);
+            black.raycastTarget = false;
+            var previous = fade != null ? fade.alpha : 1f;
+            fade = black.gameObject.AddComponent<CanvasGroup>();
+            fade.blocksRaycasts = false;
+            fade.alpha = previous;
         }
 
-        // ------------------------------------------------------------- placeholder illustration
+        // ------------------------------------------------------------------ illustration
 
         void DrawWorld(CutscenePanel panel)
         {
@@ -126,185 +233,84 @@ namespace Arash.Story
                 Destroy(world.gameObject);
             world = new GameObject("Cutscene World").transform;
 
-            if (sceneCamera != null)
+            var backdrop = Backdrop.Build(panel.biome, panel.time, sceneCamera, 0f, 0f, 70f);
+            backdrop.SetParent(world, true);
+
+            foreach (var prop in panel.props)
             {
-                sceneCamera.backgroundColor = panel.sky;
-                sceneCamera.transform.position = new Vector3(0f, 0f, -10f);
+                var sprite = ArtLibrary.Prop(prop.sprite);
+                if (sprite == null)
+                    continue;
+                var renderer = ArtLibrary.Renderer(world, prop.sprite, sprite, prop.front ? 55 : 15, prop.position);
+                renderer.transform.localScale = Vector3.one * prop.scale;
+                renderer.flipX = prop.flip;
+                if (panel.time == TimeOfDay.Night)
+                    renderer.color = new Color(0.62f, 0.66f, 0.82f);
+                else if (panel.time == TimeOfDay.Dusk)
+                    renderer.color = new Color(1f, 0.86f, 0.78f);
+                if (prop.drift != Vector2.zero)
+                    renderer.gameObject.AddComponent<ParallaxDrift>().velocity = prop.drift;
             }
 
-            var far = Layer("Far", 0.15f);
-            var mid = Layer("Mid", 0.35f);
-            var near = Layer("Near", 0.7f);
-            var sky = Layer("Sky", 0.05f);
+            foreach (var actor in panel.actors)
+                DrawActor(actor, panel.time);
+        }
 
-            Shape(near, square, new Vector2(0f, -4.6f), new Vector2(60f, 3f), panel.land, 5);
-            var shade = Color.Lerp(panel.land, panel.sky, 0.45f);
-
-            switch (panel.motif)
+        void DrawActor(CutsceneActor actor, TimeOfDay time)
+        {
+            var root = new GameObject(actor.look.ToString()).transform;
+            root.SetParent(world, false);
+            root.position = actor.position;
+            root.localScale = Vector3.one * actor.scale;
+            var skin = CharacterSkin.Build(root, actor.facingRight, actor.look);
+            if (actor.look == CharacterLook.Arash)
             {
-                case CutsceneMotif.Village:
-                    Shape(sky, circle, new Vector2(6f, 3.2f), Vector2.one * 1.6f, new Color(1f, 0.9f, 0.6f), 1);
-                    for (var i = 0; i < 6; i++)
-                        House(mid, new Vector2(-8f + i * 3.2f, -2.4f), Color.Lerp(panel.land, Color.white, 0.25f));
-                    Figure(near, new Vector2(-1f, -3.1f), new Color(0.10f, 0.42f, 0.55f));
-                    break;
-
-                case CutsceneMotif.Army:
-                    Peaks(far, shade, 5);
-                    for (var row = 0; row < 3; row++)
-                    for (var i = 0; i < 14; i++)
-                        Figure(row == 2 ? near : mid, new Vector2(-12f + i * 1.8f + row * 0.6f, -2.6f - row * 0.35f),
-                            row % 2 == 0 ? new Color(0.55f, 0.15f, 0.12f) : new Color(0.10f, 0.42f, 0.55f));
-                    for (var i = 0; i < 4; i++)
-                        Banner(mid, new Vector2(-9f + i * 6f, -1f), i % 2 == 0 ? new Color(0.9f, 0.72f, 0.32f) : new Color(0.7f, 0.15f, 0.1f));
-                    break;
-
-                case CutsceneMotif.Forest:
-                    for (var i = 0; i < 16; i++)
-                        Tree(i % 2 == 0 ? far : mid, new Vector2(-14f + i * 1.9f, -1.8f), i % 2 == 0 ? 0.8f : 1.1f);
-                    for (var i = 0; i < 4; i++)
-                        Shape(near, square, new Vector2(-10f + i * 7f, -1.5f + i % 2), new Vector2(6f, 0.5f), new Color(1f, 1f, 1f, 0.25f), 20);
-                    break;
-
-                case CutsceneMotif.Camp:
-                    for (var i = 0; i < 6; i++)
-                        Tent(mid, new Vector2(-9f + i * 3.6f, -3f), i % 3 == 0 ? new Color(0.85f, 0.8f, 0.65f) : new Color(0.6f, 0.2f, 0.15f));
-                    Shape(near, circle, new Vector2(1f, -3.3f), Vector2.one * 0.8f, new Color(1f, 0.55f, 0.15f), 22);
-                    Figure(near, new Vector2(-0.5f, -3.1f), new Color(0.10f, 0.42f, 0.55f));
-                    Figure(near, new Vector2(2.4f, -3.1f), new Color(0.75f, 0.58f, 0.15f));
-                    break;
-
-                case CutsceneMotif.Mountains:
-                    Peaks(far, shade, 6);
-                    Peaks(mid, Color.Lerp(shade, panel.land, 0.5f), 4);
-                    Figure(near, new Vector2(-3f, -3.1f), new Color(0.10f, 0.42f, 0.55f));
-                    break;
-
-                case CutsceneMotif.Damavand:
-                    Peak(far, new Vector2(0f, -6f), 9f, new Color(0.45f, 0.42f, 0.45f), true);
-                    Figure(mid, new Vector2(0f, 2.75f), new Color(0.10f, 0.42f, 0.55f));
-                    Shape(sky, circle, new Vector2(-7f, 3.5f), Vector2.one * 1.4f, new Color(1f, 0.8f, 0.5f), 1);
-                    break;
-
-                case CutsceneMotif.ArrowFlight:
-                    for (var i = 0; i < 6; i++)
-                        Shape(i % 2 == 0 ? far : mid, circle, new Vector2(-12f + i * 5f, 1f + (i % 3)), new Vector2(3.5f, 1.4f), new Color(1f, 1f, 1f, 0.7f), 3);
-                    var arrow = Arrow(sky, new Vector2(-8f, 0f));
-                    arrow.gameObject.AddComponent<ParallaxDrift>().velocity = new Vector2(3.2f, 0.3f);
-                    break;
-
-                case CutsceneMotif.River:
-                    Shape(mid, square, new Vector2(0f, -3.4f), new Vector2(60f, 1.2f), new Color(0.25f, 0.5f, 0.75f), 8);
-                    for (var i = 0; i < 12; i++)
-                        Shape(near, square, new Vector2(-10f + i * 1.7f, -2.5f), new Vector2(0.08f, 0.9f), new Color(0.35f, 0.5f, 0.25f), 9);
-                    var stuck = Arrow(near, new Vector2(1.5f, -2.8f));
-                    stuck.rotation = Quaternion.Euler(0f, 0f, -55f);
-                    break;
-
-                case CutsceneMotif.Celebration:
-                    for (var i = 0; i < 18; i++)
-                    {
-                        var lantern = Shape(i % 2 == 0 ? mid : near, circle, new Vector2(-12f + i * 1.4f, -2f + (i * 7 % 5)),
-                            Vector2.one * 0.45f, new Color(1f, 0.75f, 0.3f), 15);
-                        lantern.gameObject.AddComponent<ParallaxDrift>().velocity = new Vector2(0f, 0.3f + (i % 3) * 0.1f);
-                    }
-                    for (var i = 0; i < 8; i++)
-                        Figure(near, new Vector2(-7f + i * 2f, -3.1f), i % 2 == 0 ? new Color(0.10f, 0.42f, 0.55f) : new Color(0.75f, 0.58f, 0.15f));
-                    break;
+                var outfit = Armory.Find(SaveSystem.Data.equippedOutfit) ?? Armory.Find(Armory.DefaultOutfit);
+                skin.SetColors(outfit.Tunic, outfit.Cape);
+                skin.SetHat(null, outfit.Cap);
             }
-        }
+            if (time == TimeOfDay.Night)
+                skin.Tint(new Color(0.7f, 0.74f, 0.88f));
+            else if (time == TimeOfDay.Dusk)
+                skin.Tint(new Color(1f, 0.9f, 0.84f));
 
-        Transform Layer(string name, float speed)
-        {
-            var layer = new GameObject(name).transform;
-            layer.SetParent(world, false);
-            layer.gameObject.AddComponent<ParallaxDrift>().velocity = new Vector2(-speed, 0f);
-            return layer;
-        }
-
-        Transform Shape(Transform parent, Sprite sprite, Vector2 position, Vector2 size, Color color, int order)
-        {
-            var go = new GameObject("Shape");
-            go.transform.SetParent(parent, false);
-            go.transform.localPosition = position;
-            var renderer = go.AddComponent<SpriteRenderer>();
-            renderer.sprite = sprite;
-            if (spriteMaterial != null)
-                renderer.sharedMaterial = spriteMaterial;
-            renderer.color = color;
-            renderer.sortingOrder = order;
-            if (sprite == square)
+            var pivot = root.Find("AimPivot");
+            var angle = -65f;
+            switch (actor.pose)
             {
-                renderer.drawMode = SpriteDrawMode.Sliced;
-                renderer.size = size;
+                case ActorPose.Aim: angle = 12f; break;
+                case ActorPose.Raise: angle = 72f; break;
             }
-            else
+            if (pivot != null)
+                pivot.rotation = Quaternion.Euler(0f, 0f, actor.facingRight ? angle : 180f - angle);
+
+            if (actor.pose == ActorPose.Kneel)
             {
-                go.transform.localScale = new Vector3(size.x, size.y, 1f);
+                foreach (var name in new[] { "Torso", "Head", "AimPivot" })
+                {
+                    var part = root.Find(name);
+                    if (part != null)
+                        part.localPosition += Vector3.down * 0.38f;
+                }
+                var legs = root.Find("Legs");
+                if (legs != null)
+                {
+                    legs.localScale = new Vector3(1f, 0.55f, 1f);
+                    legs.localPosition = new Vector3(0f, 0.22f, 0f);
+                }
             }
-            return go.transform;
-        }
-
-        void Peaks(Transform layer, Color color, int count)
-        {
-            for (var i = 0; i < count; i++)
-                Peak(layer, new Vector2(-14f + i * (28f / count) + (i % 2) * 1.5f, -5f), 4f + (i * 37 % 4), color, i % 2 == 0);
-        }
-
-        void Peak(Transform layer, Vector2 basePosition, float height, Color color, bool snow)
-        {
-            // A rotated square is a passable mountain silhouette.
-            var side = height * 1.414f;
-            var peak = Shape(layer, square, basePosition, new Vector2(side, side), color, 2);
-            peak.localRotation = Quaternion.Euler(0f, 0f, 45f);
-            if (snow)
+            else if (actor.pose == ActorPose.Fallen)
             {
-                var cap = Shape(layer, square, basePosition + new Vector2(0f, height * 0.78f), new Vector2(side * 0.22f, side * 0.22f), Color.white, 3);
-                cap.localRotation = Quaternion.Euler(0f, 0f, 45f);
+                root.rotation = Quaternion.Euler(0f, 0f, actor.facingRight ? 88f : -88f);
+                root.position = (Vector3)actor.position + Vector3.up * 0.3f;
             }
-        }
 
-        void House(Transform layer, Vector2 position, Color color)
-        {
-            Shape(layer, square, position, new Vector2(2f, 1.6f), color, 6);
-            var roof = Shape(layer, square, position + new Vector2(0f, 0.8f), new Vector2(1.45f, 1.45f), new Color(0.45f, 0.25f, 0.15f), 7);
-            roof.localRotation = Quaternion.Euler(0f, 0f, 45f);
-        }
-
-        void Tent(Transform layer, Vector2 position, Color color)
-        {
-            var tent = Shape(layer, square, position, new Vector2(2f, 2f), color, 6);
-            tent.localRotation = Quaternion.Euler(0f, 0f, 45f);
-        }
-
-        void Tree(Transform layer, Vector2 position, float scale)
-        {
-            Shape(layer, square, position + new Vector2(0f, -0.8f * scale), new Vector2(0.3f, 2f) * scale, new Color(0.3f, 0.2f, 0.12f), 6);
-            Shape(layer, circle, position + new Vector2(0f, 0.6f * scale), new Vector2(1.8f, 2.2f) * scale, new Color(0.15f, 0.35f, 0.2f), 7);
-        }
-
-        void Figure(Transform layer, Vector2 position, Color color)
-        {
-            Shape(layer, square, position, new Vector2(0.45f, 1.1f), color, 12);
-            Shape(layer, circle, position + new Vector2(0f, 0.8f), Vector2.one * 0.42f, new Color(0.87f, 0.68f, 0.52f), 13);
-        }
-
-        void Banner(Transform layer, Vector2 position, Color color)
-        {
-            Shape(layer, square, position, new Vector2(0.08f, 3f), new Color(0.3f, 0.2f, 0.12f), 10);
-            Shape(layer, square, position + new Vector2(0.45f, 1.1f), new Vector2(0.8f, 0.6f), color, 11);
-        }
-
-        Transform Arrow(Transform layer, Vector2 position)
-        {
-            var arrow = new GameObject("Arrow").transform;
-            arrow.SetParent(layer, false);
-            arrow.localPosition = position;
-            Shape(arrow, square, new Vector2(-0.9f, 0f), new Vector2(1.8f, 0.09f), new Color(0.9f, 0.72f, 0.32f), 30);
-            Shape(arrow, square, new Vector2(-1.75f, 0f), new Vector2(0.35f, 0.24f), new Color(0.72f, 0.16f, 0.12f), 31);
-            var head = Shape(arrow, square, Vector2.zero, new Vector2(0.24f, 0.24f), new Color(0.85f, 0.85f, 0.9f), 31);
-            head.localRotation = Quaternion.Euler(0f, 0f, 45f);
-            return arrow;
+            if (actor.drift != Vector2.zero || actor.pose == ActorPose.Walk)
+            {
+                var drift = root.gameObject.AddComponent<ParallaxDrift>();
+                drift.velocity = actor.drift;
+                drift.bob = actor.pose == ActorPose.Walk;
+            }
         }
     }
 }
