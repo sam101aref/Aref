@@ -15,9 +15,10 @@ MonoBehaviour:
   id: ch5_1
   titleKey: level.5_1.title
   introKey: level.5_1.intro
-  hintKey: 
-  skyColor: {r: 0.95, g: 0.66, b: 0.45, a: 1}
-  groundColor: {r: 0.55, g: 0.43, b: 0.28, a: 1}
+  hintKey: level.5_1.hint
+  biome: 5
+  time: 1
+  introCutscene: {fileID: 11400000, guid: 1c798e99e82b3fac59079ee48b36338d, type: 2}
   introDialogue:
   - speaker: 1
     textKey: dlg.5_1.1
@@ -29,16 +30,13 @@ MonoBehaviour:
   - speaker: 0
     textKey: dlg.5_1o.1
   outroCutscene: {fileID: 0}
-  mode: 4
-  enemies: []
+  mode: 3
+  waves: []
   covers: []
   wind:
     strength: 0
     variance: 0
-  waves: []
-  palisadeLives: 3
-  surviveSeconds: 30
-  enemyFireInterval: 4
+  companion: 6
   targets: []
   arrowLimit: 5
   flight:
@@ -50,3 +48,4 @@ MonoBehaviour:
     healthForSecondStar: 0.5
     maxArrowsForThirdStar: 1
   coinsPerStar: 30
+  firstWinGems: 0

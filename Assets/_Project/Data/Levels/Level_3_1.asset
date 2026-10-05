@@ -16,55 +16,55 @@ MonoBehaviour:
   titleKey: level.3_1.title
   introKey: level.3_1.intro
   hintKey: level.3_1.hint
-  skyColor: {r: 0.85, g: 0.7, b: 0.6, a: 1}
-  groundColor: {r: 0.5, g: 0.4, b: 0.33, a: 1}
+  biome: 3
+  time: 0
+  introCutscene: {fileID: 11400000, guid: 9945312db783a1e7295db878856bb97e, type: 2}
   introDialogue:
   - speaker: 4
     textKey: dlg.3_1.1
-  - speaker: 5
-    textKey: dlg.3_1.2
   - speaker: 1
+    textKey: dlg.3_1.2
+  - speaker: 2
     textKey: dlg.3_1.3
   outroDialogue: []
-  outroCutscene: {fileID: 0}
-  mode: 2
-  enemies:
-  - type: {fileID: 0}
-    x: 17
-    height: 0
-    maxHealth: 90
-    accuracy:
-      initialAngleError: 7
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.15
-  - type: {fileID: 0}
-    x: 24
-    height: 0
-    maxHealth: 90
-    accuracy:
-      initialAngleError: 7
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.15
+  outroCutscene: {fileID: 11400000, guid: f96242c1d3cafc4ceb36b0d019c39a4c, type: 2}
+  mode: 1
+  waves:
+  - enemies:
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 15
+      height: 0
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 20
+      height: 2
+    dialogue: []
+  - enemies:
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 14
+      height: 0
+    - type: {fileID: 11400000, guid: 62c9be1fad87a22e5ba4415894851627, type: 2}
+      x: 17
+      height: 0
+    - type: {fileID: 11400000, guid: 7a5f1e6216d8395c0bdef9747e3e5d12, type: 2}
+      x: 22
+      height: 3.5
+    dialogue:
+    - speaker: 13
+      textKey: dlg.3_1w2.1
   covers: []
   wind:
     strength: 0
     variance: 0
-  waves: []
-  palisadeLives: 3
-  surviveSeconds: 35
-  enemyFireInterval: 4
+  companion: 6
   targets: []
   arrowLimit: 5
   flight:
     length: 900
     speed: 14
-    obstacleDensity: 0.5
-    seed: 1
+    obstacleDensity: 0.55
+    seed: 1359
   stars:
     healthForSecondStar: 0.5
-    maxArrowsForThirdStar: 8
-  coinsPerStar: 10
+    maxArrowsForThirdStar: 12
+  coinsPerStar: 20
+  firstWinGems: 0

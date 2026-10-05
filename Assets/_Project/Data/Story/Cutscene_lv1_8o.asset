@@ -1,0 +1,175 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Cutscene_lv1_8o
+  m_EditorClassIdentifier: Arash.Runtime:Arash.Story:CutsceneDefinition
+  id: lv1_8o
+  titleKey: cut.lv1_8o.title
+  panels:
+  - biome: 1
+    time: 1
+    actors:
+    - look: 16
+      position: {x: 1.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 4
+      drift: {x: 0, y: 0}
+    - look: 7
+      position: {x: 3.5, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 5
+      drift: {x: 0.3, y: 0}
+    - look: 7
+      position: {x: 5, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 5
+      drift: {x: 0.3, y: 0}
+    - look: 10
+      position: {x: 6, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0.4, y: 0}
+    props:
+    - sprite: turan_shield
+      position: {x: 0.2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_turan
+      position: {x: 3, y: 0}
+      scale: 1
+      flip: 1
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.lv1_8o.1
+    duration: 7
+    cameraFrom: {x: 1, y: 2.6}
+    cameraTo: {x: 3, y: 2.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4
+  - biome: 1
+    time: 1
+    actors:
+    - look: 3
+      position: {x: 1.2, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 0
+      position: {x: -0.8, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    - look: 1
+      position: {x: -3, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: banner_iran
+      position: {x: 3, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: tent_iran
+      position: {x: -6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 4
+    captionKey: cut.lv1_8o.2
+    duration: 6.6
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3.2
+  - biome: 1
+    time: 2
+    actors:
+    - look: 1
+      position: {x: 1, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.5, y: 0}
+    - look: 0
+      position: {x: -1.5, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props: []
+    speaker: 2
+    captionKey: cut.lv1_8o.3
+    duration: 6.8
+    cameraFrom: {x: 0, y: 2.2}
+    cameraTo: {x: 0, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 1
+    time: 2
+    actors:
+    - look: 3
+      position: {x: 2, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.5, y: 0}
+    - look: 5
+      position: {x: 3.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.5, y: 0}
+    - look: 5
+      position: {x: 5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.5, y: 0}
+    - look: 5
+      position: {x: 6.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.5, y: 0}
+    props:
+    - sprite: banner_iran
+      position: {x: 4.2, y: 0}
+      scale: 1
+      flip: 1
+      drift: {x: -0.5, y: 0}
+      front: 0
+    - sprite: moon
+      position: {x: -2, y: 6}
+      scale: 0.8
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.lv1_8o.4
+    duration: 6.8
+    cameraFrom: {x: 2, y: 2.6}
+    cameraTo: {x: 0, y: 2.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4

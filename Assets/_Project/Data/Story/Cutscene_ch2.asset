@@ -15,18 +15,267 @@ MonoBehaviour:
   id: ch2
   titleKey: cut.ch2.title
   panels:
-  - motif: 2
+  - biome: 2
+    time: 0
+    actors:
+    - look: 3
+      position: {x: -1, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.4, y: 0}
+    - look: 5
+      position: {x: 0.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.4, y: 0}
+    - look: 5
+      position: {x: 2, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.4, y: 0}
+    - look: 5
+      position: {x: 3.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.4, y: 0}
+    - look: 0
+      position: {x: 5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.4, y: 0}
+    props:
+    - sprite: oak
+      position: {x: -6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: -3.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: oak
+      position: {x: 4.2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: 6.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_iran
+      position: {x: 1.2, y: 0}
+      scale: 1
+      flip: 1
+      drift: {x: -0.4, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.ch2.1
-    sky: {r: 0.62, g: 0.75, b: 0.68, a: 1}
-    land: {r: 0.28, g: 0.36, b: 0.22, a: 1}
-    duration: 6.5
-  - motif: 2
+    duration: 7.5
+    cameraFrom: {x: 1.5, y: 2.6}
+    cameraTo: {x: 0, y: 2.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4
+  - biome: 2
+    time: 2
+    actors:
+    - look: 5
+      position: {x: -2, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 2, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 3.4, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: tent_iran
+      position: {x: -5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: campfire
+      position: {x: 0, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cloud
+      position: {x: -3, y: 3}
+      scale: 1.2
+      flip: 0
+      drift: {x: 0.2, y: 0}
+      front: 0
+    - sprite: cloud
+      position: {x: 3, y: 3.6}
+      scale: 1.2
+      flip: 0
+      drift: {x: 0.2, y: 0}
+      front: 0
+    - sprite: oak
+      position: {x: 4.2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: 6.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.ch2.2
-    sky: {r: 0.25, g: 0.32, b: 0.42, a: 1}
-    land: {r: 0.28, g: 0.36, b: 0.22, a: 1}
-    duration: 6.5
-  - motif: 3
+    duration: 6.8
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3.6
+  - biome: 2
+    time: 2
+    actors:
+    - look: 5
+      position: {x: 0.8, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    - look: 0
+      position: {x: -1.4, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: campfire
+      position: {x: -0.3, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 1
+    speaker: 10
     captionKey: cut.ch2.3
-    sky: {r: 0.25, g: 0.32, b: 0.42, a: 1}
-    land: {r: 0.28, g: 0.36, b: 0.22, a: 1}
     duration: 6.5
+    cameraFrom: {x: 0, y: 2.2}
+    cameraTo: {x: 0, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 2
+    time: 2
+    actors:
+    - look: 1
+      position: {x: -0.5, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 1.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: campfire
+      position: {x: 3.2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: tent_iran
+      position: {x: -4.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 2
+    captionKey: cut.ch2.4
+    duration: 6.3
+    cameraFrom: {x: 0.3, y: 1.9}
+    cameraTo: {x: 0.3, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2
+  - biome: 2
+    time: 2
+    actors:
+    - look: 2
+      position: {x: 1.2, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 0
+      position: {x: -1.2, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: campfire
+      position: {x: 0, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 1
+    - sprite: moon
+      position: {x: 3, y: 5.5}
+      scale: 0.7
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 3
+    captionKey: cut.ch2.5
+    duration: 6.7
+    cameraFrom: {x: 0, y: 2.2}
+    cameraTo: {x: 0, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 2
+    time: 2
+    actors:
+    - look: 0
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 1
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: moon
+      position: {x: 2.5, y: 3.8}
+      scale: 0.6
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: oak
+      position: {x: -2.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 1
+    captionKey: cut.ch2.6
+    duration: 6.8
+    cameraFrom: {x: 0, y: 1.9}
+    cameraTo: {x: 0, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2

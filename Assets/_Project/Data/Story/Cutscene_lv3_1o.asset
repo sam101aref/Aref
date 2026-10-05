@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Cutscene_lv3_1o
+  m_EditorClassIdentifier: Arash.Runtime:Arash.Story:CutsceneDefinition
+  id: lv3_1o
+  titleKey: cut.lv3_1o.title
+  panels:
+  - biome: 3
+    time: 1
+    actors:
+    - look: 6
+      position: {x: 0.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 3
+      position: {x: -1.8, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: scroll
+      position: {x: 0.1, y: 1.2}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: tent_iran
+      position: {x: -5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_iran
+      position: {x: 3, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.lv3_1o.1
+    duration: 6.6
+    cameraFrom: {x: -0.5, y: 2.2}
+    cameraTo: {x: -0.5, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 3
+    time: 2
+    actors:
+    - look: 4
+      position: {x: 0.3, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 18
+      position: {x: -1.8, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: throne
+      position: {x: 1.1, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: tent_turan
+      position: {x: -5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_turan
+      position: {x: 4.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 5
+    captionKey: cut.lv3_1o.2
+    duration: 7.1
+    cameraFrom: {x: 0, y: 2.2}
+    cameraTo: {x: 0, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 3
+    time: 2
+    actors:
+    - look: 18
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: campfire
+      position: {x: 1.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 8
+    captionKey: cut.lv3_1o.3
+    duration: 6.3
+    cameraFrom: {x: 0.3, y: 1.9}
+    cameraTo: {x: 0.3, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2

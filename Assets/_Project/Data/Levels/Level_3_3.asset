@@ -16,49 +16,61 @@ MonoBehaviour:
   titleKey: level.3_3.title
   introKey: level.3_3.intro
   hintKey: 
-  skyColor: {r: 0.85, g: 0.7, b: 0.6, a: 1}
-  groundColor: {r: 0.5, g: 0.4, b: 0.33, a: 1}
-  introDialogue: []
+  biome: 3
+  time: 0
+  introCutscene: {fileID: 11400000, guid: aeffb87f67531d962a558ce12177c6ed, type: 2}
+  introDialogue:
+  - speaker: 2
+    textKey: dlg.3_3.1
+  - speaker: 1
+    textKey: dlg.3_3.2
   outroDialogue: []
   outroCutscene: {fileID: 0}
   mode: 0
-  enemies:
-  - type: {fileID: 11400000, guid: 7a5f1e6216d8395c0bdef9747e3e5d12, type: 2}
-    x: 24
-    height: 3.5
-    maxHealth: 100
-    accuracy:
-      initialAngleError: 7
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.25
-  - type: {fileID: 0}
-    x: 16
-    height: 0
-    maxHealth: 100
-    accuracy:
-      initialAngleError: 6
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.2
+  waves:
+  - enemies:
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 15
+      height: 0
+    - type: {fileID: 11400000, guid: 7a5f1e6216d8395c0bdef9747e3e5d12, type: 2}
+      x: 20
+      height: 3.5
+    dialogue: []
+  - enemies:
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 13
+      height: 0
+    - type: {fileID: 11400000, guid: 7a5f1e6216d8395c0bdef9747e3e5d12, type: 2}
+      x: 18
+      height: 2
+    - type: {fileID: 11400000, guid: 199eae426b09690c193704e0d1a6331e, type: 2}
+      x: 22
+      height: 0
+    dialogue: []
+  - enemies:
+    - type: {fileID: 11400000, guid: 7c818d2f67a60796393c5b2a2e680369, type: 2}
+      x: 16
+      height: 1
+    - type: {fileID: 11400000, guid: dad91a496f561d5f0a057a2e70a4595c, type: 2}
+      x: 21
+      height: 0
+    dialogue:
+    - speaker: 2
+      textKey: dlg.3_3w3.1
   covers: []
   wind:
     strength: -1.5
     variance: 1.5
-  waves: []
-  palisadeLives: 3
-  surviveSeconds: 30
-  enemyFireInterval: 4
+  companion: 6
   targets: []
   arrowLimit: 5
   flight:
     length: 900
     speed: 14
-    obstacleDensity: 0.5
-    seed: 1
+    obstacleDensity: 0.55
+    seed: 1359
   stars:
     healthForSecondStar: 0.5
-    maxArrowsForThirdStar: 5
-  coinsPerStar: 10
+    maxArrowsForThirdStar: 16
+  coinsPerStar: 20
+  firstWinGems: 0

@@ -16,59 +16,59 @@ MonoBehaviour:
   titleKey: level.3_6.title
   introKey: level.3_6.intro
   hintKey: 
-  skyColor: {r: 0.85, g: 0.7, b: 0.6, a: 1}
-  groundColor: {r: 0.5, g: 0.4, b: 0.33, a: 1}
-  introDialogue: []
+  biome: 3
+  time: 0
+  introCutscene: {fileID: 11400000, guid: 4ffe2f430305071e79fd97fbd39029e3, type: 2}
+  introDialogue:
+  - speaker: 2
+    textKey: dlg.3_6.1
+  - speaker: 1
+    textKey: dlg.3_6.2
   outroDialogue: []
   outroCutscene: {fileID: 0}
   mode: 0
-  enemies:
-  - type: {fileID: 11400000, guid: db67f8b91da48b85991b304d34e126e3, type: 2}
-    x: 15
-    height: 0
-    maxHealth: 100
-    accuracy:
-      initialAngleError: 7
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.25
-  - type: {fileID: 11400000, guid: db67f8b91da48b85991b304d34e126e3, type: 2}
-    x: 21
-    height: 0
-    maxHealth: 100
-    accuracy:
-      initialAngleError: 7
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.25
-  - type: {fileID: 11400000, guid: 199eae426b09690c193704e0d1a6331e, type: 2}
-    x: 27
-    height: 2
-    maxHealth: 100
-    accuracy:
-      initialAngleError: 7
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.25
+  waves:
+  - enemies:
+    - type: {fileID: 11400000, guid: db67f8b91da48b85991b304d34e126e3, type: 2}
+      x: 13
+      height: 0
+    - type: {fileID: 11400000, guid: db67f8b91da48b85991b304d34e126e3, type: 2}
+      x: 17
+      height: 0
+    - type: {fileID: 11400000, guid: 199eae426b09690c193704e0d1a6331e, type: 2}
+      x: 21
+      height: 2
+    dialogue: []
+  - enemies:
+    - type: {fileID: 11400000, guid: 3db9446ceab1a889cb5d9ae8c014a296, type: 2}
+      x: 22
+      height: 3.5
+    - type: {fileID: 11400000, guid: db67f8b91da48b85991b304d34e126e3, type: 2}
+      x: 15
+      height: 0
+    - type: {fileID: 11400000, guid: 7a5f1e6216d8395c0bdef9747e3e5d12, type: 2}
+      x: 19
+      height: 2
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 23
+      height: 0
+    dialogue:
+    - speaker: 2
+      textKey: dlg.3_6w2.1
   covers: []
   wind:
     strength: 0
     variance: 0
-  waves: []
-  palisadeLives: 3
-  surviveSeconds: 30
-  enemyFireInterval: 4
+  companion: 6
   targets: []
   arrowLimit: 5
   flight:
     length: 900
     speed: 14
-    obstacleDensity: 0.5
-    seed: 1
+    obstacleDensity: 0.55
+    seed: 1359
   stars:
     healthForSecondStar: 0.5
-    maxArrowsForThirdStar: 6
-  coinsPerStar: 10
+    maxArrowsForThirdStar: 16
+  coinsPerStar: 20
+  firstWinGems: 0

@@ -16,21 +16,25 @@ MonoBehaviour:
   titleKey: level.1_7.title
   introKey: level.1_7.intro
   hintKey: level.1_7.hint
-  skyColor: {r: 0.97, g: 0.75, b: 0.5, a: 1}
-  groundColor: {r: 0.6, g: 0.5, b: 0.32, a: 1}
-  introDialogue: []
-  outroDialogue: []
+  biome: 1
+  time: 0
+  introCutscene: {fileID: 11400000, guid: 46a2bcea738c2f30d9cc1c679c70bd21, type: 2}
+  introDialogue:
+  - speaker: 4
+    textKey: dlg.1_7.1
+  - speaker: 2
+    textKey: dlg.1_7.2
+  outroDialogue:
+  - speaker: 4
+    textKey: dlg.1_7o.1
   outroCutscene: {fileID: 0}
-  mode: 3
-  enemies: []
+  mode: 2
+  waves: []
   covers: []
   wind:
     strength: 0
     variance: 0
-  waves: []
-  palisadeLives: 3
-  surviveSeconds: 30
-  enemyFireInterval: 4
+  companion: 6
   targets:
   - kind: 0
     position: {x: 10, y: 0.8}
@@ -56,9 +60,10 @@ MonoBehaviour:
   flight:
     length: 900
     speed: 14
-    obstacleDensity: 0.5
-    seed: 1
+    obstacleDensity: 0.55
+    seed: 1359
   stars:
     healthForSecondStar: 0.5
-    maxArrowsForThirdStar: 5
-  coinsPerStar: 10
+    maxArrowsForThirdStar: 6
+  coinsPerStar: 15
+  firstWinGems: 0

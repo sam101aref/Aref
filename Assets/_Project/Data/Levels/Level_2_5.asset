@@ -16,49 +16,58 @@ MonoBehaviour:
   titleKey: level.2_5.title
   introKey: level.2_5.intro
   hintKey: level.2_5.hint
-  skyColor: {r: 0.25, g: 0.32, b: 0.42, a: 1}
-  groundColor: {r: 0.28, g: 0.36, b: 0.22, a: 1}
-  introDialogue: []
+  biome: 2
+  time: 2
+  introCutscene: {fileID: 11400000, guid: 25561c85fa475dda39fe6be7933e148a, type: 2}
+  introDialogue:
+  - speaker: 2
+    textKey: dlg.2_5.1
+  - speaker: 1
+    textKey: dlg.2_5.2
   outroDialogue: []
   outroCutscene: {fileID: 0}
   mode: 0
-  enemies:
-  - type: {fileID: 11400000, guid: 199eae426b09690c193704e0d1a6331e, type: 2}
-    x: 16
-    height: 0
-    maxHealth: 100
-    accuracy:
-      initialAngleError: 7
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.25
-  - type: {fileID: 0}
-    x: 24
-    height: 0
-    maxHealth: 100
-    accuracy:
-      initialAngleError: 6
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.2
+  waves:
+  - enemies:
+    - type: {fileID: 11400000, guid: 199eae426b09690c193704e0d1a6331e, type: 2}
+      x: 14
+      height: 0
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 19
+      height: 2
+    dialogue: []
+  - enemies:
+    - type: {fileID: 11400000, guid: 199eae426b09690c193704e0d1a6331e, type: 2}
+      x: 16
+      height: 0
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 21
+      height: 0
+    - type: {fileID: 11400000, guid: 7a5f1e6216d8395c0bdef9747e3e5d12, type: 2}
+      x: 23
+      height: 3.5
+    dialogue: []
+  - enemies:
+    - type: {fileID: 11400000, guid: 055bff13f88d387f894690984d6f41df, type: 2}
+      x: 20
+      height: 0
+    dialogue:
+    - speaker: 2
+      textKey: dlg.2_5w3.1
   covers: []
   wind:
     strength: 0
     variance: 0
-  waves: []
-  palisadeLives: 3
-  surviveSeconds: 30
-  enemyFireInterval: 4
+  companion: 6
   targets: []
   arrowLimit: 5
   flight:
     length: 900
     speed: 14
-    obstacleDensity: 0.5
-    seed: 1
+    obstacleDensity: 0.55
+    seed: 1359
   stars:
     healthForSecondStar: 0.5
-    maxArrowsForThirdStar: 5
-  coinsPerStar: 10
+    maxArrowsForThirdStar: 14
+  coinsPerStar: 15
+  firstWinGems: 0

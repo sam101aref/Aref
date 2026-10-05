@@ -16,39 +16,55 @@ MonoBehaviour:
   titleKey: level.4_3.title
   introKey: level.4_3.intro
   hintKey: level.4_3.hint
-  skyColor: {r: 0.72, g: 0.8, b: 0.9, a: 1}
-  groundColor: {r: 0.82, g: 0.84, b: 0.88, a: 1}
-  introDialogue: []
+  biome: 4
+  time: 0
+  introCutscene: {fileID: 11400000, guid: b7b2382c572dcbaad8c4b6840911bce2, type: 2}
+  introDialogue:
+  - speaker: 2
+    textKey: dlg.4_3.1
+  - speaker: 1
+    textKey: dlg.4_3.2
   outroDialogue: []
   outroCutscene: {fileID: 0}
   mode: 0
-  enemies:
-  - type: {fileID: 11400000, guid: 8a5373271ad632cb4aac3e1b9c8ccca6, type: 2}
-    x: 22
-    height: 2
-    maxHealth: 100
-    accuracy:
-      initialAngleError: 7
-      minAngleError: 0.6
-      decayPerMiss: 0.6
-      powerErrorPerDegree: 0.015
-      headshotChance: 0.25
+  waves:
+  - enemies:
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 14
+      height: 0
+    - type: {fileID: 11400000, guid: 7a5f1e6216d8395c0bdef9747e3e5d12, type: 2}
+      x: 19
+      height: 3
+    dialogue: []
+  - enemies:
+    - type: {fileID: 11400000, guid: 8a5373271ad632cb4aac3e1b9c8ccca6, type: 2}
+      x: 21
+      height: 2
+    dialogue:
+    - speaker: 2
+      textKey: dlg.4_3w2.1
+  - enemies:
+    - type: {fileID: 11400000, guid: 199eae426b09690c193704e0d1a6331e, type: 2}
+      x: 15
+      height: 0
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 22
+      height: 3.5
+    dialogue: []
   covers: []
   wind:
     strength: 0
     variance: 0
-  waves: []
-  palisadeLives: 3
-  surviveSeconds: 30
-  enemyFireInterval: 4
+  companion: 6
   targets: []
   arrowLimit: 5
   flight:
     length: 900
     speed: 14
-    obstacleDensity: 0.5
-    seed: 1
+    obstacleDensity: 0.55
+    seed: 1359
   stars:
     healthForSecondStar: 0.5
-    maxArrowsForThirdStar: 4
-  coinsPerStar: 10
+    maxArrowsForThirdStar: 12
+  coinsPerStar: 20
+  firstWinGems: 0

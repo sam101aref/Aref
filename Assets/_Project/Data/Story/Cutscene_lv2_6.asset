@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Cutscene_lv2_6
+  m_EditorClassIdentifier: Arash.Runtime:Arash.Story:CutsceneDefinition
+  id: lv2_6
+  titleKey: cut.lv2_6.title
+  panels:
+  - biome: 2
+    time: 0
+    actors:
+    - look: 0
+      position: {x: -1.5, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 5
+      drift: {x: 0.3, y: 0}
+    - look: 1
+      position: {x: -3, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 5
+      drift: {x: 0.3, y: 0}
+    props:
+    - sprite: oak
+      position: {x: -6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: -3.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: oak
+      position: {x: 4.2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: 6.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.lv2_6.1
+    duration: 6.7
+    cameraFrom: {x: -1.5, y: 2.6}
+    cameraTo: {x: 0, y: 2.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4
+  - biome: 2
+    time: 0
+    actors:
+    - look: 1
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 1
+      drift: {x: 0, y: 0}
+    - look: 13
+      position: {x: 5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.4, y: 0}
+    props:
+    - sprite: oak
+      position: {x: 4, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: 6.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 2
+    captionKey: cut.lv2_6.2
+    duration: 6.4
+    cameraFrom: {x: 0.5, y: 2.6}
+    cameraTo: {x: 2, y: 2.6}
+    zoomFrom: 3.4
+    zoomTo: 3.4
+  - biome: 2
+    time: 0
+    actors:
+    - look: 0
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 1
+      drift: {x: 0, y: 0}
+    - look: 1
+      position: {x: -1.8, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 1
+      drift: {x: 0, y: 0}
+    props: []
+    speaker: 1
+    captionKey: cut.lv2_6.3
+    duration: 6.4
+    cameraFrom: {x: -0.4, y: 1.9}
+    cameraTo: {x: -0.4, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2

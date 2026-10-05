@@ -240,6 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a870b0f40ebb2a8418c66f862d532dca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteMaterial: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
 --- !u!4 &974794020
 Transform:
   m_ObjectHideFlags: 0

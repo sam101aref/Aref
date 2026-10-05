@@ -15,18 +15,243 @@ MonoBehaviour:
   id: ch3
   titleKey: cut.ch3.title
   panels:
-  - motif: 3
+  - biome: 0
+    time: 0
+    actors:
+    - look: 5
+      position: {x: -2, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 2.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: house
+      position: {x: -4.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: house
+      position: {x: 4.8, y: 0}
+      scale: 1
+      flip: 1
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: 0.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: sun
+      position: {x: -3, y: 6}
+      scale: 0.8
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.ch3.1
-    sky: {r: 0.85, g: 0.7, b: 0.6, a: 1}
-    land: {r: 0.5, g: 0.4, b: 0.33, a: 1}
-    duration: 6.5
-  - motif: 1
+    duration: 7
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3.6
+  - biome: 3
+    time: 2
+    actors:
+    - look: 4
+      position: {x: 0.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 18
+      position: {x: -1.8, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: throne
+      position: {x: 1.4, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_turan
+      position: {x: 3.2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: tent_turan
+      position: {x: -5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: campfire
+      position: {x: -0.6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 1
+    speaker: 5
     captionKey: cut.ch3.2
-    sky: {r: 0.85, g: 0.7, b: 0.6, a: 1}
-    land: {r: 0.5, g: 0.4, b: 0.33, a: 1}
-    duration: 6.5
-  - motif: 3
+    duration: 7
+    cameraFrom: {x: 0, y: 2.2}
+    cameraTo: {x: 0, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 3
+    time: 2
+    actors:
+    - look: 4
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: throne
+      position: {x: 0.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: campfire
+      position: {x: 2.2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 5
     captionKey: cut.ch3.3
-    sky: {r: 0.95, g: 0.66, b: 0.45, a: 1}
-    land: {r: 0.5, g: 0.4, b: 0.33, a: 1}
-    duration: 6.5
+    duration: 8
+    cameraFrom: {x: 0.2, y: 1.9}
+    cameraTo: {x: 0.2, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2
+  - biome: 3
+    time: 0
+    actors:
+    - look: 3
+      position: {x: -0.5, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 6
+      position: {x: 1.8, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: throne
+      position: {x: -0.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_iran
+      position: {x: -3, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: tent_iran
+      position: {x: 5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: scroll
+      position: {x: 1.4, y: 1.2}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 4
+    captionKey: cut.ch3.4
+    duration: 6.4
+    cameraFrom: {x: 0, y: 2.2}
+    cameraTo: {x: 0, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 3
+    time: 0
+    actors:
+    - look: 2
+      position: {x: 0.3, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: cypress
+      position: {x: 2.4, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: sun
+      position: {x: -2, y: 3.6}
+      scale: 0.6
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 3
+    captionKey: cut.ch3.5
+    duration: 7
+    cameraFrom: {x: 0.3, y: 1.9}
+    cameraTo: {x: 0.3, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2
+  - biome: 3
+    time: 2
+    actors:
+    - look: 18
+      position: {x: 0, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 13
+      position: {x: 2, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 15
+      position: {x: 3.6, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: tent_turan
+      position: {x: 5.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: moon
+      position: {x: -3, y: 5.8}
+      scale: 0.7
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 8
+    captionKey: cut.ch3.6
+    duration: 7.1
+    cameraFrom: {x: 1, y: 2.6}
+    cameraTo: {x: 1, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3

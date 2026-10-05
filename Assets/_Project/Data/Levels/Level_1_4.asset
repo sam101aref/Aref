@@ -16,47 +16,67 @@ MonoBehaviour:
   titleKey: level.1_4.title
   introKey: level.1_4.intro
   hintKey: level.1_4.hint
-  skyColor: {r: 0.97, g: 0.75, b: 0.5, a: 1}
-  groundColor: {r: 0.6, g: 0.5, b: 0.32, a: 1}
-  introDialogue: []
+  biome: 1
+  time: 1
+  introCutscene: {fileID: 11400000, guid: ec972426ce4e4b5dba2c9608b4187d38, type: 2}
+  introDialogue:
+  - speaker: 10
+    textKey: dlg.1_4.1
+  - speaker: 1
+    textKey: dlg.1_4.2
   outroDialogue: []
   outroCutscene: {fileID: 0}
-  mode: 1
-  enemies: []
-  covers: []
+  mode: 0
+  waves:
+  - enemies:
+    - type: {fileID: 11400000, guid: 055bff13f88d387f894690984d6f41df, type: 2}
+      x: 20
+      height: 0
+    - type: {fileID: 11400000, guid: 055bff13f88d387f894690984d6f41df, type: 2}
+      x: 23
+      height: 0
+    dialogue:
+    - speaker: 2
+      textKey: dlg.1_4w1.1
+  - enemies:
+    - type: {fileID: 11400000, guid: 07f651720559e96f59d1868c61dab472, type: 2}
+      x: 14
+      height: 2
+    - type: {fileID: 11400000, guid: 055bff13f88d387f894690984d6f41df, type: 2}
+      x: 21
+      height: 0
+    dialogue: []
+  - enemies:
+    - type: {fileID: 11400000, guid: 62c9be1fad87a22e5ba4415894851627, type: 2}
+      x: 16
+      height: 0
+    - type: {fileID: 11400000, guid: 055bff13f88d387f894690984d6f41df, type: 2}
+      x: 19
+      height: 0
+    - type: {fileID: 11400000, guid: 055bff13f88d387f894690984d6f41df, type: 2}
+      x: 23
+      height: 0
+    dialogue:
+    - speaker: 10
+      textKey: dlg.1_4w3.1
+  covers:
+  - x: 4
+    width: 0.6
+    height: 1.6
+    flammable: 1
   wind:
     strength: 0
     variance: 0
-  waves:
-  - count: 3
-    interval: 3
-    startDelay: 2
-    speed: 1.3
-    health: 40
-    mounted: 0
-  - count: 4
-    interval: 2.6
-    startDelay: 2
-    speed: 1.4
-    health: 40
-    mounted: 0
-  - count: 5
-    interval: 2.2
-    startDelay: 2
-    speed: 1.5
-    health: 40
-    mounted: 0
-  palisadeLives: 3
-  surviveSeconds: 30
-  enemyFireInterval: 4
+  companion: 6
   targets: []
   arrowLimit: 5
   flight:
     length: 900
     speed: 14
-    obstacleDensity: 0.5
-    seed: 1
+    obstacleDensity: 0.55
+    seed: 1359
   stars:
     healthForSecondStar: 0.5
-    maxArrowsForThirdStar: 14
-  coinsPerStar: 10
+    maxArrowsForThirdStar: 16
+  coinsPerStar: 15
+  firstWinGems: 0

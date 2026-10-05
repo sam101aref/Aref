@@ -10,14 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef4b6984eba5b6133bef212b0e7913d0, type: 3}
-  m_Name: WhiteDiv
+  m_Name: 
   m_EditorClassIdentifier: 
-  nameKey: 
-  maxHealth: 450
+  nameKey: enemy.whitediv
+  look: 20
+  role: 0
+  maxHealth: 500
+  boss: 1
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  scale: 2.2
   accuracy:
     initialAngleError: 7
-    minAngleError: 0.6
-    decayPerMiss: 0.6
+    minAngleError: 1.8
+    decayPerMiss: 0.75
     powerErrorPerDegree: 0.015
     headshotChance: 0
   tactics:
@@ -36,13 +41,18 @@ MonoBehaviour:
       shotsPerTurn: 3
       repositionRange: 0
       announceKey: boss.4.phase2
-  tint: {r: 0.95, g: 0.97, b: 1, a: 1}
-  scale: 2.2
-  projectile: {fileID: 865981431833313454, guid: cba7d8225a5d2da8a9b38b29e9665051, type: 3}
+  cooldown: {x: 3.6, y: 5.2}
+  projectile: {fileID: 6110886977214027570, guid: cba7d8225a5d2da8a9b38b29e9665051, type: 3}
+  damage: 50
   minSpeed: 10
   maxSpeed: 24
   gravityScale: 1.2
   windScale: 0.2
   shield: 0
+  mounted: 0
   patrolRange: 0
   patrolSpeed: 2.5
+  runSpeed: 2.2
+  meleeDamage: 12
+  castInterval: 6
+  shieldStrength: 80

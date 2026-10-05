@@ -15,23 +15,384 @@ MonoBehaviour:
   id: ending
   titleKey: cut.ending.title
   panels:
-  - motif: 7
+  - biome: 4
+    time: 0
+    actors: []
+    props:
+    - sprite: damavand
+      position: {x: -3, y: 0}
+      scale: 0.7
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: simurgh
+      position: {x: -2, y: 5.2}
+      scale: 0.8
+      flip: 0
+      drift: {x: 1.4, y: 0}
+      front: 0
+    - sprite: cloud
+      position: {x: 2, y: 4.4}
+      scale: 1
+      flip: 0
+      drift: {x: 0.6, y: 0}
+      front: 0
+    - sprite: sun
+      position: {x: 4, y: 6.4}
+      scale: 0.9
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.ending.1
-    sky: {r: 0.45, g: 0.7, b: 0.95, a: 1}
-    land: {r: 0.45, g: 0.55, b: 0.3, a: 1}
-    duration: 6.5
-  - motif: 5
+    duration: 7
+    cameraFrom: {x: -1, y: 2.6}
+    cameraTo: {x: 2, y: 2.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4
+  - biome: 6
+    time: 0
+    actors: []
+    props:
+    - sprite: sun
+      position: {x: 0, y: 6.5}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: oak
+      position: {x: -5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: 5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.ending.2
-    sky: {r: 0.95, g: 0.66, b: 0.45, a: 1}
-    land: {r: 0.82, g: 0.84, b: 0.88, a: 1}
-    duration: 6.5
-  - motif: 1
+    duration: 6.8
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3.4
+  - biome: 6
+    time: 0
+    actors:
+    - look: 4
+      position: {x: 0.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    - look: 18
+      position: {x: 2.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 7
+      position: {x: 4, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: banner_turan
+      position: {x: 5.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 5
     captionKey: cut.ending.3
-    sky: {r: 0.98, g: 0.82, b: 0.55, a: 1}
-    land: {r: 0.55, g: 0.43, b: 0.28, a: 1}
-    duration: 6.5
-  - motif: 8
+    duration: 8
+    cameraFrom: {x: 1, y: 2.2}
+    cameraTo: {x: 1, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 5
+    time: 0
+    actors:
+    - look: 2
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: sun
+      position: {x: 3, y: 5}
+      scale: 0.8
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cloud
+      position: {x: -3, y: 4.5}
+      scale: 1
+      flip: 0
+      drift: {x: 0.2, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.ending.4
-    sky: {r: 0.25, g: 0.32, b: 0.42, a: 1}
-    land: {r: 0.55, g: 0.43, b: 0.28, a: 1}
-    duration: 6.5
+    duration: 7.1
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3
+  - biome: 5
+    time: 1
+    actors:
+    - look: 1
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: sun
+      position: {x: 3, y: 3.6}
+      scale: 0.7
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: simurgh
+      position: {x: -2, y: 3.8}
+      scale: 0.4
+      flip: 0
+      drift: {x: 0.5, y: 0}
+      front: 0
+    speaker: 2
+    captionKey: cut.ending.5
+    duration: 6.2
+    cameraFrom: {x: 0, y: 1.9}
+    cameraTo: {x: 0, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2
+  - biome: 3
+    time: 0
+    actors:
+    - look: 3
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 2
+      position: {x: -1.6, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 1
+      position: {x: 1.6, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: -4, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: -5.3, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 4.2, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 5.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: banner_iran
+      position: {x: -2.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_iran
+      position: {x: 2.8, y: 0}
+      scale: 1
+      flip: 1
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: damavand
+      position: {x: 0, y: 0}
+      scale: 0.6
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 4
+    captionKey: cut.ending.6
+    duration: 6.8
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.5}
+    zoomFrom: 4.4
+    zoomTo: 4
+  - biome: 0
+    time: 2
+    actors:
+    - look: 5
+      position: {x: -3, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: -1.5, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 2, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 3.5, y: 0}
+      facingRight: 0
+      scale: 0.7
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: campfire
+      position: {x: 0.3, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: house
+      position: {x: -6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: house
+      position: {x: 6, y: 0}
+      scale: 1
+      flip: 1
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: lantern
+      position: {x: -2.4, y: 3.5}
+      scale: 0.7
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: lantern
+      position: {x: 2.8, y: 3.8}
+      scale: 0.7
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: moon
+      position: {x: 0, y: 6.2}
+      scale: 0.8
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.ending.7
+    duration: 8
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.5}
+    zoomFrom: 4.4
+    zoomTo: 4
+  - biome: 0
+    time: 0
+    actors:
+    - look: 5
+      position: {x: -0.5, y: 0}
+      facingRight: 1
+      scale: 0.7
+      pose: 1
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 1, y: 0}
+      facingRight: 1
+      scale: 0.65
+      pose: 1
+      drift: {x: 0, y: 0}
+    - look: 1
+      position: {x: -2.4, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: target
+      position: {x: 4.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: 6.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: house
+      position: {x: -6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 2
+    captionKey: cut.ending.8
+    duration: 8
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3.4
+  - biome: 4
+    time: 1
+    actors: []
+    props:
+    - sprite: damavand
+      position: {x: 0, y: 0}
+      scale: 1.2
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: sun
+      position: {x: 4, y: 4.8}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: simurgh
+      position: {x: -4, y: 6}
+      scale: 0.6
+      flip: 0
+      drift: {x: 0.5, y: 0}
+      front: 0
+    - sprite: cloud
+      position: {x: -2, y: 5}
+      scale: 1
+      flip: 0
+      drift: {x: 0.3, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.ending.9
+    duration: 8
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 3.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4

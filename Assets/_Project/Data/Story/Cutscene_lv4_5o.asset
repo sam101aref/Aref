@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Cutscene_lv4_5o
+  m_EditorClassIdentifier: Arash.Runtime:Arash.Story:CutsceneDefinition
+  id: lv4_5o
+  titleKey: cut.lv4_5o.title
+  panels:
+  - biome: 4
+    time: 2
+    actors:
+    - look: 1
+      position: {x: 0.8, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 0
+      position: {x: -1.4, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: campfire
+      position: {x: 2.6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: moon
+      position: {x: -3, y: 5.5}
+      scale: 0.7
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 2
+    captionKey: cut.lv4_5o.1
+    duration: 6.4
+    cameraFrom: {x: 0, y: 2.2}
+    cameraTo: {x: 0, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 4
+    time: 2
+    actors:
+    - look: 0
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 1
+      position: {x: 2.2, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props: []
+    speaker: 1
+    captionKey: cut.lv4_5o.2
+    duration: 5.5
+    cameraFrom: {x: 0.3, y: 1.9}
+    cameraTo: {x: 0.3, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2
+  - biome: 4
+    time: 2
+    actors:
+    - look: 1
+      position: {x: 0, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 0
+      position: {x: -2.2, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props: []
+    speaker: 2
+    captionKey: cut.lv4_5o.3
+    duration: 5.9
+    cameraFrom: {x: -0.3, y: 1.9}
+    cameraTo: {x: -0.3, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2
+  - biome: 4
+    time: 2
+    actors:
+    - look: 1
+      position: {x: -3, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 0
+      position: {x: 1.5, y: 0}
+      facingRight: 1
+      scale: 0.7
+      pose: 5
+      drift: {x: 0.5, y: 0}
+    - look: 2
+      position: {x: 0.3, y: 0}
+      facingRight: 1
+      scale: 0.7
+      pose: 5
+      drift: {x: 0.5, y: 0}
+    props:
+    - sprite: damavand
+      position: {x: 3, y: 0}
+      scale: 0.8
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: moon
+      position: {x: 3, y: 6.2}
+      scale: 0.8
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.lv4_5o.4
+    duration: 6.9
+    cameraFrom: {x: -1, y: 2.6}
+    cameraTo: {x: -1, y: 2.5}
+    zoomFrom: 4.4
+    zoomTo: 4

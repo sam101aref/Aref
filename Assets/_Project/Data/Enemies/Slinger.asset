@@ -10,14 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef4b6984eba5b6133bef212b0e7913d0, type: 3}
-  m_Name: Slinger
+  m_Name: 
   m_EditorClassIdentifier: 
-  nameKey: 
+  nameKey: enemy.slinger
+  look: 11
+  role: 0
   maxHealth: 70
+  boss: 0
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  scale: 1
   accuracy:
-    initialAngleError: 6
-    minAngleError: 0.6
-    decayPerMiss: 0.6
+    initialAngleError: 7
+    minAngleError: 1.8
+    decayPerMiss: 0.75
     powerErrorPerDegree: 0.015
     headshotChance: 0.3
   tactics:
@@ -26,13 +31,18 @@ MonoBehaviour:
     volleySpread: 4
     repositionRange: 0
     phases: []
-  tint: {r: 0.7, g: 0.75, b: 0.6, a: 1}
-  scale: 1
-  projectile: {fileID: 4210501849981957846, guid: 2a61ca935e8e1d0f3978b620f27dfb4d, type: 3}
+  cooldown: {x: 3, y: 5}
+  projectile: {fileID: 5181035076090752016, guid: 2a61ca935e8e1d0f3978b620f27dfb4d, type: 3}
+  damage: 30
   minSpeed: 10
   maxSpeed: 24
   gravityScale: 1
   windScale: 1
   shield: 0
+  mounted: 0
   patrolRange: 0
   patrolSpeed: 2.5
+  runSpeed: 2.2
+  meleeDamage: 12
+  castInterval: 6
+  shieldStrength: 80

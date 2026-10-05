@@ -1,0 +1,152 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Cutscene_lv1_4
+  m_EditorClassIdentifier: Arash.Runtime:Arash.Story:CutsceneDefinition
+  id: lv1_4
+  titleKey: cut.lv1_4.title
+  panels:
+  - biome: 1
+    time: 1
+    actors:
+    - look: 5
+      position: {x: -4, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: -2.8, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: -5.3, y: 0}
+      facingRight: 1
+      scale: 0.7
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: house
+      position: {x: -6.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: pavise_wood
+      position: {x: 0, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: pavise_wood
+      position: {x: 0.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: pavise_wood
+      position: {x: 1.6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: campfire
+      position: {x: -3.4, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 1
+    - sprite: sun
+      position: {x: 4, y: 4.5}
+      scale: 0.9
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.lv1_4.1
+    duration: 6.6
+    cameraFrom: {x: -2, y: 2.6}
+    cameraTo: {x: -2, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3.6
+  - biome: 1
+    time: 1
+    actors:
+    - look: 1
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 14
+      position: {x: 4, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.8, y: 0}
+    - look: 14
+      position: {x: 5.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.8, y: 0}
+    - look: 14
+      position: {x: 7, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 5
+      drift: {x: -0.8, y: 0}
+    props: []
+    speaker: 2
+    captionKey: cut.lv1_4.2
+    duration: 6.1
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 2, y: 2.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4
+  - biome: 1
+    time: 1
+    actors:
+    - look: 0
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 1
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: -2.2, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: pavise_wood
+      position: {x: 1.6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: house
+      position: {x: -4.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 1
+    captionKey: cut.lv1_4.3
+    duration: 6
+    cameraFrom: {x: 0, y: 1.9}
+    cameraTo: {x: 0, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2

@@ -10,29 +10,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef4b6984eba5b6133bef212b0e7913d0, type: 3}
-  m_Name: Assassin
+  m_Name: 
   m_EditorClassIdentifier: 
-  nameKey: 
+  nameKey: enemy.assassin
+  look: 13
+  role: 0
   maxHealth: 60
+  boss: 0
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  scale: 1
   accuracy:
-    initialAngleError: 5
-    minAngleError: 0.6
-    decayPerMiss: 0.6
+    initialAngleError: 6
+    minAngleError: 1.4
+    decayPerMiss: 0.75
     powerErrorPerDegree: 0.015
-    headshotChance: 0.4
+    headshotChance: 0.45
   tactics:
     highArc: 0
     shotsPerTurn: 1
     volleySpread: 4
     repositionRange: 4
     phases: []
-  tint: {r: 0.35, g: 0.35, b: 0.4, a: 1}
-  scale: 1
+  cooldown: {x: 2.5, y: 4}
   projectile: {fileID: 0}
+  damage: 25
   minSpeed: 8
   maxSpeed: 28
   gravityScale: 1
   windScale: 1
   shield: 0
+  mounted: 0
   patrolRange: 0
   patrolSpeed: 2.5
+  runSpeed: 2.2
+  meleeDamage: 12
+  castInterval: 6
+  shieldStrength: 80

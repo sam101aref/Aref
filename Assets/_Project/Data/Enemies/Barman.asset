@@ -10,14 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef4b6984eba5b6133bef212b0e7913d0, type: 3}
-  m_Name: Barman
+  m_Name: 
   m_EditorClassIdentifier: 
-  nameKey: 
-  maxHealth: 250
+  nameKey: enemy.barman
+  look: 17
+  role: 0
+  maxHealth: 280
+  boss: 1
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  scale: 1.15
   accuracy:
     initialAngleError: 6
-    minAngleError: 0.6
-    decayPerMiss: 0.6
+    minAngleError: 1.5
+    decayPerMiss: 0.75
     powerErrorPerDegree: 0.015
     headshotChance: 0.3
   tactics:
@@ -31,13 +36,18 @@ MonoBehaviour:
       shotsPerTurn: 3
       repositionRange: 0
       announceKey: boss.2.phase
-  tint: {r: 0.65, g: 0.5, b: 0.5, a: 1}
-  scale: 1.15
+  cooldown: {x: 3, y: 4.5}
   projectile: {fileID: 0}
+  damage: 28
   minSpeed: 8
   maxSpeed: 28
   gravityScale: 1
   windScale: 1
   shield: 0
+  mounted: 0
   patrolRange: 0
   patrolSpeed: 2.5
+  runSpeed: 2.2
+  meleeDamage: 12
+  castInterval: 6
+  shieldStrength: 80

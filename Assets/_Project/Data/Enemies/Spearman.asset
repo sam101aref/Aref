@@ -10,14 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef4b6984eba5b6133bef212b0e7913d0, type: 3}
-  m_Name: Spearman
+  m_Name: 
   m_EditorClassIdentifier: 
-  nameKey: 
+  nameKey: enemy.spearman
+  look: 9
+  role: 0
   maxHealth: 100
+  boss: 0
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  scale: 1
   accuracy:
     initialAngleError: 9
-    minAngleError: 0.6
-    decayPerMiss: 0.6
+    minAngleError: 2.2
+    decayPerMiss: 0.75
     powerErrorPerDegree: 0.015
     headshotChance: 0.1
   tactics:
@@ -26,13 +31,18 @@ MonoBehaviour:
     volleySpread: 4
     repositionRange: 0
     phases: []
-  tint: {r: 0.85, g: 0.75, b: 0.6, a: 1}
-  scale: 1
-  projectile: {fileID: 441511165917670938, guid: 1600bd33fc30ea2e7ad54b28857a2228, type: 3}
+  cooldown: {x: 3.5, y: 5.5}
+  projectile: {fileID: 7410595765164692335, guid: 1600bd33fc30ea2e7ad54b28857a2228, type: 3}
+  damage: 35
   minSpeed: 8
   maxSpeed: 21
   gravityScale: 1.3
   windScale: 0.5
   shield: 0
+  mounted: 0
   patrolRange: 0
   patrolSpeed: 2.5
+  runSpeed: 2.2
+  meleeDamage: 12
+  castInterval: 6
+  shieldStrength: 80

@@ -15,23 +15,326 @@ MonoBehaviour:
   id: prologue
   titleKey: cut.prologue.title
   panels:
-  - motif: 1
+  - biome: 1
+    time: 1
+    actors:
+    - look: 7
+      position: {x: 2.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 7
+      position: {x: 4, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 7
+      position: {x: 5.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 10
+      position: {x: 6, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: banner_turan
+      position: {x: 3.2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_iran
+      position: {x: -4.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: tent_iran
+      position: {x: -6.2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: sun
+      position: {x: -3, y: 6}
+      scale: 0.8
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.prologue.1
-    sky: {r: 0.95, g: 0.66, b: 0.45, a: 1}
-    land: {r: 0.55, g: 0.43, b: 0.28, a: 1}
-    duration: 6.5
-  - motif: 3
+    duration: 7
+    cameraFrom: {x: -1.5, y: 2.6}
+    cameraTo: {x: 1.5, y: 2.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4
+  - biome: 1
+    time: 2
+    actors:
+    - look: 4
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 7
+      position: {x: -3, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 7
+      position: {x: 3, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: throne
+      position: {x: 0, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: tent_turan
+      position: {x: -5.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_turan
+      position: {x: 4.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: campfire
+      position: {x: 2, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 1
+    speaker: 0
     captionKey: cut.prologue.2
-    sky: {r: 0.25, g: 0.32, b: 0.42, a: 1}
-    land: {r: 0.28, g: 0.36, b: 0.22, a: 1}
-    duration: 6.5
-  - motif: 0
+    duration: 6.9
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3.2
+  - biome: 0
+    time: 0
+    actors:
+    - look: 0
+      position: {x: -3, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 5
+      drift: {x: 0.5, y: 0}
+    - look: 5
+      position: {x: 3, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: 5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: damavand
+      position: {x: 0, y: 0}
+      scale: 0.8
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: house
+      position: {x: -5.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: house
+      position: {x: 5.8, y: 0}
+      scale: 1
+      flip: 1
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cypress
+      position: {x: -3.6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: oak
+      position: {x: 3.6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: sun
+      position: {x: 4, y: 6}
+      scale: 0.8
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cloud
+      position: {x: -3, y: 5.5}
+      scale: 1
+      flip: 0
+      drift: {x: 0.3, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.prologue.3
-    sky: {r: 0.98, g: 0.82, b: 0.55, a: 1}
-    land: {r: 0.55, g: 0.43, b: 0.28, a: 1}
-    duration: 6.5
-  - motif: 0
+    duration: 7.2
+    cameraFrom: {x: -1.5, y: 2.6}
+    cameraTo: {x: 1, y: 2.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4
+  - biome: 0
+    time: 0
+    actors:
+    - look: 0
+      position: {x: -2, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 1
+      drift: {x: 0, y: 0}
+    - look: 1
+      position: {x: -4.2, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: target
+      position: {x: 4.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: oak
+      position: {x: 6.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: house
+      position: {x: -6.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 2
     captionKey: cut.prologue.4
-    sky: {r: 0.95, g: 0.66, b: 0.45, a: 1}
-    land: {r: 0.55, g: 0.43, b: 0.28, a: 1}
+    duration: 6.6
+    cameraFrom: {x: -1, y: 2.2}
+    cameraTo: {x: -1, y: 2.1}
+    zoomFrom: 3.2
+    zoomTo: 2.8
+  - biome: 0
+    time: 0
+    actors:
+    - look: 0
+      position: {x: -1, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 1
+      drift: {x: 0, y: 0}
+    - look: 1
+      position: {x: -3.2, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: target
+      position: {x: 4.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 1
+    captionKey: cut.prologue.5
+    duration: 6.6
+    cameraFrom: {x: -1, y: 1.9}
+    cameraTo: {x: -1, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2
+  - biome: 0
+    time: 0
+    actors:
+    - look: 2
+      position: {x: 2.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 0
+      position: {x: -2.5, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 1
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: cypress
+      position: {x: 3.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: house
+      position: {x: 6, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.prologue.6
+    duration: 7
+    cameraFrom: {x: 0.5, y: 2.6}
+    cameraTo: {x: 1, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3.2
+  - biome: 0
+    time: 1
+    actors: []
+    props:
+    - sprite: damavand
+      position: {x: 0, y: 0}
+      scale: 1.1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: sun
+      position: {x: 3, y: 6.2}
+      scale: 0.9
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cloud
+      position: {x: -4, y: 5.8}
+      scale: 1
+      flip: 0
+      drift: {x: 0.4, y: 0}
+      front: 0
+    - sprite: cloud
+      position: {x: 4, y: 4.8}
+      scale: 1
+      flip: 0
+      drift: {x: 0.3, y: 0}
+      front: 0
+    speaker: 0
+    captionKey: cut.prologue.7
     duration: 6.5
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 3.6}
+    zoomFrom: 4.4
+    zoomTo: 4.4

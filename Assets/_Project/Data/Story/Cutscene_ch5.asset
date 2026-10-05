@@ -15,18 +15,161 @@ MonoBehaviour:
   id: ch5
   titleKey: cut.ch5.title
   panels:
-  - motif: 5
+  - biome: 3
+    time: 1
+    actors:
+    - look: 3
+      position: {x: -4, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 5
+      position: {x: -5.3, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 6
+      position: {x: -6.5, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 4
+      position: {x: 4, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 18
+      position: {x: 5.3, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 7
+      position: {x: 6.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: damavand
+      position: {x: 0, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_iran
+      position: {x: -2.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: banner_turan
+      position: {x: 2.8, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: sun
+      position: {x: -1.5, y: 5.2}
+      scale: 0.7
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.ch5.1
-    sky: {r: 0.95, g: 0.66, b: 0.45, a: 1}
-    land: {r: 0.82, g: 0.84, b: 0.88, a: 1}
-    duration: 6.5
-  - motif: 5
+    duration: 7.1
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.5}
+    zoomFrom: 4.4
+    zoomTo: 4
+  - biome: 3
+    time: 1
+    actors:
+    - look: 4
+      position: {x: 0.5, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    - look: 18
+      position: {x: 2.4, y: 0}
+      facingRight: 0
+      scale: 1
+      pose: 0
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: banner_turan
+      position: {x: -1.5, y: 0}
+      scale: 1
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 5
     captionKey: cut.ch5.2
-    sky: {r: 0.98, g: 0.6, b: 0.45, a: 1}
-    land: {r: 0.82, g: 0.84, b: 0.88, a: 1}
-    duration: 6.5
-  - motif: 6
+    duration: 6.7
+    cameraFrom: {x: 0.8, y: 1.9}
+    cameraTo: {x: 0.8, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2.2
+  - biome: 5
+    time: 1
+    actors:
+    - look: 0
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 2
+      drift: {x: 0, y: 0}
+    - look: 2
+      position: {x: -2.2, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 3
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: sun
+      position: {x: 3.5, y: 5}
+      scale: 0.9
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    - sprite: cloud
+      position: {x: -4, y: 4.5}
+      scale: 1
+      flip: 0
+      drift: {x: 0.2, y: 0}
+      front: 0
+    speaker: 0
     captionKey: cut.ch5.3
-    sky: {r: 0.98, g: 0.7, b: 0.5, a: 1}
-    land: {r: 0.55, g: 0.43, b: 0.28, a: 1}
-    duration: 6.5
+    duration: 7
+    cameraFrom: {x: 0, y: 2.6}
+    cameraTo: {x: 0, y: 2.3}
+    zoomFrom: 4.4
+    zoomTo: 3.4
+  - biome: 5
+    time: 1
+    actors:
+    - look: 0
+      position: {x: 0, y: 0}
+      facingRight: 1
+      scale: 1
+      pose: 1
+      drift: {x: 0, y: 0}
+    props:
+    - sprite: sun
+      position: {x: 2.6, y: 3.8}
+      scale: 0.7
+      flip: 0
+      drift: {x: 0, y: 0}
+      front: 0
+    speaker: 1
+    captionKey: cut.ch5.4
+    duration: 7
+    cameraFrom: {x: 0, y: 1.9}
+    cameraTo: {x: 0, y: 1.9}
+    zoomFrom: 2.6
+    zoomTo: 2
