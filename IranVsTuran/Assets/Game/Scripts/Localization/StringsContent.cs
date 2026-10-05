@@ -5,7 +5,9 @@ namespace IranVsTuran.Localization
     /// </summary>
     public static partial class Strings
     {
-        public static readonly string[][][] All = { UI, Content, Story };
+        // A property, not a field: static fields in partial classes spread over several files are
+        // initialized in an unspecified order, so a field could capture tables that are still null.
+        public static string[][][] All { get { return new[] { UI, Content, Story }; } }
 
         /// <summary>Names and lore of chapters, levels, enemies, towers, heroes, items and upgrades.</summary>
         static readonly string[][] Content =
