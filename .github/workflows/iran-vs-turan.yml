@@ -89,6 +89,22 @@ jobs:
           path: build/Android/*.apk
           if-no-files-found: error
 
+      # Also publish the APK on its own branch, so it can be fetched with plain git.
+      - name: Publish APK to the iran-vs-turan-apk branch
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" .
+          apk=$(ls build/Android/*.apk | head -n 1)
+          tmp=$(mktemp -d)
+          cp "$apk" "$tmp/IranVsTuran.apk"
+          cd "$tmp"
+          git init -q
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -b iran-vs-turan-apk
+          git add IranVsTuran.apk
+          git commit -q -m "Iran vs Turan APK from ${GITHUB_SHA::7} [skip ci]"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" iran-vs-turan-apk
+
       # Keep the files Unity generated (stable .meta GUIDs, ProjectSettings, scenes) in the repo.
       - name: Commit Unity-generated files
         run: |
