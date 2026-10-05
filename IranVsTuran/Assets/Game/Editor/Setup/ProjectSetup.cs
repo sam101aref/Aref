@@ -15,7 +15,7 @@ namespace IranVsTuran.Editor.Setup
     [InitializeOnLoad]
     public static class ProjectSetup
     {
-        const int SetupVersion = 1;
+        const int SetupVersion = 2;
         const string MarkerPath = "ProjectSettings/IranVsTuranSetup.json";
 
         // The application ID is permanent once the game is published.
@@ -26,6 +26,7 @@ namespace IranVsTuran.Editor.Setup
         const int MinAndroidApiLevel = 24;
 
         public const string ScenePath = "Assets/Game/Scenes/Boot.unity";
+        const string IconPath = "Assets/Game/Icon/AppIcon.png";
 
         /// <summary>Packages the game needs; all are listed in Packages/manifest.json.</summary>
         internal static readonly string[] RequiredPackages =
@@ -67,7 +68,7 @@ namespace IranVsTuran.Editor.Setup
             PlayerSettings.companyName = CompanyName;
             PlayerSettings.productName = ProductName;
             PlayerSettings.bundleVersion = Version;
-            PlayerSettings.colorSpace = ColorSpace.Gamma;
+            PlayerSettings.colorSpace = ColorSpace.Linear;
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
             PlayerSettings.allowedAutorotateToPortrait = false;
             PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;
@@ -80,6 +81,10 @@ namespace IranVsTuran.Editor.Setup
             PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevelAuto;
             if ((int)PlayerSettings.Android.minSdkVersion < MinAndroidApiLevel)
                 PlayerSettings.Android.minSdkVersion = (AndroidSdkVersions)MinAndroidApiLevel;
+
+            var icon = AssetDatabase.LoadAssetAtPath<Texture2D>(IconPath);
+            if (icon != null)
+                PlayerSettings.SetIcons(NamedBuildTarget.Unknown, new[] { icon }, IconKind.Any);
 
             var inputChanged = ConfigureInputHandling();
             if (!CreateScene())
