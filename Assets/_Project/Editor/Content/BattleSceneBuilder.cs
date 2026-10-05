@@ -125,14 +125,17 @@ namespace Arash.Editor.Content
             var enemy = LoadOrCreate(EnemyPrefabPath, () => CreateArcherPrefab("Turanian Archer", EnemyPrefabPath, Role.Enemy, TuranianRed, arrow));
             var companion = LoadOrCreate(CompanionPrefabPath, () => CreateArcherPrefab("Companion", CompanionPrefabPath, Role.Companion, Color.white, arrow));
 
+            // Checked now: opening scenes below unloads assets, after which the reference reads as null.
             var catalog = StoryContent.EnsureCatalog(projectiles);
+            var catalogReady = catalog != null && catalog.chapters.Count > 0;
+
             BuildBattleScene(arash, enemy, companion);
             BuildCutsceneScene();
             BuildFlightScene();
             BuildMenuScene<MainMenuScreen>(MainMenuScenePath, "Main Menu");
             BuildMenuScene<WorldMapScreen>(WorldMapScenePath, "World Map");
             BuildBootScene();
-            return catalog != null;
+            return catalogReady;
         }
 
         /// <summary>
