@@ -9,6 +9,7 @@ on:
     paths-ignore:
       - 'docs/**'
       - '**.md'
+      - 'Siavosh/**' # a separate game; it gets its own workflow
   workflow_dispatch:
 
 permissions:
