@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6470609967958871676
+--- !u!1 &557819148703681349
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8320410878260687094}
-  - component: {fileID: 8663199915926505145}
-  - component: {fileID: 3889292670220737754}
+  - component: {fileID: 7393342058837764420}
+  - component: {fileID: 2738976414047213039}
+  - component: {fileID: 6535273308019590825}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -18,29 +18,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8320410878260687094
+--- !u!4 &7393342058837764420
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6470609967958871676}
+  m_GameObject: {fileID: 557819148703681349}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 9156391068247631197}
+  - {fileID: 6923621975331429349}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8663199915926505145
+--- !u!114 &2738976414047213039
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6470609967958871676}
+  m_GameObject: {fileID: 557819148703681349}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d50ab3beda14604378f95fb6898a34ef, type: 3}
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 100
   ignites: 0
-  interceptCollider: {fileID: 3889292670220737754}
+  interceptCollider: {fileID: 6535273308019590825}
   impactImpulse: 0.03
   penetration: 0.2
   hitMask:
@@ -56,13 +56,13 @@ MonoBehaviour:
     m_Bits: 4294967295
   maxLifetime: 15
   destroyBelowY: -50
---- !u!58 &3889292670220737754
+--- !u!58 &6535273308019590825
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6470609967958871676}
+  m_GameObject: {fileID: 557819148703681349}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -92,7 +92,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.35
---- !u!1 &8247762763914066928
+--- !u!1 &8272968441704666412
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,8 +100,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9156391068247631197}
-  - component: {fileID: 3051736864712022274}
+  - component: {fileID: 6923621975331429349}
+  - component: {fileID: 7428170818184472699}
   m_Layer: 0
   m_Name: Art
   m_TagString: Untagged
@@ -109,28 +109,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9156391068247631197
+--- !u!4 &6923621975331429349
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8247762763914066928}
+  m_GameObject: {fileID: 8272968441704666412}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8320410878260687094}
+  m_Father: {fileID: 7393342058837764420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &3051736864712022274
+--- !u!212 &7428170818184472699
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8247762763914066928}
+  m_GameObject: {fileID: 8272968441704666412}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0

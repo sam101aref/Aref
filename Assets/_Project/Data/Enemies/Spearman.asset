@@ -32,7 +32,7 @@ MonoBehaviour:
     repositionRange: 0
     phases: []
   cooldown: {x: 3.5, y: 5.5}
-  projectile: {fileID: 7410595765164692335, guid: 1600bd33fc30ea2e7ad54b28857a2228, type: 3}
+  projectile: {fileID: 7397921339426852262, guid: 1600bd33fc30ea2e7ad54b28857a2228, type: 3}
   damage: 35
   minSpeed: 8
   maxSpeed: 21

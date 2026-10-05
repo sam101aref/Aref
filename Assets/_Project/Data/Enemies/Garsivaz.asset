@@ -37,7 +37,7 @@ MonoBehaviour:
       repositionRange: 5
       announceKey: boss.3.phase
   cooldown: {x: 2.6, y: 4}
-  projectile: {fileID: 3133939327675947622, guid: cf54d4363cfb85effb95b446351d4d0d, type: 3}
+  projectile: {fileID: 9165140112735657353, guid: cf54d4363cfb85effb95b446351d4d0d, type: 3}
   damage: 25
   minSpeed: 8
   maxSpeed: 28
