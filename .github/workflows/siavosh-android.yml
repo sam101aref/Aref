@@ -1,0 +1,102 @@
+name: Siavosh Android Build
+
+# Builds an installable APK of Siavosh the Prince (the Unity project in Siavosh/) on every push
+# that changes it. Uses the same UNITY_LICENSE, UNITY_EMAIL and UNITY_PASSWORD secrets as Arash.
+
+on:
+  push:
+    paths:
+      - 'Siavosh/**'
+      - '!Siavosh/Design/**'
+      - '!Siavosh/**.md'
+      - '.github/workflows/siavosh-android.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write # commits the files Unity generates (ProjectSettings, .meta, scene)
+
+concurrency:
+  group: siavosh-android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+    steps:
+      - name: Check Unity license secrets
+        if: env.UNITY_EMAIL == '' || (env.UNITY_LICENSE == '' && env.UNITY_SERIAL == '')
+        run: |
+          echo "::error::Unity license secrets are missing. Add UNITY_LICENSE, UNITY_EMAIL and UNITY_PASSWORD (README → Cloud build)."
+          exit 1
+
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/cache@v4
+        with:
+          path: Siavosh/Library
+          key: Siavosh-Library-Android-${{ hashFiles('Siavosh/Packages/manifest.json', 'Siavosh/ProjectSettings/**') }}
+          restore-keys: Siavosh-Library-Android-
+
+      # Pass 1: switch input handling; it only takes effect on the next Unity start.
+      - name: Prepare project
+        uses: game-ci/unity-builder@v4
+        with:
+          projectPath: Siavosh
+          targetPlatform: Android
+          buildName: SiavoshThePrince
+          buildMethod: Siavosh.Editor.Setup.CIBuild.Prepare
+          versioning: None
+          allowDirtyBuild: true
+
+      # Pass 2: run the EditMode tests, apply the project setup and build the APK.
+      - name: Test and build APK
+        uses: game-ci/unity-builder@v4
+        with:
+          projectPath: Siavosh
+          targetPlatform: Android
+          buildName: SiavoshThePrince
+          buildMethod: Siavosh.Editor.Setup.CIBuild.ConfigureAndBuild
+          androidExportType: androidPackage
+          versioning: None
+          allowDirtyBuild: true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SiavoshThePrince-apk
+          path: build/Android/*.apk
+          if-no-files-found: error
+
+      # Keep the files Unity generated (stable .meta GUIDs, ProjectSettings, scene) in the repo.
+      - name: Commit Unity-generated files
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" .
+          git add -A Siavosh/Assets Siavosh/Packages Siavosh/ProjectSettings
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(siavosh): commit Unity-generated project files [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

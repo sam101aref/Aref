@@ -1,0 +1,28 @@
+{
+    "name": "Siavosh.Editor.CI",
+    "rootNamespace": "Siavosh.Editor.Setup",
+    "references": [
+        "Siavosh.Editor.Setup",
+        "UnityEditor.TestRunner",
+        "UnityEngine.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "SIAVOSH_TEST_FRAMEWORK"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.test-framework",
+            "expression": "1.0.0",
+            "define": "SIAVOSH_TEST_FRAMEWORK"
+        }
+    ],
+    "noEngineReferences": false
+}

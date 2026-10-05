@@ -1,0 +1,1062 @@
+{
+ "pixelsPerUnit": 200.0,
+ "sprites": [
+  {
+   "name": "chars/siavosh",
+   "w": 1.66,
+   "h": 4.11,
+   "x": 0.11,
+   "y": 2.025
+  },
+  {
+   "name": "chars/siavosh_white",
+   "w": 1.0,
+   "h": 4.11,
+   "x": 0.02,
+   "y": 2.025
+  },
+  {
+   "name": "chars/rostam",
+   "w": 1.62,
+   "h": 4.09,
+   "x": 0.2318,
+   "y": 2.015
+  },
+  {
+   "name": "chars/kavus",
+   "w": 1.48,
+   "h": 4.33,
+   "x": 0.02,
+   "y": 2.135
+  },
+  {
+   "name": "chars/sudabeh",
+   "w": 1.585,
+   "h": 4.01,
+   "x": 0.2125,
+   "y": 1.975
+  },
+  {
+   "name": "chars/farangis",
+   "w": 1.2,
+   "h": 4.01,
+   "x": 0.02,
+   "y": 1.975
+  },
+  {
+   "name": "chars/afrasiab",
+   "w": 1.96,
+   "h": 4.27,
+   "x": 0.26,
+   "y": 2.105
+  },
+  {
+   "name": "chars/garsivaz",
+   "w": 1.0,
+   "h": 4.27,
+   "x": 0.02,
+   "y": 2.105
+  },
+  {
+   "name": "chars/piran",
+   "w": 1.2,
+   "h": 3.95,
+   "x": 0.12,
+   "y": 1.945
+  },
+  {
+   "name": "chars/naqqal",
+   "w": 1.74,
+   "h": 3.93,
+   "x": 0.15,
+   "y": 1.935
+  },
+  {
+   "name": "chars/turan_soldier",
+   "w": 1.16,
+   "h": 4.21,
+   "x": 0.1,
+   "y": 2.075
+  },
+  {
+   "name": "chars/turan_archer",
+   "w": 1.57,
+   "h": 4.27,
+   "x": 0.305,
+   "y": 2.105
+  },
+  {
+   "name": "chars/trainee",
+   "w": 1.38,
+   "h": 3.95,
+   "x": 0.21,
+   "y": 1.945
+  },
+  {
+   "name": "chars/mother",
+   "w": 1.2,
+   "h": 4.01,
+   "x": 0.02,
+   "y": 1.975
+  },
+  {
+   "name": "chars/tus",
+   "w": 1.4,
+   "h": 4.21,
+   "x": -0.02,
+   "y": 2.075
+  },
+  {
+   "name": "chars/giv",
+   "w": 1.81,
+   "h": 4.21,
+   "x": 0.185,
+   "y": 2.075
+  },
+  {
+   "name": "parts/siavosh_body",
+   "w": 0.77,
+   "h": 2.22,
+   "x": -0.062,
+   "y": 1.4212
+  },
+  {
+   "name": "parts/siavosh_bootB",
+   "w": 0.31,
+   "h": 0.48,
+   "x": -0.044,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/siavosh_bootF",
+   "w": 0.325,
+   "h": 0.48,
+   "x": 0.1358,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/siavosh_arm",
+   "w": 0.5,
+   "h": 1.85,
+   "x": 0.3348,
+   "y": 0.9858
+  },
+  {
+   "name": "parts/siavosh_armbow",
+   "w": 0.54,
+   "h": 1.195,
+   "x": 0.4061,
+   "y": 1.55
+  },
+  {
+   "name": "parts/rostam_body",
+   "w": 0.75,
+   "h": 2.205,
+   "x": 0.0151,
+   "y": 1.415
+  },
+  {
+   "name": "parts/rostam_bootB",
+   "w": 0.37,
+   "h": 0.48,
+   "x": -0.0536,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/rostam_bootF",
+   "w": 0.385,
+   "h": 0.48,
+   "x": 0.1657,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/rostam_arm",
+   "w": 0.55,
+   "h": 1.54,
+   "x": 0.3706,
+   "y": 1.5748
+  },
+  {
+   "name": "parts/naqqal_body",
+   "w": 0.77,
+   "h": 2.11,
+   "x": -0.062,
+   "y": 1.3654
+  },
+  {
+   "name": "parts/naqqal_bootB",
+   "w": 0.31,
+   "h": 0.48,
+   "x": -0.044,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/naqqal_bootF",
+   "w": 0.325,
+   "h": 0.48,
+   "x": 0.1358,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/naqqal_arm",
+   "w": 0.5,
+   "h": 1.775,
+   "x": 0.3844,
+   "y": 1.1718
+  },
+  {
+   "name": "parts/soldier_body",
+   "w": 0.62,
+   "h": 2.28,
+   "x": 0.0124,
+   "y": 1.4522
+  },
+  {
+   "name": "parts/soldier_bootB",
+   "w": 0.31,
+   "h": 0.48,
+   "x": -0.044,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/soldier_bootF",
+   "w": 0.325,
+   "h": 0.48,
+   "x": 0.1358,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/soldier_arm",
+   "w": 0.335,
+   "h": 2.505,
+   "x": 0.2542,
+   "y": 1.2524
+  },
+  {
+   "name": "parts/archer_body",
+   "w": 0.62,
+   "h": 2.32,
+   "x": 0.0124,
+   "y": 1.4708
+  },
+  {
+   "name": "parts/archer_bootB",
+   "w": 0.31,
+   "h": 0.48,
+   "x": -0.044,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/archer_bootF",
+   "w": 0.325,
+   "h": 0.48,
+   "x": 0.1358,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/archer_arm",
+   "w": 0.54,
+   "h": 1.195,
+   "x": 0.4061,
+   "y": 1.55
+  },
+  {
+   "name": "parts/trainee_body",
+   "w": 0.62,
+   "h": 2.12,
+   "x": 0.0124,
+   "y": 1.3716
+  },
+  {
+   "name": "parts/trainee_bootB",
+   "w": 0.31,
+   "h": 0.48,
+   "x": -0.044,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/trainee_bootF",
+   "w": 0.325,
+   "h": 0.48,
+   "x": 0.1358,
+   "y": 0.2201
+  },
+  {
+   "name": "parts/trainee_arm",
+   "w": 0.475,
+   "h": 1.665,
+   "x": 0.3224,
+   "y": 1.0788
+  },
+  {
+   "name": "parts/shabrang_legFF",
+   "w": 1.035,
+   "h": 0.785,
+   "x": 1.1189,
+   "y": 0.2499
+  },
+  {
+   "name": "parts/shabrang_legHF",
+   "w": 1.05,
+   "h": 0.81,
+   "x": -1.1816,
+   "y": 0.2626
+  },
+  {
+   "name": "parts/shabrang_body",
+   "w": 4.19,
+   "h": 2.08,
+   "x": 0.0,
+   "y": 1.3537
+  },
+  {
+   "name": "parts/shabrang_legFN",
+   "w": 1.125,
+   "h": 0.73,
+   "x": 1.3212,
+   "y": 0.3509
+  },
+  {
+   "name": "parts/shabrang_legHN",
+   "w": 1.085,
+   "h": 0.84,
+   "x": -1.3006,
+   "y": 0.441
+  },
+  {
+   "name": "parts/onager_legFF",
+   "w": 1.035,
+   "h": 0.785,
+   "x": 1.1189,
+   "y": 0.2499
+  },
+  {
+   "name": "parts/onager_legHF",
+   "w": 1.05,
+   "h": 0.81,
+   "x": -1.1816,
+   "y": 0.2626
+  },
+  {
+   "name": "parts/onager_body",
+   "w": 4.19,
+   "h": 2.08,
+   "x": 0.0,
+   "y": 1.3537
+  },
+  {
+   "name": "parts/onager_legFN",
+   "w": 1.125,
+   "h": 0.73,
+   "x": 1.3212,
+   "y": 0.3509
+  },
+  {
+   "name": "parts/onager_legHN",
+   "w": 1.085,
+   "h": 0.84,
+   "x": -1.3006,
+   "y": 0.441
+  },
+  {
+   "name": "parts/shabrang_rider",
+   "w": 3.685,
+   "h": 2.485,
+   "x": -0.0471,
+   "y": 1.6468
+  },
+  {
+   "name": "parts/shabrang_riderwhite",
+   "w": 1.97,
+   "h": 2.485,
+   "x": 0.81,
+   "y": 1.6468
+  },
+  {
+   "name": "chars/siavosh_riding",
+   "w": 4.055,
+   "h": 2.925,
+   "x": 0.0,
+   "y": 1.3382
+  },
+  {
+   "name": "chars/siavosh_riding_white",
+   "w": 4.055,
+   "h": 2.925,
+   "x": 0.0,
+   "y": 1.3382
+  },
+  {
+   "name": "chars/shabrang",
+   "w": 4.055,
+   "h": 2.445,
+   "x": 0.0,
+   "y": 1.0963
+  },
+  {
+   "name": "props/cypress",
+   "w": 0.88,
+   "h": 5.0,
+   "x": 0.0,
+   "y": 2.5
+  },
+  {
+   "name": "props/tree_blossom",
+   "w": 3.875,
+   "h": 4.405,
+   "x": 0.0,
+   "y": 2.2025
+  },
+  {
+   "name": "props/tree_rose",
+   "w": 3.84,
+   "h": 4.0,
+   "x": 0.0,
+   "y": 2.0
+  },
+  {
+   "name": "props/reeds",
+   "w": 2.555,
+   "h": 1.7,
+   "x": 0.0,
+   "y": 0.85
+  },
+  {
+   "name": "props/rock_lilac",
+   "w": 4.425,
+   "h": 2.6,
+   "x": 0.0,
+   "y": 1.3
+  },
+  {
+   "name": "props/rock_rose",
+   "w": 3.255,
+   "h": 2.0,
+   "x": 0.0,
+   "y": 1.0
+  },
+  {
+   "name": "props/rock_turq",
+   "w": 3.55,
+   "h": 2.8,
+   "x": 0.0,
+   "y": 1.4
+  },
+  {
+   "name": "props/dummy",
+   "w": 0.93,
+   "h": 2.3,
+   "x": 0.0,
+   "y": 1.15
+  },
+  {
+   "name": "props/target",
+   "w": 1.275,
+   "h": 2.0,
+   "x": 0.0,
+   "y": 1.0
+  },
+  {
+   "name": "props/gate",
+   "w": 3.03,
+   "h": 4.6,
+   "x": 0.0,
+   "y": 2.3
+  },
+  {
+   "name": "props/log",
+   "w": 2.37,
+   "h": 0.62,
+   "x": 0.0,
+   "y": 0.31
+  },
+  {
+   "name": "props/stone",
+   "w": 1.25,
+   "h": 0.8,
+   "x": 0.0,
+   "y": 0.4
+  },
+  {
+   "name": "props/branch",
+   "w": 3.155,
+   "h": 1.2,
+   "x": 0.0,
+   "y": 0.6
+  },
+  {
+   "name": "props/chest",
+   "w": 1.175,
+   "h": 0.8,
+   "x": 0.0,
+   "y": 0.4
+  },
+  {
+   "name": "props/coin",
+   "w": 0.36,
+   "h": 0.36,
+   "x": 0.0,
+   "y": 0.18
+  },
+  {
+   "name": "props/leaf",
+   "w": 0.435,
+   "h": 0.605,
+   "x": 0.0,
+   "y": 0.3025
+  },
+  {
+   "name": "props/pomegranate",
+   "w": 0.435,
+   "h": 0.5,
+   "x": 0.0,
+   "y": 0.25
+  },
+  {
+   "name": "props/lamb",
+   "w": 1.385,
+   "h": 0.9,
+   "x": 0.0,
+   "y": 0.45
+  },
+  {
+   "name": "props/bird_up",
+   "w": 1.075,
+   "h": 0.555,
+   "x": 0.0,
+   "y": 0.2775
+  },
+  {
+   "name": "props/bird_down",
+   "w": 0.875,
+   "h": 0.555,
+   "x": 0.0,
+   "y": 0.2775
+  },
+  {
+   "name": "props/bird_hurt",
+   "w": 0.69,
+   "h": 0.45,
+   "x": 0.0,
+   "y": 0.225
+  },
+  {
+   "name": "props/arrow",
+   "w": 1.16,
+   "h": 0.16,
+   "x": 0.0,
+   "y": 0.08
+  },
+  {
+   "name": "props/fence",
+   "w": 1.41,
+   "h": 1.0,
+   "x": 0.0,
+   "y": 0.5
+  },
+  {
+   "name": "props/banner",
+   "w": 1.57,
+   "h": 3.4,
+   "x": 0.0,
+   "y": 1.7
+  },
+  {
+   "name": "props/ledge_s",
+   "w": 1.49,
+   "h": 0.75,
+   "x": 0.0,
+   "y": 0.375
+  },
+  {
+   "name": "props/ledge_l",
+   "w": 3.1,
+   "h": 0.8,
+   "x": 0.0,
+   "y": 0.4
+  },
+  {
+   "name": "props/slash",
+   "w": 2.07,
+   "h": 1.5,
+   "x": 0.0,
+   "y": 0.75
+  },
+  {
+   "name": "props/spark",
+   "w": 0.7,
+   "h": 0.7,
+   "x": 0.0,
+   "y": 0.35
+  },
+  {
+   "name": "props/dust",
+   "w": 0.845,
+   "h": 0.6,
+   "x": 0.0,
+   "y": 0.3
+  },
+  {
+   "name": "icons/sword",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/shield",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/bow",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/jump",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/duck",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/dodge",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/farr",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/pause",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/back",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/lock",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/check",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/heart",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/hand",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/close",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/gear",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/book",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/tent",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/map",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/play",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/sound",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/music",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/palm",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/flame",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/oath",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/sun",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/heavy",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/twin",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/eye",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/mounted",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/shoe",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/wind",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/leap",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/call",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/armor",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "icons/skip",
+   "w": 0.64,
+   "h": 0.64
+  },
+  {
+   "name": "bg/zabul_far",
+   "w": 11.52,
+   "h": 5.185
+  },
+  {
+   "name": "bg/dusk_far",
+   "w": 11.52,
+   "h": 5.185
+  },
+  {
+   "name": "bg/zabul",
+   "w": 11.52,
+   "h": 5.185
+  },
+  {
+   "name": "bg/pass_dusk",
+   "w": 11.52,
+   "h": 5.185
+  },
+  {
+   "name": "bg/fire",
+   "w": 11.52,
+   "h": 5.185
+  },
+  {
+   "name": "bg/coffeehouse",
+   "w": 11.52,
+   "h": 5.185
+  },
+  {
+   "name": "bg/palace",
+   "w": 11.52,
+   "h": 5.185
+  },
+  {
+   "name": "bg/pardeh_map",
+   "w": 11.52,
+   "h": 5.185
+  },
+  {
+   "name": "tiles/ground_meadow",
+   "w": 2.56,
+   "h": 1.6
+  },
+  {
+   "name": "tiles/ground_earth",
+   "w": 2.56,
+   "h": 1.6
+  },
+  {
+   "name": "titles/logo_fa",
+   "w": 4.79,
+   "h": 2.055
+  },
+  {
+   "name": "titles/logo_en",
+   "w": 6.0,
+   "h": 0.77
+  },
+  {
+   "name": "titles/ch0_fa",
+   "w": 2.2,
+   "h": 1.51
+  },
+  {
+   "name": "titles/ch0_en",
+   "w": 2.55,
+   "h": 0.67
+  },
+  {
+   "name": "titles/ch1_fa",
+   "w": 2.575,
+   "h": 1.565
+  },
+  {
+   "name": "titles/ch1_en",
+   "w": 3.705,
+   "h": 0.67
+  },
+  {
+   "name": "titles/ch2_fa",
+   "w": 3.93,
+   "h": 1.595
+  },
+  {
+   "name": "titles/ch2_en",
+   "w": 5.68,
+   "h": 0.67
+  },
+  {
+   "name": "titles/ch3_fa",
+   "w": 2.79,
+   "h": 1.51
+  },
+  {
+   "name": "titles/ch3_en",
+   "w": 4.46,
+   "h": 0.67
+  },
+  {
+   "name": "titles/ch4_fa",
+   "w": 1.86,
+   "h": 1.51
+  },
+  {
+   "name": "titles/ch4_en",
+   "w": 4.385,
+   "h": 0.67
+  },
+  {
+   "name": "titles/ch5_fa",
+   "w": 2.76,
+   "h": 1.51
+  },
+  {
+   "name": "titles/ch5_en",
+   "w": 3.97,
+   "h": 0.67
+  },
+  {
+   "name": "titles/ch6_fa",
+   "w": 2.445,
+   "h": 1.515
+  },
+  {
+   "name": "titles/ch6_en",
+   "w": 3.2,
+   "h": 0.67
+  },
+  {
+   "name": "titles/ch7_fa",
+   "w": 1.355,
+   "h": 1.51
+  },
+  {
+   "name": "titles/ch7_en",
+   "w": 2.765,
+   "h": 0.67
+  },
+  {
+   "name": "titles/ch8_fa",
+   "w": 1.59,
+   "h": 1.75
+  },
+  {
+   "name": "titles/ch8_en",
+   "w": 3.4,
+   "h": 0.67
+  },
+  {
+   "name": "titles/no_fa",
+   "w": 2.005,
+   "h": 1.32
+  },
+  {
+   "name": "titles/no_en",
+   "w": 3.525,
+   "h": 0.575
+  },
+  {
+   "name": "titles/end_fa",
+   "w": 2.41,
+   "h": 1.51
+  },
+  {
+   "name": "titles/end_en",
+   "w": 5.0,
+   "h": 0.67
+  }
+ ],
+ "rigs": [
+  {
+   "name": "siavosh",
+   "anchors": [
+    {
+     "name": "shoulder",
+     "x": 0.1612,
+     "y": 1.8476
+    }
+   ]
+  },
+  {
+   "name": "rostam",
+   "anchors": [
+    {
+     "name": "shoulder",
+     "x": 0.1967,
+     "y": 1.8476
+    }
+   ]
+  },
+  {
+   "name": "naqqal",
+   "anchors": [
+    {
+     "name": "shoulder",
+     "x": 0.1612,
+     "y": 1.8476
+    }
+   ]
+  },
+  {
+   "name": "soldier",
+   "anchors": [
+    {
+     "name": "shoulder",
+     "x": 0.1612,
+     "y": 1.8476
+    }
+   ]
+  },
+  {
+   "name": "archer",
+   "anchors": [
+    {
+     "name": "shoulder",
+     "x": 0.1612,
+     "y": 1.8476
+    }
+   ]
+  },
+  {
+   "name": "trainee",
+   "anchors": [
+    {
+     "name": "shoulder",
+     "x": 0.1612,
+     "y": 1.8476
+    }
+   ]
+  },
+  {
+   "name": "shabrang",
+   "anchors": [
+    {
+     "name": "legFF",
+     "x": 0.713,
+     "y": 0.529
+    },
+    {
+     "name": "legHF",
+     "x": -0.782,
+     "y": 0.552
+    },
+    {
+     "name": "legFN",
+     "x": 0.874,
+     "y": 0.575
+    },
+    {
+     "name": "legHN",
+     "x": -0.92,
+     "y": 0.736
+    },
+    {
+     "name": "rider",
+     "x": 0.161,
+     "y": 1.288
+    }
+   ]
+  },
+  {
+   "name": "onager",
+   "anchors": [
+    {
+     "name": "legFF",
+     "x": 0.713,
+     "y": 0.529
+    },
+    {
+     "name": "legHF",
+     "x": -0.782,
+     "y": 0.552
+    },
+    {
+     "name": "legFN",
+     "x": 0.874,
+     "y": 0.575
+    },
+    {
+     "name": "legHN",
+     "x": -0.92,
+     "y": 0.736
+    }
+   ]
+  }
+ ]
+}

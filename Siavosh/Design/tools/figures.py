@@ -137,6 +137,11 @@ def held_item(kind, h):
             + path(f"M{x - 10} {y - 10} L{x + 16} {y + 6} L{x + 12} {y + 12} L{x - 14} {y - 4} Z", GOLD)
             + path(f"M{x - 2} {y + 4} L{x - 10} {y + 22} L{x - 4} {y + 24} L{x + 4} {y + 8} Z", CRIMSON)
         )
+    if kind == "wood_sword":  # training sword
+        return (
+            path(f"M{x - 3} {y + 4} L{x + 34} {y + 160} L{x + 40} {y + 157} L{x + 4} {y + 2} Z", EARTH)
+            + path(f"M{x - 12} {y + 2} L{x + 12} {y - 4} L{x + 14} {y + 2} L{x - 10} {y + 8} Z", EARTH_DARK)
+        )
     if kind == "mace":  # ox-head mace held upright
         return (
             f'<path d="M{x - 2} {y + 70} L{x + 4} {y - 120}" stroke="{EARTH_DARK}" stroke-width="7" stroke-linecap="round"/>'
@@ -301,6 +306,39 @@ def figure(c):
     return svg(g, w=320, defs=defs, top=-30, left=-40)
 
 
+def figure_parts(c):
+    """The figure split into puppet parts that share one coordinate frame:
+    body (everything but the front arm and boots), arm (front arm, hand and held item),
+    and the two boots. Returns {part: svg}."""
+    item = c.get("item")
+    arm, hnd = front_arm(c)
+    body = cape(c) + back_arm(c) + robe(c)
+    if c.get("armor"):
+        body += path("M96 120 Q122 132 148 120 L146 184 Q122 194 98 184 Z", c["armor"])
+        body += f'<path d="M100 140 L144 140 M100 156 L144 156 M100 172 L144 172" stroke="{GOLD_DARK}" stroke-width="1.3"/>'
+    if c.get("stripes"):
+        body += f'<g clip-path="url(#robe-clip-{c["id"]})">' + "".join(
+            f'<path d="M{x} {y} q10 4 6 12 q-4 8 4 14" fill="none" stroke="{INK}" stroke-width="3.2" stroke-linecap="round"/>'
+            for x, y in [(96, 130), (120, 150), (140, 128), (100, 220), (126, 236), (150, 214), (90, 290), (116, 300), (146, 290), (108, 260), (134, 180)]
+        ) + "</g>"
+    body += sash(c) + head(c)
+    if item in ("mace", "bow", "spear"):
+        arm_svg = held_item(item, hnd) + arm + hand(hnd)
+    else:
+        arm_svg = arm + hand(hnd) + (held_item(item, hnd) if item else "")
+    b = boots(c)
+    cut = b.index("<path", 1)
+    trim = b.index("<path", cut + 1)
+    parts = {"body": body, "arm": arm_svg, "bootB": b[:cut], "bootF": b[cut:trim]}
+    defs = robe_clip(c)
+    s = c.get("scale_x", 1.0)
+    out = {}
+    for name, inner in parts.items():
+        g = f'<g {scale_x(s)}>{inner}</g>' if s != 1.0 else inner
+        out[name] = svg(g, w=320, defs=defs, top=-30, left=-40)
+    return out
+
+
 CAST = {
     "siavosh": dict(id="siavosh", robe=LAPIS, pattern=GOLD_LIGHT, under=WHITE, sash=VERMILION,
                     headgear="kiani", beard=None, item="sword", pose="rest", cape=CRIMSON, boots=EARTH_DARK),
@@ -326,6 +364,14 @@ CAST = {
                   beard="long", beard_color=BEARD_WHITE, hair=BEARD_WHITE, item="staff", pose="rest"),
     "naqqal": dict(id="naqqal", robe=EARTH, pattern=None, under=PAPER, sash=INK, headgear="cap", hat=INK,
                    beard="short", beard_color="#3A2A22", item="staff", pose="raise", locks=False, cape=LAPIS_DARK),
+    "trainee": dict(id="trainee", robe=LEAF, pattern=None, under=PAPER, sash=SAFFRON, headgear="turban",
+                    beard="short", item="wood_sword", pose="rest", locks=False, boots=EARTH_DARK),
+    "mother": dict(id="mother", robe=ROSE, pattern=WHITE, under=PLUM, sash=GOLD, headgear="queen", veil=WHITE,
+                   jewel=VERMILION, hem=402, flare=10, item=None, pose="hip", boots=PLUM),
+    "tus": dict(id="tus", robe=LAPIS_DARK, pattern=None, under=STEEL, sash=GOLD, headgear="helmet",
+                beard="long", item="spear", pose="rest", armor=STEEL, cape=VERMILION),
+    "giv": dict(id="giv", robe=CRIMSON, pattern=None, under=STEEL, sash=SAFFRON, headgear="helmet",
+                beard="pointed", item="bow", pose="raise", armor=STEEL_DARK, cape=LEAF_DARK),
     "turan_soldier": dict(id="turan_soldier", robe=EARTH_DARK, pattern=None, under=STEEL, sash=CRIMSON,
                           headgear="helmet", beard="short", item="spear", pose="rest", armor=STEEL_DARK, locks=False),
 }

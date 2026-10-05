@@ -1,0 +1,16 @@
+{
+    "name": "Siavosh.Editor.Setup",
+    "rootNamespace": "Siavosh.Editor.Setup",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

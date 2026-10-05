@@ -247,8 +247,9 @@ def crowd(rnd, x0, x1, base, n, colors):
 # ---------------------------------------------------------------- scenes
 
 
-def zabul(seed=3, dusk=False):
-    """Zabulistan: golden sky, Rostam's castle on a hill, pastel rocks, the reeds of the Helmand."""
+def zabul(seed=3, dusk=False, far=False):
+    """Zabulistan: golden sky, Rostam's castle on a hill, pastel rocks, the reeds of the Helmand.
+    far=True leaves out the river and the foreground strip, for the gameplay backdrop."""
     rnd = random.Random(seed)
     horizon = 300
     sky, defs = gold_sky(horizon + 40)
@@ -274,6 +275,9 @@ def zabul(seed=3, dusk=False):
     out += cypress(1500, 560, 260)
     out += blossom_tree(rnd, 1080, 520, 300, WHITE)
     out += blossom_tree(rnd, 300, 700, 220, ROSE)
+    if far:
+        out += meadow_flowers(rnd, 0, SW, SH - 140, SH, 60, [WHITE, VERMILION, GOLD_LIGHT, ROSE])
+        return svg(out, defs)
     # river with reeds in the foreground
     out += P(f"M0 640 Q500 600 980 650 Q1460 700 {SW} 640 L{SW} 700 Q1460 760 980 712 Q500 660 0 704 Z", "#BFD6DB", INK, 2)
     out += "".join(f'<path d="M{x} {650 + (x % 3) * 12} q30 -8 60 0" stroke="{WHITE}" stroke-width="3" fill="none"/>' for x in range(40, SW, 140))
@@ -396,6 +400,8 @@ def pardeh_map(seed=13):
 
 
 SCENES = {
+    "bg_zabul_far": lambda: zabul(seed=3, far=True),
+    "bg_dusk_far": lambda: zabul(seed=9, dusk=True, far=True),
     "bg_zabul": zabul,
     "bg_pass_dusk": lambda: zabul(seed=9, dusk=True),
     "bg_fire": fire_trial,
