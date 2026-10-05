@@ -528,6 +528,17 @@ SAM.Game = (function () {
   return Game;
 })();
 
+// The Android app's back button: pause or step back a screen; returns false on the title screen so the app closes.
+SAM.onBack = function () {
+  var g = SAM.game;
+  if (!g || g.mode === 'title' || g.mode === 'lang') return false;
+  if (g.mode === 'story') g.endStory();
+  else if (g.mode === 'play' && !g.overlay) g.pause();
+  else if (g.mode === 'play' && g.overlay === 'pause') { g.overlay = null; g.setButtons([]); }
+  else g.toTitle();
+  return true;
+};
+
 (function () {
   function boot() {
     SAM.Touch.build();
