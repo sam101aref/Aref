@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Cutscene_ch2
+  m_EditorClassIdentifier: Arash.Runtime:Arash.Story:CutsceneDefinition
+  id: ch2
+  titleKey: cut.ch2.title
+  panels:
+  - motif: 2
+    captionKey: cut.ch2.1
+    sky: {r: 0.62, g: 0.75, b: 0.68, a: 1}
+    land: {r: 0.28, g: 0.36, b: 0.22, a: 1}
+    duration: 6.5
+  - motif: 2
+    captionKey: cut.ch2.2
+    sky: {r: 0.25, g: 0.32, b: 0.42, a: 1}
+    land: {r: 0.28, g: 0.36, b: 0.22, a: 1}
+    duration: 6.5
+  - motif: 3
+    captionKey: cut.ch2.3
+    sky: {r: 0.25, g: 0.32, b: 0.42, a: 1}
+    land: {r: 0.28, g: 0.36, b: 0.22, a: 1}
+    duration: 6.5

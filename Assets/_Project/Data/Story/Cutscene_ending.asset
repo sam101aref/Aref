@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Cutscene_ending
+  m_EditorClassIdentifier: Arash.Runtime:Arash.Story:CutsceneDefinition
+  id: ending
+  titleKey: cut.ending.title
+  panels:
+  - motif: 7
+    captionKey: cut.ending.1
+    sky: {r: 0.45, g: 0.7, b: 0.95, a: 1}
+    land: {r: 0.45, g: 0.55, b: 0.3, a: 1}
+    duration: 6.5
+  - motif: 5
+    captionKey: cut.ending.2
+    sky: {r: 0.95, g: 0.66, b: 0.45, a: 1}
+    land: {r: 0.82, g: 0.84, b: 0.88, a: 1}
+    duration: 6.5
+  - motif: 1
+    captionKey: cut.ending.3
+    sky: {r: 0.98, g: 0.82, b: 0.55, a: 1}
+    land: {r: 0.55, g: 0.43, b: 0.28, a: 1}
+    duration: 6.5
+  - motif: 8
+    captionKey: cut.ending.4
+    sky: {r: 0.25, g: 0.32, b: 0.42, a: 1}
+    land: {r: 0.55, g: 0.43, b: 0.28, a: 1}
+    duration: 6.5

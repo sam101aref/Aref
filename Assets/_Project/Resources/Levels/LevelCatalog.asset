@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf3edf0f7f9e82b978b7aeebde575ef3, type: 3}
+  m_Name: LevelCatalog
+  m_EditorClassIdentifier: 
+  chapters:
+  - titleKey: chapter.0.title
+    starsToUnlock: 0
+    introCutscene: {fileID: 11400000, guid: f591842b1ff67a099b9d950688b48c8d, type: 2}
+    levels:
+    - {fileID: 11400000, guid: 7d36caa04405d06f9b8324c22040c61b, type: 2}
+    - {fileID: 11400000, guid: beb06aa05fd4698ee93384e91e582dab, type: 2}
+    - {fileID: 11400000, guid: 96a1359a43eaecef99ce17907cce6b5b, type: 2}
+    - {fileID: 11400000, guid: a723dacbd2ff0bc449d71e6811aff55e, type: 2}
+    - {fileID: 11400000, guid: 273fefe952ebc8118ad36dd1c234d303, type: 2}
+  - titleKey: chapter.1.title
+    starsToUnlock: 6
+    introCutscene: {fileID: 11400000, guid: d759da20712bcda17922595c53f839d0, type: 2}
+    levels:
+    - {fileID: 11400000, guid: a7849c12708fa35059a923affa0d4517, type: 2}
+    - {fileID: 11400000, guid: 660783a962be5f8d5b385ce218f85f43, type: 2}
+    - {fileID: 11400000, guid: e1eed6c124f987863b858e45118992c1, type: 2}
+    - {fileID: 11400000, guid: 3a9bebe562a68ab2b918d59773d0b781, type: 2}
+    - {fileID: 11400000, guid: 25c812be0cf5b7bc2b6da17b88c69d79, type: 2}
+    - {fileID: 11400000, guid: 45aa4b0e9e367c63bb87baf0d184086e, type: 2}
+    - {fileID: 11400000, guid: e23e5f66c893db45aa4fd4022c9bdc83, type: 2}
+    - {fileID: 11400000, guid: 951c9ff7ae36aaab88bd5bb9b932c00f, type: 2}
+  - titleKey: chapter.2.title
+    starsToUnlock: 24
+    introCutscene: {fileID: 11400000, guid: 0e293822ee788f5a1aecccd67693a716, type: 2}
+    levels:
+    - {fileID: 11400000, guid: f93e3eeced553eee8a5355fad97fcdea, type: 2}
+    - {fileID: 11400000, guid: 0abafefbc49b79460b857e50ca2e1192, type: 2}
+    - {fileID: 11400000, guid: 50b341cd54ec5b70dacbc3deae043e01, type: 2}
+    - {fileID: 11400000, guid: fa95f24ecab109dcfae0c831d3085c32, type: 2}
+    - {fileID: 11400000, guid: 0417eacd9b433d6f2b59e13dabc429c0, type: 2}
+    - {fileID: 11400000, guid: 16034024af9a298748ca54199c3f4024, type: 2}
+    - {fileID: 11400000, guid: 4bbbaa0f5b38c7888a32f45fddf5b29a, type: 2}
+    - {fileID: 11400000, guid: 27c885536107edd23b40b0b466453859, type: 2}
+  - titleKey: chapter.3.title
+    starsToUnlock: 44
+    introCutscene: {fileID: 11400000, guid: 0d370cce2b314d7a394884bb365d3a0a, type: 2}
+    levels:
+    - {fileID: 11400000, guid: 2fac7deb4dca704d4aa3af7aaa9b1379, type: 2}
+    - {fileID: 11400000, guid: 12d7cb26049c229e392a92a48effd4fa, type: 2}
+    - {fileID: 11400000, guid: 0f7cff04aff6245e6bc4083f8f36a1dd, type: 2}
+    - {fileID: 11400000, guid: c1e31cb03b0799e02b6e471426cde4f3, type: 2}
+    - {fileID: 11400000, guid: 5637875349c0e86799cccb3d81ee4b13, type: 2}
+    - {fileID: 11400000, guid: 95bcbd7087d07ea989b91026b3df435c, type: 2}
+    - {fileID: 11400000, guid: f039525460423cecda6e7d740e2e305f, type: 2}
+    - {fileID: 11400000, guid: e7542c1baa1543d7095eb5418444e475, type: 2}
+  - titleKey: chapter.4.title
+    starsToUnlock: 64
+    introCutscene: {fileID: 11400000, guid: 11191d8b988720de68714dda95c51274, type: 2}
+    levels:
+    - {fileID: 11400000, guid: 9abab9e06b4bef2418a75faab15f2e4f, type: 2}
+    - {fileID: 11400000, guid: 539674c2da58196c9a749442717c5c5a, type: 2}
+    - {fileID: 11400000, guid: c7040999d342b7924bfd4a5fcbfb8b2a, type: 2}
+    - {fileID: 11400000, guid: 2c43c3bb60902f7a2b30af88fd1b56ff, type: 2}
+    - {fileID: 11400000, guid: 45e861039b23477f2bd4234d6338c419, type: 2}
+    - {fileID: 11400000, guid: d6d4c19ec62f93811a7a7f9b4ebf0b15, type: 2}
+    - {fileID: 11400000, guid: fd578685f8d720e0ea8c7ddb6afce9d4, type: 2}
+    - {fileID: 11400000, guid: 77b9fb50c75fe951593ddcb9d42741ec, type: 2}
+  - titleKey: chapter.5.title
+    starsToUnlock: 84
+    introCutscene: {fileID: 11400000, guid: 8576acfff0f91b4e4984c55ab289fd00, type: 2}
+    levels:
+    - {fileID: 11400000, guid: f32342e14de3ba2c0815764066350aa6, type: 2}
+  endingCutscene: {fileID: 11400000, guid: 6877e3bd8b96c4989adf38f804ee45ae, type: 2}

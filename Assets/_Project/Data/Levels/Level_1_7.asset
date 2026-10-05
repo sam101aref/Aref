@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee398102b41a3acfb9dce71140890250, type: 3}
+  m_Name: Level_1_7
+  m_EditorClassIdentifier: 
+  id: ch1_7
+  titleKey: level.1_7.title
+  introKey: level.1_7.intro
+  hintKey: level.1_7.hint
+  skyColor: {r: 0.97, g: 0.75, b: 0.5, a: 1}
+  groundColor: {r: 0.6, g: 0.5, b: 0.32, a: 1}
+  introDialogue: []
+  outroDialogue: []
+  outroCutscene: {fileID: 0}
+  mode: 3
+  enemies: []
+  covers: []
+  wind:
+    strength: 0
+    variance: 0
+  waves: []
+  palisadeLives: 3
+  surviveSeconds: 30
+  enemyFireInterval: 4
+  targets:
+  - kind: 0
+    position: {x: 10, y: 0.8}
+    movement: {x: 0, y: 0}
+    period: 2.5
+  - kind: 0
+    position: {x: 16, y: 1.4}
+    movement: {x: 0, y: 0}
+    period: 2.5
+  - kind: 2
+    position: {x: 13, y: 4}
+    movement: {x: 0, y: 0}
+    period: 2.5
+  - kind: 0
+    position: {x: 22, y: 2}
+    movement: {x: 0, y: 0}
+    period: 2.5
+  - kind: 2
+    position: {x: 19, y: 5.5}
+    movement: {x: 0, y: 0}
+    period: 2.5
+  arrowLimit: 7
+  flight:
+    length: 900
+    speed: 14
+    obstacleDensity: 0.5
+    seed: 1
+  stars:
+    healthForSecondStar: 0.5
+    maxArrowsForThirdStar: 5
+  coinsPerStar: 10

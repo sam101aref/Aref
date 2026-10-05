@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_Project/Scenes/Boot.unity
+    guid: 6b07050c0c5ca0e14b3700af29bab4c4
+  - enabled: 1
+    path: Assets/_Project/Scenes/MainMenu.unity
+    guid: d1bb5536f72f0f383b68b4bb94267d8f
+  - enabled: 1
+    path: Assets/_Project/Scenes/WorldMap.unity
+    guid: e01283054da005ea4acbefebed4e14fc
+  - enabled: 1
+    path: Assets/_Project/Scenes/Battle.unity
+    guid: 5052d964e2872b9e3aedeb68a335d368
+  - enabled: 1
+    path: Assets/_Project/Scenes/Cutscene.unity
+    guid: b6088b5e87e4f3a998b7fa772c6ea439
+  - enabled: 1
+    path: Assets/_Project/Scenes/FinalFlight.unity
+    guid: 549b0b06f47641f58a0fc7c5d2c757ef
+  m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

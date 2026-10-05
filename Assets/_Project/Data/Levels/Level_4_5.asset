@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee398102b41a3acfb9dce71140890250, type: 3}
+  m_Name: Level_4_5
+  m_EditorClassIdentifier: 
+  id: ch4_5
+  titleKey: level.4_5.title
+  introKey: level.4_5.intro
+  hintKey: level.4_5.hint
+  skyColor: {r: 0.72, g: 0.8, b: 0.9, a: 1}
+  groundColor: {r: 0.82, g: 0.84, b: 0.88, a: 1}
+  introDialogue: []
+  outroDialogue: []
+  outroCutscene: {fileID: 0}
+  mode: 1
+  enemies: []
+  covers: []
+  wind:
+    strength: 0
+    variance: 0
+  waves:
+  - count: 4
+    interval: 2
+    startDelay: 2
+    speed: 1.7
+    health: 60
+    mounted: 1
+  - count: 5
+    interval: 1.8
+    startDelay: 2
+    speed: 1.7
+    health: 70
+    mounted: 0
+  - count: 5
+    interval: 1.6
+    startDelay: 2
+    speed: 1.8
+    health: 70
+    mounted: 1
+  - count: 6
+    interval: 1.5
+    startDelay: 2
+    speed: 1.9
+    health: 70
+    mounted: 0
+  palisadeLives: 3
+  surviveSeconds: 30
+  enemyFireInterval: 4
+  targets: []
+  arrowLimit: 5
+  flight:
+    length: 900
+    speed: 14
+    obstacleDensity: 0.5
+    seed: 1
+  stars:
+    healthForSecondStar: 0.5
+    maxArrowsForThirdStar: 22
+  coinsPerStar: 10
