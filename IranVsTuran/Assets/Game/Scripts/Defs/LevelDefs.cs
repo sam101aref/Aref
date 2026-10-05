@@ -231,7 +231,7 @@ namespace IranVsTuran.Defs
                 },
                 new LevelDef
                 {
-                    id = "l6", chapter = 1, theme = Theme.Cave, startCoins = 500, mapPosition = new P(0.12f, 0.78f), boss = "divsepid",
+                    id = "l6", chapter = 1, theme = Theme.Cave, startCoins = 500, mapPosition = new P(0.12f, 0.73f), boss = "divsepid",
                     paths = new[] { Path(11f, 3f, 5f, 3f, 2.5f, 1f, -1f, 1.2f, -3.5f, 2.6f, -7f, 2f, -7.5f, -0.5f, -11f, -0.5f), Path(11f, -2.4f, 6f, -2.6f, 3f, -0.8f, -1f, -1.2f, -4f, -2.6f, -7f, -1.8f, -7.5f, -0.5f, -11f, -0.5f) },
                     slots = Points(-6.45f, -0.3f, -0.2f, -0.05f, 2.55f, 0.2f, -1.7f, -0.05f, 4.05f, 0.2f, -3.2f, -0.3f, -7.7f, -2.3f, -8.45f, 0.7f, -4.95f, -0.55f, -4.7f, 0.95f, 1.3f, 2.2f, 2.3f, -2.05f),
                     waves = WaveGen.Build(606, 12, 120, 560, 2, "divsepid", R("imp", 1), R("gorgsar", 1), R("lion", 1), R("winged", 2), R("witch", 3), R("div", 3)),
@@ -273,14 +273,14 @@ namespace IranVsTuran.Defs
                 },
                 new LevelDef
                 {
-                    id = "l12", chapter = 3, theme = Theme.Dark, startCoins = 800, mapPosition = new P(0.92f, 0.80f), boss = "afrasiab",
+                    id = "l12", chapter = 3, theme = Theme.Dark, startCoins = 800, mapPosition = new P(0.92f, 0.72f), boss = "afrasiab",
                     paths = new[] { Path(11f, 3f, 6f, 3.2f, 3f, 1.5f, 0f, 2.4f, -3f, 1f, -6f, 1.2f, -11f, 0f), Path(11f, 0f, 6.5f, 0f, 3f, -1.2f, 0f, -0.4f, -3f, 1f, -6f, 1.2f, -11f, 0f), Path(11f, -3f, 6f, -3.2f, 2f, -2.8f, -2f, -2f, -5f, -1.2f, -8f, -0.4f, -11f, 0f) },
                     slots = Points(-5.2f, -0.05f, -3.7f, -0.3f, -2.2f, -0.55f, -7.2f, 1.95f, 0.3f, 0.7f, 4.8f, -1.8f, -3.95f, 2.2f, 6.3f, -1.8f, -5.45f, 2.2f, 1.8f, 0.45f, 6.8f, 1.2f, -7.95f, -1.55f, 3.55f, 0.45f),
                     waves = WaveGen.Build(1212, 15, 250, 1100, 3, "afrasiab", R("heavy", 1), R("cavalry", 1), R("archer", 1), R("shaman", 2), R("elephant", 3), R("div", 5), R("winged", 6)),
                 },
                 new LevelDef
                 {
-                    id = "l13", chapter = 4, theme = Theme.Volcanic, startCoins = 850, mapPosition = new P(0.37f, 0.80f), boss = "zahhak",
+                    id = "l13", chapter = 4, theme = Theme.Volcanic, startCoins = 850, mapPosition = new P(0.37f, 0.74f), boss = "zahhak",
                     paths = new[] { Path(-11f, 1f, -6.5f, 1f, -4.5f, -1.6f, -1f, -2.6f, 2.5f, -1.2f, 5f, -2.6f, 11f, -2.6f), Path(-1.5f, 6.2f, -1.5f, 2.8f, 1.5f, 1.4f, 0.5f, -0.8f, 2.5f, -1.2f, 5f, -2.6f, 11f, -2.6f) },
                     slots = Points(3.05f, -0.3f, 5.3f, -1.3f, 2.8f, -2.8f, 6.8f, -1.3f, -0.45f, -0.55f, 4.3f, -3.3f, 1.3f, -3.05f, 8.3f, -1.55f, -0.2f, 0.95f, 2.3f, 1.2f, 0.3f, 3.2f, -3.2f, -0.8f),
                     waves = WaveGen.Build(1313, 15, 260, 1200, 2, "zahhak", R("snake", 1), R("imp", 1), R("winged", 2), R("div", 3), R("witch", 4), R("gorgsar", 5)),

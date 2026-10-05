@@ -1,0 +1,28 @@
+{
+    "name": "IVT.Editor.CI",
+    "rootNamespace": "IranVsTuran.Editor.Setup",
+    "references": [
+        "IVT.Editor.Setup",
+        "UnityEditor.TestRunner",
+        "UnityEngine.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "IVT_TEST_FRAMEWORK"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.test-framework",
+            "expression": "1.0.0",
+            "define": "IVT_TEST_FRAMEWORK"
+        }
+    ],
+    "noEngineReferences": false
+}

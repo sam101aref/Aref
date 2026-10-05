@@ -81,6 +81,7 @@ namespace IranVsTuran.Battle
         Vector3 cameraHome;
         float shake;
         readonly Dictionary<Sfx, float> lastSound = new Dictionary<Sfx, float>();
+        Sprite mapSprite;
 
         public static Battlefield Create(LevelDef level, int difficulty, Camera camera)
         {
@@ -99,7 +100,7 @@ namespace IranVsTuran.Battle
             Effects = new Effects(transform);
 
             var background = new GameObject("Map").AddComponent<SpriteRenderer>();
-            background.sprite = ArtLibrary.Map(level);
+            background.sprite = mapSprite = ArtLibrary.Map(level);
             background.sortingOrder = Depth.Background;
             background.transform.SetParent(transform, false);
 
@@ -717,6 +718,11 @@ namespace IranVsTuran.Battle
 
         void OnDestroy()
         {
+            if (mapSprite != null)
+            {
+                Destroy(mapSprite.texture);
+                Destroy(mapSprite);
+            }
             if (battleCamera != null)
                 battleCamera.transform.position = cameraHome;
         }

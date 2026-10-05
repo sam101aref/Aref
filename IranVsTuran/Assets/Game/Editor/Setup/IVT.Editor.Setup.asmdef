@@ -1,0 +1,16 @@
+{
+    "name": "IVT.Editor.Setup",
+    "rootNamespace": "IranVsTuran.Editor.Setup",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

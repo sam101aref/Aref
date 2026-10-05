@@ -1,0 +1,104 @@
+name: Iran vs Turan Android Build
+
+# Builds the Iran vs Turan APK in the cloud whenever IranVsTuran/ changes; no local Unity install is needed.
+# One-time setup: add the UNITY_LICENSE, UNITY_EMAIL and UNITY_PASSWORD repository secrets
+# (see README → Cloud build).
+
+on:
+  push:
+    paths:
+      - 'IranVsTuran/**'
+      - '!IranVsTuran/**.md'
+      - '.github/workflows/iran-vs-turan.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write # commits the files Unity generates (ProjectSettings, .meta, scenes)
+
+concurrency:
+  group: iran-vs-turan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+    steps:
+      - name: Check Unity license secrets
+        if: env.UNITY_EMAIL == '' || (env.UNITY_LICENSE == '' && env.UNITY_SERIAL == '')
+        run: |
+          echo "::error::Unity license secrets are missing. Add UNITY_LICENSE, UNITY_EMAIL and UNITY_PASSWORD (README → Cloud build)."
+          exit 1
+
+      # The Unity Android image is large; the default runner does not have enough free space.
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/cache@v4
+        with:
+          path: IranVsTuran/Library
+          key: IVT-Library-Android-${{ hashFiles('IranVsTuran/Packages/manifest.json', 'IranVsTuran/Packages/packages-lock.json', 'IranVsTuran/ProjectSettings/**') }}
+          restore-keys: IVT-Library-Android-
+
+      # Pass 1: add missing packages. They only compile on the next Unity start.
+      - name: Install Unity packages
+        uses: game-ci/unity-builder@v4
+        with:
+          targetPlatform: Android
+          projectPath: IranVsTuran
+          buildName: IranVsTuran
+          buildMethod: IranVsTuran.Editor.Setup.CIBuild.InstallPackages
+          versioning: None
+          allowDirtyBuild: true
+
+      # Pass 2: run the EditMode tests, apply the project setup and build the APK.
+      # (Tests run inside this licensed Unity session; a failing test stops the build.)
+      - name: Configure project and build APK
+        uses: game-ci/unity-builder@v4
+        with:
+          targetPlatform: Android
+          projectPath: IranVsTuran
+          buildName: IranVsTuran
+          buildMethod: IranVsTuran.Editor.Setup.CIBuild.ConfigureAndBuild
+          androidExportType: androidPackage
+          versioning: None
+          allowDirtyBuild: true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: IranVsTuran-apk
+          path: build/Android/*.apk
+          if-no-files-found: error
+
+      # Keep the files Unity generated (stable .meta GUIDs, ProjectSettings, scenes) in the repo.
+      - name: Commit Unity-generated files
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" .
+          git add -A IranVsTuran/Assets IranVsTuran/Packages IranVsTuran/ProjectSettings
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: commit Unity-generated project files [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

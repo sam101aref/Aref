@@ -358,8 +358,8 @@ namespace IranVsTuran.UI
             layout.childControlHeight = false;
             layout.childAlignment = TextAnchor.MiddleCenter;
             layout.reverseArrangement = Loc.IsRtl;
-            var gold = Pill(bar, Icon.Coin, openShop);
-            var gems = Pill(bar, Icon.Gem, openShop);
+            var gold = Pill(bar, Art.Icon.Coin, openShop);
+            var gems = Pill(bar, Art.Icon.Gem, openShop);
             Action refresh = () =>
             {
                 if (gold != null)
