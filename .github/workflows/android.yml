@@ -9,6 +9,8 @@ on:
     paths-ignore:
       - 'docs/**'
       - '**.md'
+      - 'IranVsTuran/**'
+      - '.github/workflows/iran-vs-turan.yml'
   workflow_dispatch:
 
 permissions:
